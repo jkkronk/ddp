@@ -25,7 +25,7 @@ parser.add_argument('--skiprecon', type=int, default=1)
 
 args=parser.parse_args()
 
-basefolder = '/scratch_netd/bimmjonatan/'
+basefolder = '/scratch_net/bmicdl03/jonatank/data/ddp_pretrained/'
 
 def FT (x, normalize=False):
      #inp: [nx, ny]
@@ -70,7 +70,7 @@ USp = US_pattern()
 #make a dataset to load images
 noise=0
 #DS = Dataset(-1, -1, ndims,noise, 1, mode)
-MRi = MR_image_data_v3(dirname='/scratch_net/bmicdl03/jonatank/code/code4neerav/chunks/', imgSize = [260, 311, 260], testchunks = [39], noiseinvstd=noise)
+MRi = MR_image_data_v3(dirname='/scratch_net/bmicdl03/jonatank/data/ddp_pretrained/testchunks/', imgSize = [260, 311, 260], testchunks = [39], noiseinvstd=noise)
 
 rmses=np.zeros((1,1,4))
 
