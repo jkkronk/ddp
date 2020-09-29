@@ -2,27 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/code4neerav.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code4neerav.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sub_train_vae.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MR_image_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cvae_sparsity_check_mri_inpaint_ms_24_joint_half.py" beforeDir="false" afterPath="$PROJECT_DIR$/cvae_sparsity_check_mri_inpaint_ms_24_joint_half.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_reconsamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_reconsamp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_runrecon.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cvae_sparsity_check_mri_inpaint_ms_24_joint_half.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>basefolder</find>
-      <find>sens</find>
-    </findStrings>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,15 +33,15 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Fewshot_Lesion_Detection_Normative_Prior" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor.code.editing" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/chunks" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/chunks" />
     </key>
   </component>
   <component name="RunManager">
@@ -86,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1600863568477</updated>
-      <workItem from="1601366304629" duration="3770000" />
+      <workItem from="1601366304629" duration="11996000" />
     </task>
     <servers />
   </component>
@@ -109,9 +105,9 @@
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601017386008" />
-    <state x="221" y="100" key="SettingsEditor" timestamp="1601366744078">
+    <state x="221" y="100" key="SettingsEditor" timestamp="1601379957167">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="221" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1601366744078" />
+    <state x="221" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1601379957167" />
   </component>
 </project>

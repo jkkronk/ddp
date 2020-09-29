@@ -6,6 +6,7 @@ import scipy.misc as smi
 #import matplotlib.pyplot as plt
 from US_pattern import US_pattern
 import time as tm
+import random
 
 
 from skimage.util.shape import view_as_blocks
@@ -33,12 +34,12 @@ class MR_image_data:
         
         self.allfiles = os.listdir(dirname+'/multicoil_train')
 
-        with h5py.File(self.dirname + '/multicoil_train/' + self.allfiles, 'r') as fdset:
+        with h5py.File(self.dirname + '/multicoil_train/' + self.allfiles[0], 'r') as fdset:
              self.reconstruction_rss_size = fdset['reconstruction_rss'].shape #  The shape of the reconstruction_rss tensor is (number of slices, r_height, r_width)
 
         self.data_size = round(trainset_ratio*len(self.allfiles))
 
-        self.allfiles_test = os.listdir(dirname + '/multicoil_valid')
+        self.allfiles_test = os.listdir(dirname + '/multicoil_val_old')
         self.data_size_test = len(self.allfiles_test)
 
         #self.nochunks = 0
@@ -88,7 +89,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.allfiles_test[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_valid/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_val_old/' + file, 'r') as fdset:
                     sliceindex = np.sort(np.random.choice(fdset.shape[0], 1, replace=False))
                     # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
                     btch[:, :, ix] = fdset['reconstruction_rss'][sliceindex[0], :, :]  # vol, sli, x, y
@@ -127,13 +128,16 @@ class MR_image_data:
                 file = train_files[volindex[0]]
 
                 with h5py.File(self.dirname + '/multicoil_train/' + file, 'r') as fdset:
-                    sliceindex = np.sort(np.random.choice(fdset.shape[0], 1, replace=False))
-                    patchindexr = np.random.randint(0, self.reconstruction_rss_size[-1] - self.patchsize)
-                    patchindexc = np.random.randint(self.reconstruction_rss_size[-2] - self.patchsize)
+                    sliceindex = np.sort(np.random.choice(fdset['reconstruction_rss'].shape[0], 1, replace=False))
+                    patchindexr = np.random.randint(0, fdset['reconstruction_rss'][sliceindex[0]].shape[
+                        0] - self.patchsize)
+                    patchindexc = np.random.randint(
+                        fdset['reconstruction_rss'][sliceindex[0]].shape[1] - self.patchsize)
                     # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+
                     btch[:, :, ix] = fdset['reconstruction_rss'][sliceindex[0],
                                      patchindexr:patchindexr + self.patchsize,
-                                     patchindexc:patchindexc + self.patchsize]  # vol, sli, x, y
+                                     patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
         else:
             # To be implemented
@@ -142,14 +146,15 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.allfiles_test[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_valid/' + file, 'r') as fdset:
-                    sliceindex = np.sort(np.random.choice(fdset.shape[0], 1, replace=False))
-                    patchindexr = np.random.randint(0, self.reconstruction_rss_size[-1] - self.patchsize)
-                    patchindexc = np.random.randint(self.reconstruction_rss_size[-2] - self.patchsize)
+                with h5py.File(self.dirname + '/multicoil_val_old/' + file, 'r') as fdset:
+                    sliceindex = np.sort(np.random.choice(fdset['reconstruction_rss'].shape[0], 1, replace=False))
+                    patchindexr = np.random.randint(0, fdset['reconstruction_rss'][sliceindex[0]].shape[0] - self.patchsize)
+                    patchindexc = np.random.randint(fdset['reconstruction_rss'][sliceindex[0]].shape[1] - self.patchsize)
                     # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+
                     btch[:, :, ix] = fdset['reconstruction_rss'][sliceindex[0],
                                      patchindexr:patchindexr + self.patchsize,
-                                     patchindexc:patchindexc + self.patchsize]  # vol, sli, x, y
+                                     patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
 
             #chunkindices = np.sort(np.random.choice(self.notestchunks, batchsize, replace=True)) + self.notrainchunks
