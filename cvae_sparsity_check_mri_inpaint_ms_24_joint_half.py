@@ -13,8 +13,8 @@ import numpy as np
 import time as tm
 import tensorflow as tf
 import os
-from Dataset import Dataset
 import sys
+from datetime import datetime
 
 
 SEED=1001
@@ -31,11 +31,15 @@ parser.add_argument('--mode', type=str, default='Melanie_BFC')
 args=parser.parse_args()
 
 
+logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+file_writer = tf.summary.create_file_writer(logdir)
+file_writer.set_as_default()
+
 # parameters
 #==============================================================================
 #==============================================================================
 
-user='Kerem' #'Ender'
+user='jonatank'
 
 #mode=sys.argv[2]
 mode= args.mode # 'MRIunproc'
@@ -83,9 +87,11 @@ num_inp_channels=1
 #make a dataset to use later
 #==============================================================================
 #==============================================================================
-DS = Dataset(train_size, test_size, ndims, noisy, seed, mode, downscale=True)
-#from MR_image_data_v3 import MR_image_data_v3
-#MRi = MR_image_data_v3(dirname='/scratch_net/bmicdl02/Data/data4fullvol_2d/', imgSize = [260, 311, 260], testchunks = [39], noiseinvstd=50)
+datapath = '/srv/beegfs02/scratch/fastmri_challenge/data/brain/'
+#DS = SliceData(datapath, transform, sample_rate=0.1) # sample_rate = how much ratio of data to use
+    #(train_size, test_size, ndims, noisy, seed, mode, downscale=True)
+from MR_image_data_v3 import MR_image_data_v3
+MRi = MR_image_data_v3(dirname=datapath, trainset_ratio=0.5, noiseinvstd=50, patch_size=28)
 
 
 print('CAME HERE!! 1')
@@ -349,325 +355,63 @@ print('CAME HERE!! 4')
 # do the training
 #==============================================================================
 #==============================================================================
-#test_batch = MRi.get_patch(batch_size, test=True)
-#test_batch = np.transpose(np.reshape(test_batch, [-1, batch_size]))
-test_batch = DS.get_test_batch(batch_size)
+test_batch = MRi.get_patch(batch_size, test=True)
+test_batch = np.transpose(np.reshape(test_batch, [-1, batch_size]))
+#test_batch = DS.get_test_batch(batch_size)
 
 
 with tf.device('/gpu:0'):
      
      #train for N steps
-     for step in range(0, 500001): # 500k
-
-#         batch = MRi.get_patch(batch_size, test=False)
-#         batch = np.transpose(np.reshape(batch, [-1, batch_size]))
-         batch = DS.get_train_batch(batch_size)
+    for step in range(0, 500001): # 500k
+        batch = MRi.get_patch(batch_size, test=False)
+        batch = np.transpose(np.reshape(batch, [-1, batch_size]))
+        # batch = MRi.get_train_batch(batch_size)
          
               
-         # run the training step     
-         sess.run([train_step], feed_dict={x_inp: batch})
+        # run the training step
+        sess.run([train_step], feed_dict={x_inp: batch})
          
     
-         #print some stuf...
-         if step % 500 == 0: # 500
-              
-             if useMixtureScale:
-                  loss_l2_1 = l2_loss_1.eval(feed_dict={x_inp: test_batch})
-                  loss_l2_2 = l2_loss_2.eval(feed_dict={x_inp: test_batch})
-             loss_l2_ = l2_loss_.eval(feed_dict={x_inp: test_batch})
-             loss_kld = KLD.eval(feed_dict={x_inp: test_batch})
-             std_val = std.eval(feed_dict={x_inp: test_batch})
-             mu_val = mu.eval(feed_dict={x_inp: test_batch})
-             loss_tot_ = loss_tot.eval(feed_dict={x_inp: test_batch})
-              
-             
-             xh = y_out.eval(feed_dict={x_inp: test_batch}) 
-             test_loss_l2 = np. mean( np.sum(np.power((xh[0:test_batch.shape[0],:] - test_batch),2), axis=1) )
-             
-             if useMixtureScale:
-                  print("Step {0} | L2 Loss: {1:.3f} | KLD Loss: {2:.3f} | L2 Loss_1: {3:.3f} | L2 Loss_2: {4:.3f} | loss_tot: {5:.3f} | L2 Loss test: {6:.3f}"\
-                        .format(step, np.mean(loss_l2_1-loss_l2_2), np.mean(loss_kld), np.mean(loss_l2_1), np.mean(loss_l2_2), np.mean(loss_tot_), np.mean(test_loss_l2)))
-             else:
-                  print("Step {0} | L2 Loss: {1:.3f} | KLD Loss: {2:.3f} | L2 Loss test: {3:.3f} | std: {4:.3f} | mu: {5:.3f}"\
-                        .format(step, np.mean(loss_l2_), np.mean(loss_kld),  np.mean(test_loss_l2), np.mean(std_val), np.mean(mu_val)))
+        #print some stuf...
+        if step % 500 == 0: # 500
+
+            if useMixtureScale:
+                loss_l2_1 = l2_loss_1.eval(feed_dict={x_inp: batch})
+                loss_l2_2 = l2_loss_2.eval(feed_dict={x_inp: batch})
+                loss_l2_ = l2_loss_.eval(feed_dict={x_inp: batch})
+                loss_kld = KLD.eval(feed_dict={x_inp: batch})
+                std_val = std.eval(feed_dict={x_inp: batch})
+                mu_val = mu.eval(feed_dict={x_inp: batch})
+                loss_tot_ = loss_tot.eval(feed_dict={x_inp: batch})
+
+            xh = y_out.eval(feed_dict={x_inp: test_batch})
+            test_loss_l2 = np.mean(np.sum(np.power((xh[0:test_batch.shape[0], :] - test_batch), 2), axis=1))
+
+            tf.summary.scalar('loss_l2', data=np.mean(loss_l2_1 - loss_l2_2), step=step)
+            tf.summary.scalar('KLD Loss', data=np.mean(loss_kld), step=step)
+            tf.summary.scalar('loss_tot', data=np.mean(loss_tot_), step=step)
+
+            tf.summary.scalar('test_recloss', data=np.mean(test_loss_l2), step=step)
 
 
-         if step%100000==0:
-               saver.save(sess, '/home/ktezcan/modelrecon/trained_models/cvae_MSJhalf_rscl_'+str(mode)+'_fcl'+str(fcl_dim)+'_lat'+str(lat_dim)+'_ns'+str(noisy)+'_ps'+str(ndims)+'_step'+str(step))
+            if useMixtureScale:
+                print(
+                    "Step {0} | L2 Loss: {1:.3f} | KLD Loss: {2:.3f} | L2 Loss_1: {3:.3f} | L2 Loss_2: {4:.3f} | loss_tot: {5:.3f} | L2 Loss test: {6:.3f}" \
+                        .format(step, np.mean(loss_l2_1 - loss_l2_2), np.mean(loss_kld), np.mean(loss_l2_1),
+                                np.mean(loss_l2_2), np.mean(loss_tot_), np.mean(test_loss_l2)))
+            else:
+                print(
+                    "Step {0} | L2 Loss: {1:.3f} | KLD Loss: {2:.3f} | L2 Loss test: {3:.3f} | std: {4:.3f} | mu: {5:.3f}" \
+                        .format(step, np.mean(loss_l2_), np.mean(loss_kld), np.mean(test_loss_l2), np.mean(std_val),
+                                np.mean(mu_val)))
+
+            with file_writer.as_default():
+                tf.summary.image("Recdata data", xh, step=0)
+
+        if step % 100000 == 0:
+            saver.save(sess, '/scratch_net/bmicdl03/jonatank/logs/dpp/vae/' + str(mode) + '_fcl' + str(
+                fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_step' + str(step))
 
      
 print("elapsed time: {0}".format(tm.time()-ts))
-
-#
-## do post-training predictions
-##==============================================================================
-##==============================================================================
-#
-#
-#
-#test_batch = DS.get_test_batch(batch_size)
-#
-#saver.restore(sess, '/home/ktezcan/modelrecon/trained_models/cvae_MSJ_'+mode+'_fcl'+str(fcl_dim)+'_lat'+str(lat_dim)+'_ns'+str(noisy)+'_ps'+str(ndims))
-#
-#     
-##xh = y_out.eval(feed_dict={x_inp: test_batch}) 
-##xch = 1./y_out_prec.eval(feed_dict={x_inp: test_batch}) 
-#
-#xh, xch = sess.run([y_out, 1/y_out_prec], feed_dict={x_inp: test_batch})
-#
-#nsamp=50
-#
-#yos=np.zeros((nsamp,input_dim))
-#sos=np.zeros((nsamp,input_dim))
-#yos_samp = np.zeros((nsamp,input_dim))
-#for ix in range(nsamp):
-#     print(ix)
-#     zr = np.random.randn(1,lat_dim)
-#     yo=y_out.eval(feed_dict={z: np.tile(zr,[50,1])})
-#     try:
-#          so=1./y_out_prec.eval(feed_dict={z: np.tile(zr,[50,1])})
-#     except:
-#          so = 1/kld_div          
-#     yos[ix,:]=yo[0]
-#     sos[ix,:]=np.sqrt(so[0])
-#     yos_samp[ix,:] = yos[ix,:] + np.random.randn(input_dim)*sos[ix,:]
-#
-#
-#print("generated means: ")
-#print("=========================")
-#plt.figure(figsize=(10,10))
-#for ix in range(16):
-#    plt.subplot(4,4, ix+1);
-#    plt.imshow(np.reshape(yos[ix,:],(28,28)),cmap='gray');plt.xticks([]);plt.yticks([])
-#
-#
-#print("generated covs: ")
-#print("=========================")
-#plt.figure(figsize=(10,10))
-#for ix in range(16):
-#    plt.subplot(4,4, ix+1)
-#    plt.imshow(np.reshape(sos[ix,:],(28,28)),cmap='gray')
-#
-#
-#print("means + [-1,+1]*covs: ")
-#print("=========================")
-#show_samp=20
-#mults = np.linspace(-40,40,7)
-#fig, ax = plt.subplots(show_samp,9, figsize=(20,show_samp*2))
-#for ix in range(show_samp):
-#    for ixc in range(7):
-#         ax[ix][ixc].imshow(np.reshape(xh[ix,:],(28,28))+mults[ixc]*np.reshape(xch[ix,:],(28,28)),cmap='gray',vmin=-0.2,vmax=1.2)
-#         ax[ix][7].imshow(np.reshape(test_batch[ix,:],(28,28)), cmap='gray',vmin=-0.2,vmax=1.2)
-#         ax[ix][8].imshow(np.reshape(xch[ix,:],(28,28)), cmap='gray')
-#
-#
-#
-#
-#
-#
-##########
-##
-###person=DS.get_test_batch(1)  
-###person=denoise[80:108,80:108]
-##
-##
-##from scipy import ndimage
-##
-##x_rec2=tf.get_variable('x_rec2',shape=[50,input_dim],initializer=tf.constant_initializer(value=0.0))
-##
-##person=DS.MRi.d_brains_test[10,180:208,180:208]
-###person=denoise[180:208,180:208]
-##
-##nsampl=50
-##imsize=28
-##minperc=2
-##maxperc=98
-##nsigma=15
-##   
-##op_p_x_z = - 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec2),2), y_out_prec),axis=1) \
-##             + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1) #-  0.5*48*48*np.log(2*np.pi)
-##       
-##op_p_x_z_0 = - 0.5 * tf.reduce_sum(tf.pow((y_out - x_rec2),2),axis=1)      
-##op_p_x_z_1 = - 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec2),2), y_out_prec),axis=1)
-##op_p_x_z_2 = + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1)
-##
-##op_q_z_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - mu),2), tf.reciprocal(std)),axis=1) \
-##                  - 0.5 * tf.reduce_sum(tf.log(std), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
-##
-##op_p_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - tf.zeros_like(mu)),2), tf.reciprocal(tf.ones_like(std))),axis=1) \
-##                  - 0.5 * tf.reduce_sum(tf.log(tf.ones_like(std)), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
-##
-##
-##np.set_printoptions(threshold=1000)
-##
-##sigmas=np.linspace(0.001,30,nsigma)
-##
-##tbbs=np.zeros((nsigma,imsize,imsize))
-##
-##goodbad=np.zeros(25)
-##persons=np.zeros((25,imsize,imsize))
-##
-##plt.figure(figsize=(20,10))
-##
-##for ixm in range(10,11):
-##     person=DS.get_test_batch(1) 
-##     
-##     aas=np.zeros((nsigma,1))#,dtype='float64')
-##     Ks=np.zeros((nsigma,1))#,dtype='float64')
-##     aams = np.zeros((nsigma,1))#,dtype='float64')
-##     bbs=np.zeros((nsampl,nsigma))#,dtype='float64')
-##
-##     for ix in range(nsigma):
-##         print(ix)
-##         tb=np.reshape(person,(imsize,imsize)) 
-##         tbb=ndimage.gaussian_filter(tb,sigma=sigmas[ix])
-##         #tbb=tb + np.random.normal(loc=0, scale=sigmas[ix], size=tb.shape)
-##         tbb=(tbb - np.percentile(tbb, minperc))/(np.percentile(tbb, maxperc) - np.percentile(tbb, minperc))
-##         tbbs[ix,:,:]=tbb.copy()
-##         tbb=np.reshape(tbb,(1,imsize*imsize))
-##         x_rec2.load(    value = np.tile(tbb,(nsampl,1))    )
-##         #get p(x|z_n), q(z_n|x) and p(z_n)
-##         p_x_z, q_z_x, p_z  = sess.run([op_p_x_z, op_q_z_x, op_p_z], feed_dict={x_inp: np.tile(tbb,(nsampl,1))})
-##     
-##         aa = (p_x_z - q_z_x + p_z).astype('float128') #).astype('float128') 
-##         
-##         K=np.max(aa)
-##         
-##         aad=(aa-K).astype('float128')
-##         
-##         aae=np.exp(aad)
-##         
-##         aaes=np.sum(aae)
-##         if ix==31:
-##              print("aa")
-##              print(aa)
-##              print("aae")
-##              print(aae)
-##              print("aaes")
-##              print(aaes)
-##         
-##         
-##         aaesl=np.log(aaes)
-##         
-##         aaeslKS=aaesl + K - np.log(nsampl)
-##     
-##         aas[ix,0]=aaeslKS
-##            
-##           
-##     if aas[0]>aas[-1]:
-##          goodbad[ixm]=1
-##     else:
-##          goodbad[ixm]=0
-##     persons[ixm,:,:]=np.reshape(person,(imsize,imsize))
-##     
-##     
-##     plt.plot(sigmas, aas,'.-')
-##
-##
-##
-##
-##
-##
-###from tensorflow.examples.tutorials.mnist import input_data
-###from scipy import ndimage
-###mnist2 = input_data.read_data_sets('MNIST')
-###
-###aas=np.zeros((50,1))
-###sigmas=np.linspace(0.001,1,50)
-###for ix in range(50):
-###    tb=np.reshape(mnist2.test.images[0,:],(28,28)) 
-###    tbb=ndimage.gaussian_filter(tb,sigma=sigmas[ix])
-###    tbb=np.reshape(tbb,(1,784))
-###    x_rec.load(    value = np.tile(tbb,(5000,1))    )
-###    aa = (- 1/2 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), y_out_prec),axis=1) \
-###             + 1/2 * tf.reduce_sum(tf.log(y_out_prec), axis=1) -  1/2*784*tf.log(2*np.pi)).eval(feed_dict={x_inp: np.tile(tbb,(5000,1))})
-###    aas[ix,0]=aa.mean()
-###
-###plt.plot(sigmas, aas, '.-'), plt.title("log(p(x)) vs. sigma of blurrung gaussian"), plt.xlabel("gaussian std"),plt.ylabel("log likelihood")
-##     
-##     
-##     
-###
-#### do post-training predictions
-####==============================================================================
-####==============================================================================
-###
-###test_batch = DS.get_test_batch(batch_size)
-###
-###if user == 'Kerem':
-###     saver.restore(sess, '/home/ktezcan/Code/spyder_files/tests_code_results/models_vae_mri_ms_iter20k/vae_MG_fcl'+str(fcl_dim)+'_lat'+str(lat_dim)+'_ns'+str(noisy)+'_klddiv'+str(int(kld_div)))
-###elif user == 'Ender':     
-###     saver.restore(sess,'/scratch/kender/Projects/VAE/spyder_files')
-###else:
-###     print("User unknown!")
-###     assert(1==0)
-###     
-###xh = y_out.eval(feed_dict={x_inp: test_batch}) 
-###xch = 1./y_out_prec.eval(feed_dict={x_inp: test_batch}) 
-###
-###
-###nsamp=5000
-###
-###yos=np.zeros((nsamp,input_dim))
-###sos=np.zeros((nsamp,input_dim))
-###yos_samp = np.zeros((nsamp,input_dim))
-###for ix in range(nsamp):
-###     zr = np.random.randn(1,lat_dim)
-###     yo=y_out.eval(feed_dict={z: zr})
-###     try:
-###          so=1./y_out_prec.eval(feed_dict={z: zr})
-###     except:
-###          so = 1/kld_div          
-###     yos[ix,:]=yo
-###     sos[ix,:]=np.sqrt(so)
-###     yos_samp[ix,:] = yos[ix,:] + np.random.randn(input_dim)*sos[ix,:]
-###
-###
-###print("generated means: ")
-###print("=========================")
-###plt.figure(figsize=(10,10))
-###for ix in range(16):
-###    plt.subplot(4,4, ix+1)
-###    plt.imshow(np.reshape(yos[ix,:],(28,28)),cmap='gray')
-###
-###
-###print("generated covs: ")
-###print("=========================")
-###plt.figure(figsize=(10,10))
-###for ix in range(16):
-###    plt.subplot(4,4, ix+1)
-###    plt.imshow(np.reshape(sos[ix,:],(28,28)),cmap='gray')
-###
-###
-###print("means + [-1,+1]*covs: ")
-###print("=========================")
-###show_samp=20
-###mults = np.linspace(-1,1,7)
-###fig, ax = plt.subplots(show_samp,9, figsize=(20,show_samp*2))
-###for ix in range(show_samp):
-###    for ixc in range(7):
-###         ax[ix][ixc].imshow(np.reshape(xh[ix,:],(28,28))+mults[ixc]*np.reshape(xch[ix,:],(28,28)),cmap='gray')
-###         ax[ix][7].imshow(np.reshape(test_batch[ix,:],(28,28)), cmap='gray')
-###         ax[ix][8].imshow(np.reshape(xch[ix,:],(28,28)), cmap='gray',vmin=-1, vmax=1)
-###
-###
-###
-###from tensorflow.examples.tutorials.mnist import input_data
-###from scipy import ndimage
-###mnist2 = input_data.read_data_sets('MNIST')
-###
-###aas=np.zeros((50,1))
-###sigmas=np.linspace(0.001,1,50)
-###for ix in range(50):
-###    tb=np.reshape(mnist2.test.images[0,:],(28,28)) 
-###    tbb=ndimage.gaussian_filter(tb,sigma=sigmas[ix])
-###    tbb=np.reshape(tbb,(1,784))
-###    x_rec.load(    value = np.tile(tbb,(5000,1))    )
-###    aa = (- 1/2 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), y_out_prec),axis=1) \
-###             + 1/2 * tf.reduce_sum(tf.log(y_out_prec), axis=1) -  1/2*784*tf.log(2*np.pi)).eval(feed_dict={x_inp: np.tile(tbb,(5000,1))})
-###    aas[ix,0]=aa.mean()
-###
-###plt.plot(sigmas, aas, '.-'), plt.title("log(p(x)) vs. sigma of blurrung gaussian"), plt.xlabel("gaussian std"),plt.ylabel("log likelihood")
-##     
-##     
-##     

@@ -29,7 +29,7 @@ import sys
 
 ## direk precision optimize etmek daha da iyi olabilir. 
 
-def vaerecon(us_ksp_r2, sensmaps, dcprojiter, onlydciter=0, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, rescaled=False, half=False, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, optScale=False, mode=[], chunks40=False, Melmodels='', N4BFcorr=False, z_multip=1.0):
+def vaerecon(us_ksp_r2, sensmaps, dcprojiter, onlydciter=0, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, rescaled=False, half=False, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, optScale=False, mode=[], chunks40=False, Melmodels='', N4BFcorr=False, z_multip=1.0, writer=writer):
      
 
      print('xxxxxxxxxxxxxxxxxxx contRec is ' + contRec)
@@ -558,7 +558,7 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, onlydciter=0, lat_dim=60, patchsiz
           #===============================================
       
            recstmp = recs[:,it].copy()
-           for ix in range(10):
+           for ix in range(1):
                 ftot, f_lik, f_dc = feval(recstmp)
                 if N4BFcorr:
                      f_dc = dconst(recstmp.reshape([imsizer,imrizec])*n4bf)

@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import vaerecon5
 
+
 from US_pattern import US_pattern
 
 import argparse
@@ -13,8 +14,6 @@ parser.add_argument('--usfact', type=float, default=2)
 parser.add_argument('--contrun', type=int, default=0) 
 
 args=parser.parse_args()
-
-
 
 
 
@@ -48,14 +47,7 @@ def tUFT(x, uspat):
      return  tFT( tmp1*x )
 
 
-
-
-
-
-
 #############################
-
-
 #
 #
 #def FT (x):
@@ -80,6 +72,7 @@ def tUFT(x, uspat):
 #     return  tFT( uspat*x )
 
 
+
 def calc_rmse(rec,imorig):
      return 100*np.sqrt(np.sum(np.square(np.abs(rec) - np.abs(imorig))) / np.sum(np.square(np.abs(imorig))) )
 
@@ -96,8 +89,6 @@ print(usfact)
 if np.floor(usfact) == usfact: # if it is already an integer
      usfact = int(usfact)
 print(usfact)
-
-
 
 ###################
 ###### RECON ######
@@ -220,7 +211,7 @@ mode = 'MRIunproc'
   
 #rec_vae = vaerecon5.vaerecon(usksp, sensmaps=sensmaps, dcprojiter=10, onlydciter=onlydciter, lat_dim=lat_dim, patchsize=ndims, parfact=20, num_iter=302, rescaled = rescaled, half=half,regiter=15, reglmb=reg, regtype=regtype)
           
-rec_vae = vaerecon5.vaerecon(         usksp, sensmaps=sensmaps, dcprojiter=10,   onlydciter=10,                     lat_dim=lat_dim, patchsize=ndims, contRec='' ,parfact=25, num_iter=302,                                  regiter=10, reglmb=reg, regtype=regtype, half=True, mode=mode, chunks40=chunks40)
+rec_vae = vaerecon5.vaerecon(usksp, sensmaps=sensmaps, dcprojiter=10, onlydciter=10, lat_dim=lat_dim, patchsize=ndims, contRec='' ,parfact=25, num_iter=302, regiter=10, reglmb=reg, regtype=regtype, half=True, mode=mode, chunks40=chunks40)
 pickle.dump(rec_vae[0], open('/usr/bmicnas01/data-biwi-01/ktezcan/reconsampling/MAPestimation/rec_meas_us'+str(R)+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb')   )
 
 
