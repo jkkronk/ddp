@@ -2,30 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConvVAE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conf_vae.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataloader_pytorch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/60862.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/60894.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/60897.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/60951.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61162.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61279.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61281.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61317.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61321.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61357.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log/61362.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run_train_vae_pytorch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/runrecon_pytorch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sub_train_vae_pytorch.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/60856.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/60856.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloader_pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader_pytorch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runrecon_pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon_pytorch.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

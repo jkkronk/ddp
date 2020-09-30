@@ -30,7 +30,7 @@ subj=args.subj
 sli=args.slice
 R = args.usfact
 
-basefolder = '/scratch_net/bmicdl03/jonatank/logs/ddp/vae_pytorch'
+basefolder = '/scratch_net/bmicdl03/jonatank/logs/ddp/pytorch/'
 logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/restore/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 path = '/srv/beegfs02/scratch/fastmri_challenge/data/brain'
 mode = 'MRIunproc'#'Melanie_BFC'
@@ -51,25 +51,24 @@ print('Undersample', R)
 rmses=np.zeros((1,1,4))
 
 validation_dataset = fastMRI_kspace(dirname=path, subj=subj)
-valid_data_loader  = data.DataLoader(validation_dataset, batch_size=1, shuffle=False, num_workers=1)
 print('Data loaded')
 
-ksp_all = next(iter(valid_data_loader))
-ksp = ksp_all[slice]
+ksp_all = validation_dataset.getitem()
+ksp = ksp_all[sli]
 
 try:
      uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
      print("Read from existing u.s. pattern file")
 except:
      USp=US_pattern()
-     uspat = USp.generate_opt_US_pattern_1D(ksp[1, 2].shape, R=R, max_iter=100, no_of_training_profs=15)
-     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli), uspat)
+     uspat = USp.generate_opt_US_pattern_1D(ksp.shape[1:], R=R, max_iter=100, no_of_training_profs=15)
+     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli), uspat)
 
 usksp = np.zeros(ksp.shape)
 
 for i in range(ksp.shape[1]):
-    for j in range(ksp.shape[2]):
-        usksp[:,i,j] = uspat*ksp[:,i,j]
+     print(usksp.shape, uspat.shape, ksp[:,i,j])
+     usksp[:,i,j] = uspat*ksp[:,i,j]
 
 ###################
 ###### RECON ######

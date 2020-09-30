@@ -57,7 +57,7 @@ class fastMRI_patch(Dataset):
     def __len__(self):
         return self.size
 
-class fastMRI_kspace(Dataset):
+class fastMRI_kspace():
     def __init__(self, dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain', subj='file_brain_AXFLAIR_200_6002462.h5'):
         self.dirname = dirname
         self.folderpath = '/multicoil_val_old/'
@@ -69,10 +69,10 @@ class fastMRI_kspace(Dataset):
 
         self.size = self.kspace.shape[0]
 
-    def __getitem__(self, index):
+    def getitem(self):
         kspace_slice = self.kspace
 
         return kspace_slice # [Slice, Coil, Sx, Sy]
 
-    def __len__(self):
+    def len(self):
         return self.size
