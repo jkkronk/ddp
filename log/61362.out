@@ -264,3 +264,6 @@ Epoch: 85
 epoch 85: train_l2_loss 0.027895 train_lat_loss 66.029630 total train_loss 66.057525
 epoch 85: test_l2_loss 0.024088 test_lat_loss 136.498315 total loss 136.522404
 Epoch: 86
+epoch 86: train_l2_loss 0.028059 train_lat_loss 65.152432 total train_loss 65.180491
+epoch 86: test_l2_loss 0.014525 test_lat_loss 51.861608 total loss 51.876133
+Epoch: 87
