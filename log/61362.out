@@ -1,0 +1,266 @@
+Using device: cuda:0
+Loading data...
+['file_brain_AXFLAIR_201_6002996.h5', 'file_brain_AXFLAIR_202_6000575.h5', 'file_brain_AXFLAIR_210_6001938.h5', 'file_brain_AXFLAIR_201_6002991.h5', 'file_brain_AXFLAIR_200_6002616.h5', 'file_brain_AXFLAIR_203_6000959.h5', 'file_brain_AXFLAIR_203_6000953.h5', 'file_brain_AXFLAIR_201_6002972.h5', 'file_brain_AXFLAIR_202_6000526.h5', 'file_brain_AXFLAIR_202_6000563.h5', 'file_brain_AXFLAIR_202_6000550.h5', 'file_brain_AXFLAIR_201_6002878.h5', 'file_brain_AXFLAIR_206_6000232.h5', 'file_brain_AXFLAIR_202_6000435.h5', 'file_brain_AXFLAIR_200_6002608.h5', 'file_brain_AXFLAIR_201_6003012.h5', 'file_brain_AXFLAIR_200_6002516.h5', 'file_brain_AXFLAIR_202_6000561.h5', 'file_brain_AXFLAIR_203_6000916.h5', 'file_brain_AXFLAIR_200_6002543.h5', 'file_brain_AXFLAIR_203_6000935.h5', 'file_brain_AXFLAIR_201_6002977.h5', 'file_brain_AXFLAIR_200_6002487.h5', 'file_brain_AXFLAIR_201_6002940.h5', 'file_brain_AXFLAIR_200_6002493.h5', 'file_brain_AXFLAIR_202_6000585.h5', 'file_brain_AXFLAIR_210_6001934.h5', 'file_brain_AXFLAIR_200_6002435.h5', 'file_brain_AXFLAIR_201_6002881.h5', 'file_brain_AXFLAIR_203_6000934.h5', 'file_brain_AXFLAIR_205_6000181.h5', 'file_brain_AXFLAIR_203_6000887.h5', 'file_brain_AXFLAIR_202_6000555.h5', 'file_brain_AXFLAIR_201_6002933.h5', 'file_brain_AXFLAIR_210_6001957.h5', 'file_brain_AXFLAIR_203_6000944.h5', 'file_brain_AXFLAIR_205_6000169.h5', 'file_brain_AXFLAIR_210_6001499.h5', 'file_brain_AXFLAIR_209_6001377.h5', 'file_brain_AXFLAIR_210_6001867.h5', 'file_brain_AXFLAIR_203_6000904.h5', 'file_brain_AXFLAIR_201_6002962.h5', 'file_brain_AXFLAIR_200_6002629.h5', 'file_brain_AXFLAIR_200_6002548.h5', 'file_brain_AXFLAIR_203_6000963.h5', 'file_brain_AXFLAIR_202_6000493.h5', 'file_brain_AXFLAIR_202_6000469.h5', 'file_brain_AXFLAIR_203_6000914.h5', 'file_brain_AXFLAIR_206_6000250.h5', 'file_brain_AXFLAIR_201_6002963.h5', 'file_brain_AXFLAIR_206_6000254.h5', 'file_brain_AXFLAIR_201_6002954.h5', 'file_brain_AXFLAIR_200_6002533.h5', 'file_brain_AXFLAIR_202_6000489.h5', 'file_brain_AXFLAIR_200_6002452.h5', 'file_brain_AXFLAIR_201_6003016.h5', 'file_brain_AXFLAIR_206_6000256.h5', 'file_brain_AXFLAIR_203_6000930.h5', 'file_brain_AXFLAIR_201_6003019.h5', 'file_brain_AXFLAIR_200_6002585.h5', 'file_brain_AXFLAIR_210_6001489.h5', 'file_brain_AXFLAIR_200_6002553.h5', 'file_brain_AXFLAIR_203_6000907.h5', 'file_brain_AXFLAIR_201_6002976.h5', 'file_brain_AXFLAIR_202_6000536.h5', 'file_brain_AXFLAIR_200_6002442.h5', 'file_brain_AXFLAIR_200_6002469.h5', 'file_brain_AXFLAIR_202_6000543.h5', 'file_brain_AXFLAIR_201_6002994.h5', 'file_brain_AXFLAIR_202_6000548.h5', 'file_brain_AXFLAIR_203_6000911.h5', 'file_brain_AXFLAIR_201_6003024.h5', 'file_brain_AXFLAIR_202_6000421.h5', 'file_brain_AXFLAIR_209_6001391.h5', 'file_brain_AXFLAIR_201_6002998.h5', 'file_brain_AXFLAIR_210_6001896.h5', 'file_brain_AXFLAIR_202_6000455.h5', 'file_brain_AXFLAIR_209_6001381.h5', 'file_brain_AXFLAIR_201_6002928.h5', 'file_brain_AXFLAIR_206_6000241.h5', 'file_brain_AXFLAIR_203_6000878.h5', 'file_brain_AXFLAIR_209_6001428.h5', 'file_brain_AXFLAIR_200_6002658.h5', 'file_brain_AXFLAIR_201_6002902.h5', 'file_brain_AXFLAIR_201_6002951.h5', 'file_brain_AXFLAIR_200_6002558.h5', 'file_brain_AXFLAIR_202_6000531.h5', 'file_brain_AXFLAIR_210_6001903.h5', 'file_brain_AXFLAIR_202_6000437.h5', 'file_brain_AXFLAIR_210_6001548.h5', 'file_brain_AXFLAIR_202_6000428.h5', 'file_brain_AXFLAIR_203_6000901.h5', 'file_brain_AXFLAIR_201_6002980.h5', 'file_brain_AXFLAIR_203_6000947.h5', 'file_brain_AXFLAIR_201_6002953.h5', 'file_brain_AXFLAIR_200_6002525.h5', 'file_brain_AXFLAIR_210_6001482.h5', 'file_brain_AXFLAIR_202_6000524.h5', 'file_brain_AXFLAIR_201_6002950.h5', 'file_brain_AXFLAIR_202_6000522.h5', 'file_brain_AXFLAIR_210_6001544.h5', 'file_brain_AXFLAIR_203_6000902.h5', 'file_brain_AXFLAIR_201_6002944.h5', 'file_brain_AXFLAIR_201_6002939.h5', 'file_brain_AXFLAIR_200_6002510.h5', 'file_brain_AXFLAIR_200_6002549.h5', 'file_brain_AXFLAIR_201_6003018.h5', 'file_brain_AXFLAIR_200_6002644.h5', 'file_brain_AXFLAIR_210_6001485.h5', 'file_brain_AXFLAIR_202_6000589.h5', 'file_brain_AXFLAIR_200_6002428.h5', 'file_brain_AXFLAIR_201_6002911.h5', 'file_brain_AXFLAIR_210_6001953.h5', 'file_brain_AXFLAIR_200_6002538.h5', 'file_brain_AXFLAIR_210_6001511.h5', 'file_brain_AXFLAIR_201_6003005.h5', 'file_brain_AXFLAIR_201_6002929.h5', 'file_brain_AXFLAIR_200_6002638.h5', 'file_brain_AXFLAIR_203_6000945.h5', 'file_brain_AXFLAIR_203_6000926.h5', 'file_brain_AXFLAIR_209_6001395.h5', 'file_brain_AXFLAIR_201_6003003.h5', 'file_brain_AXFLAIR_202_6000581.h5', 'file_brain_AXFLAIR_203_6000960.h5', 'file_brain_AXFLAIR_210_6001930.h5', 'file_brain_AXFLAIR_205_6000173.h5', 'file_brain_AXFLAIR_202_6000517.h5', 'file_brain_AXFLAIR_202_6000553.h5', 'file_brain_AXFLAIR_203_6000913.h5', 'file_brain_AXFLAIR_210_6001912.h5', 'file_brain_AXFLAIR_203_6000910.h5', 'file_brain_AXFLAIR_210_6001484.h5', 'file_brain_AXFLAIR_210_6001496.h5', 'file_brain_AXFLAIR_203_6000958.h5', 'file_brain_AXFLAIR_210_6001885.h5', 'file_brain_AXFLAIR_203_6000920.h5', 'file_brain_AXFLAIR_209_6001397.h5', 'file_brain_AXFLAIR_202_6000440.h5', 'file_brain_AXFLAIR_203_6000890.h5', 'file_brain_AXFLAIR_202_6000460.h5', 'file_brain_AXFLAIR_202_6000473.h5', 'file_brain_AXFLAIR_210_6001510.h5', 'file_brain_AXFLAIR_200_6002512.h5', 'file_brain_AXFLAIR_201_6003009.h5', 'file_brain_AXFLAIR_201_6003008.h5', 'file_brain_AXFLAIR_201_6002938.h5', 'file_brain_AXFLAIR_200_6002579.h5', 'file_brain_AXFLAIR_202_6000480.h5', 'file_brain_AXFLAIR_209_6001402.h5', 'file_brain_AXFLAIR_202_6000436.h5', 'file_brain_AXFLAIR_202_6000557.h5', 'file_brain_AXFLAIR_210_6001533.h5', 'file_brain_AXFLAIR_201_6002971.h5', 'file_brain_AXFLAIR_202_6000572.h5', 'file_brain_AXFLAIR_202_6000539.h5', 'file_brain_AXFLAIR_201_6002919.h5', 'file_brain_AXFLAIR_203_6000900.h5', 'file_brain_AXFLAIR_200_6002631.h5', 'file_brain_AXFLAIR_201_6002978.h5', 'file_brain_AXFLAIR_202_6000584.h5', 'file_brain_AXFLAIR_200_6002618.h5', 'file_brain_AXFLAIR_201_6002918.h5', 'file_brain_AXFLAIR_203_6000950.h5', 'file_brain_AXFLAIR_200_6002481.h5', 'file_brain_AXFLAIR_202_6000558.h5', 'file_brain_AXFLAIR_209_6001411.h5', 'file_brain_AXFLAIR_203_6000897.h5', 'file_brain_AXFLAIR_209_6001355.h5', 'file_brain_AXFLAIR_200_6002496.h5', 'file_brain_AXFLAIR_205_6000159.h5', 'file_brain_AXFLAIR_202_6000511.h5', 'file_brain_AXFLAIR_203_6000951.h5', 'file_brain_AXFLAIR_201_6002909.h5', 'file_brain_AXFLAIR_200_6002466.h5', 'file_brain_AXFLAIR_201_6002987.h5', 'file_brain_AXFLAIR_201_6002871.h5', 'file_brain_AXFLAIR_201_6002947.h5', 'file_brain_AXFLAIR_209_6001413.h5', 'file_brain_AXFLAIR_201_6002867.h5', 'file_brain_AXFLAIR_203_6000875.h5', 'file_brain_AXFLAIR_200_6002488.h5', 'file_brain_AXFLAIR_202_6000483.h5', 'file_brain_AXFLAIR_203_6000908.h5', 'file_brain_AXFLAIR_210_6001900.h5', 'file_brain_AXFLAIR_203_6000931.h5', 'file_brain_AXFLAIR_210_6001541.h5', 'file_brain_AXFLAIR_210_6001487.h5', 'file_brain_AXFLAIR_200_6002653.h5', 'file_brain_AXFLAIR_200_6002429.h5', 'file_brain_AXFLAIR_202_6000554.h5', 'file_brain_AXFLAIR_202_6000551.h5', 'file_brain_AXFLAIR_210_6001557.h5', 'file_brain_AXFLAIR_200_6002648.h5', 'file_brain_AXFLAIR_201_6002964.h5', 'file_brain_AXFLAIR_210_6001887.h5', 'file_brain_AXFLAIR_210_6001835.h5', 'file_brain_AXFLAIR_201_6002917.h5', 'file_brain_AXFLAIR_201_6002997.h5', 'file_brain_AXFLAIR_209_6001348.h5', 'file_brain_AXFLAIR_202_6000477.h5', 'file_brain_AXFLAIR_200_6002492.h5', 'file_brain_AXFLAIR_200_6002467.h5', 'file_brain_AXFLAIR_200_6002520.h5', 'file_brain_AXFLAIR_210_6001531.h5', 'file_brain_AXFLAIR_209_6001374.h5', 'file_brain_AXFLAIR_206_6000260.h5', 'file_brain_AXFLAIR_203_6000918.h5', 'file_brain_AXFLAIR_209_6001406.h5', 'file_brain_AXFLAIR_200_6002566.h5', 'file_brain_AXFLAIR_203_6000940.h5', 'file_brain_AXFLAIR_200_6002576.h5', 'file_brain_AXFLAIR_209_6001369.h5', 'file_brain_AXFLAIR_201_6002876.h5', 'file_brain_AXFLAIR_201_6002957.h5', 'file_brain_AXFLAIR_203_6000961.h5', 'file_brain_AXFLAIR_200_6002522.h5', 'file_brain_AXFLAIR_200_6002641.h5', 'file_brain_AXFLAIR_201_6002995.h5', 'file_brain_AXFLAIR_201_6002916.h5', 'file_brain_AXFLAIR_210_6001517.h5', 'file_brain_AXFLAIR_202_6000576.h5', 'file_brain_AXFLAIR_202_6000540.h5', 'file_brain_AXFLAIR_203_6000922.h5', 'file_brain_AXFLAIR_203_6000899.h5', 'file_brain_AXFLAIR_201_6002894.h5', 'file_brain_AXFLAIR_201_6002956.h5', 'file_brain_AXFLAIR_203_6000915.h5', 'file_brain_AXFLAIR_210_6001897.h5', 'file_brain_AXFLAIR_202_6000464.h5', 'file_brain_AXFLAIR_203_6000893.h5', 'file_brain_AXFLAIR_200_6002474.h5', 'file_brain_AXFLAIR_200_6002567.h5', 'file_brain_AXFLAIR_210_6001937.h5', 'file_brain_AXFLAIR_209_6001404.h5', 'file_brain_AXFLAIR_201_6003002.h5', 'file_brain_AXFLAIR_209_6001408.h5', 'file_brain_AXFLAIR_209_6001421.h5', 'file_brain_AXFLAIR_200_6002501.h5', 'file_brain_AXFLAIR_210_6001889.h5', 'file_brain_AXFLAIR_210_6001925.h5', 'file_brain_AXFLAIR_210_6001552.h5', 'file_brain_AXFLAIR_202_6000496.h5', 'file_brain_AXFLAIR_201_6002981.h5', 'file_brain_AXFLAIR_209_6001346.h5', 'file_brain_AXFLAIR_201_6002993.h5', 'file_brain_AXFLAIR_201_6002934.h5', 'file_brain_AXFLAIR_209_6001360.h5', 'file_brain_AXFLAIR_203_6000946.h5', 'file_brain_AXFLAIR_203_6000949.h5', 'file_brain_AXFLAIR_210_6001955.h5', 'file_brain_AXFLAIR_203_6000933.h5', 'file_brain_AXFLAIR_200_6002458.h5', 'file_brain_AXFLAIR_201_6002888.h5', 'file_brain_AXFLAIR_201_6003017.h5', 'file_brain_AXFLAIR_201_6003026.h5', 'file_brain_AXFLAIR_210_6001521.h5', 'file_brain_AXFLAIR_202_6000590.h5', 'file_brain_AXFLAIR_201_6002992.h5', 'file_brain_AXFLAIR_201_6002923.h5', 'file_brain_AXFLAIR_210_6001480.h5', 'file_brain_AXFLAIR_210_6001513.h5', 'file_brain_AXFLAIR_200_6002650.h5', 'file_brain_AXFLAIR_209_6001393.h5', 'file_brain_AXFLAIR_201_6002903.h5', 'file_brain_AXFLAIR_202_6000566.h5', 'file_brain_AXFLAIR_202_6000542.h5', 'file_brain_AXFLAIR_202_6000498.h5', 'file_brain_AXFLAIR_209_6001344.h5', 'file_brain_AXFLAIR_201_6003023.h5', 'file_brain_AXFLAIR_201_6003028.h5', 'file_brain_AXFLAIR_202_6000474.h5', 'file_brain_AXFLAIR_201_6002892.h5', 'file_brain_AXFLAIR_200_6002541.h5', 'file_brain_AXFLAIR_200_6002606.h5', 'file_brain_AXFLAIR_209_6001362.h5', 'file_brain_AXFLAIR_203_6000957.h5', 'file_brain_AXFLAIR_202_6000562.h5', 'file_brain_AXFLAIR_200_6002506.h5', 'file_brain_AXFLAIR_205_6000175.h5', 'file_brain_AXFLAIR_202_6000424.h5', 'file_brain_AXFLAIR_203_6000936.h5', 'file_brain_AXFLAIR_203_6000941.h5', 'file_brain_AXFLAIR_201_6003004.h5', 'file_brain_AXFLAIR_201_6002914.h5', 'file_brain_AXFLAIR_203_6000912.h5', 'file_brain_AXFLAIR_202_6000472.h5', 'file_brain_AXFLAIR_200_6002503.h5', 'file_brain_AXFLAIR_203_6000964.h5', 'file_brain_AXFLAIR_210_6001905.h5', 'file_brain_AXFLAIR_202_6000507.h5', 'file_brain_AXFLAIR_205_6000165.h5', 'file_brain_AXFLAIR_210_6001914.h5', 'file_brain_AXFLAIR_203_6000937.h5', 'file_brain_AXFLAIR_200_6002425.h5', 'file_brain_AXFLAIR_202_6000529.h5', 'file_brain_AXFLAIR_210_6001504.h5', 'file_brain_AXFLAIR_202_6000530.h5', 'file_brain_AXFLAIR_200_6002460.h5', 'file_brain_AXFLAIR_210_6001479.h5', 'file_brain_AXFLAIR_200_6002600.h5', 'file_brain_AXFLAIR_210_6001875.h5', 'file_brain_AXFLAIR_203_6000927.h5', 'file_brain_AXFLAIR_202_6000567.h5', 'file_brain_AXFLAIR_202_6000556.h5', 'file_brain_AXFLAIR_200_6002595.h5', 'file_brain_AXFLAIR_200_6002570.h5', 'file_brain_AXFLAIR_200_6002646.h5', 'file_brain_AXFLAIR_203_6000955.h5', 'file_brain_AXFLAIR_202_6000481.h5', 'file_brain_AXFLAIR_210_6001545.h5', 'file_brain_AXFLAIR_202_6000456.h5', 'file_brain_AXFLAIR_202_6000508.h5', 'file_brain_AXFLAIR_202_6000579.h5', 'file_brain_AXFLAIR_201_6002906.h5', 'file_brain_AXFLAIR_205_6000164.h5', 'file_brain_AXFLAIR_200_6002611.h5', 'file_brain_AXFLAIR_203_6000928.h5', 'file_brain_AXFLAIR_201_6003029.h5', 'file_brain_AXFLAIR_201_6002882.h5', 'file_brain_AXFLAIR_200_6002614.h5', 'file_brain_AXFLAIR_202_6000502.h5', 'file_brain_AXFLAIR_202_6000431.h5', 'file_brain_AXFLAIR_201_6003027.h5', 'file_brain_AXFLAIR_210_6001555.h5', 'file_brain_AXFLAIR_203_6000942.h5', 'file_brain_AXFLAIR_202_6000528.h5', 'file_brain_AXFLAIR_201_6002925.h5', 'file_brain_AXFLAIR_203_6000884.h5', 'file_brain_AXFLAIR_203_6000905.h5', 'file_brain_AXFLAIR_201_6002960.h5', 'file_brain_AXFLAIR_200_6002507.h5', 'file_brain_AXFLAIR_201_6002973.h5', 'file_brain_AXFLAIR_201_6002941.h5', 'file_brain_AXFLAIR_210_6001901.h5', 'file_brain_AXFLAIR_210_6001519.h5', 'file_brain_AXFLAIR_202_6000492.h5', 'file_brain_AXFLAIR_200_6002456.h5', 'file_brain_AXFLAIR_202_6000425.h5', 'file_brain_AXFLAIR_201_6002931.h5', 'file_brain_AXFLAIR_201_6002896.h5', 'file_brain_AXFLAIR_203_6000929.h5', 'file_brain_AXFLAIR_203_6000898.h5', 'file_brain_AXFLAIR_203_6000954.h5', 'file_brain_AXFLAIR_209_6001386.h5']
+Train data loaded
+['file_brain_AXFLAIR_210_6001553.h5', 'file_brain_AXFLAIR_202_6000499.h5', 'file_brain_AXFLAIR_202_6000586.h5', 'file_brain_AXFLAIR_200_6002556.h5', 'file_brain_AXFLAIR_200_6002560.h5', 'file_brain_AXFLAIR_210_6001497.h5', 'file_brain_AXFLAIR_210_6001950.h5', 'file_brain_AXFLAIR_201_6002872.h5', 'file_brain_AXFLAIR_210_6001919.h5', 'file_brain_AXFLAIR_201_6002868.h5', 'file_brain_AXFLAIR_210_6001907.h5', 'file_brain_AXFLAIR_202_6000476.h5', 'file_brain_AXFLAIR_203_6000921.h5', 'file_brain_AXFLAIR_202_6000532.h5', 'file_brain_AXFLAIR_200_6002584.h5', 'file_brain_AXFLAIR_200_6002603.h5', 'file_brain_AXFLAIR_210_6001927.h5', 'file_brain_AXFLAIR_200_6002477.h5', 'file_brain_AXFLAIR_203_6000881.h5', 'file_brain_AXFLAIR_203_6000925.h5', 'file_brain_AXFLAIR_202_6000583.h5', 'file_brain_AXFLAIR_201_6002969.h5', 'file_brain_AXFLAIR_203_6000923.h5', 'file_brain_AXFLAIR_209_6001423.h5', 'file_brain_AXFLAIR_201_6003021.h5', 'file_brain_AXFLAIR_202_6000571.h5', 'file_brain_AXFLAIR_210_6001492.h5', 'file_brain_AXFLAIR_200_6002588.h5', 'file_brain_AXFLAIR_210_6001538.h5', 'file_brain_AXFLAIR_209_6001351.h5', 'file_brain_AXFLAIR_209_6001358.h5', 'file_brain_AXFLAIR_201_6002975.h5', 'file_brain_AXFLAIR_210_6001917.h5', 'file_brain_AXFLAIR_202_6000422.h5', 'file_brain_AXFLAIR_202_6000427.h5', 'file_brain_AXFLAIR_206_6000243.h5', 'file_brain_AXFLAIR_210_6001910.h5', 'file_brain_AXFLAIR_200_6002483.h5', 'file_brain_AXFLAIR_203_6000924.h5', 'file_brain_AXFLAIR_203_6000917.h5', 'file_brain_AXFLAIR_201_6002968.h5', 'file_brain_AXFLAIR_209_6001399.h5', 'file_brain_AXFLAIR_202_6000418.h5', 'file_brain_AXFLAIR_206_6000238.h5', 'file_brain_AXFLAIR_201_6002942.h5', 'file_brain_AXFLAIR_202_6000450.h5', 'file_brain_AXFLAIR_203_6000962.h5', 'file_brain_AXFLAIR_202_6000420.h5', 'file_brain_AXFLAIR_200_6002605.h5', 'file_brain_AXFLAIR_206_6000248.h5', 'file_brain_AXFLAIR_201_6002936.h5', 'file_brain_AXFLAIR_209_6001389.h5', 'file_brain_AXFLAIR_202_6000559.h5', 'file_brain_AXFLAIR_206_6000262.h5', 'file_brain_AXFLAIR_202_6000423.h5', 'file_brain_AXFLAIR_200_6002581.h5', 'file_brain_AXFLAIR_201_6002949.h5', 'file_brain_AXFLAIR_200_6002562.h5', 'file_brain_AXFLAIR_205_6000163.h5', 'file_brain_AXFLAIR_202_6000573.h5', 'file_brain_AXFLAIR_203_6000896.h5', 'file_brain_AXFLAIR_201_6002873.h5', 'file_brain_AXFLAIR_201_6002915.h5', 'file_brain_AXFLAIR_200_6002536.h5', 'file_brain_AXFLAIR_201_6002874.h5', 'file_brain_AXFLAIR_203_6000906.h5', 'file_brain_AXFLAIR_201_6003001.h5', 'file_brain_AXFLAIR_200_6002652.h5', 'file_brain_AXFLAIR_200_6002634.h5', 'file_brain_AXFLAIR_202_6000510.h5', 'file_brain_AXFLAIR_203_6000938.h5', 'file_brain_AXFLAIR_200_6002574.h5', 'file_brain_AXFLAIR_203_6000956.h5', 'file_brain_AXFLAIR_203_6000939.h5', 'file_brain_AXFLAIR_203_6000909.h5', 'file_brain_AXFLAIR_200_6002462.h5', 'file_brain_AXFLAIR_210_6001932.h5', 'file_brain_AXFLAIR_201_6002974.h5', 'file_brain_AXFLAIR_201_6002985.h5', 'file_brain_AXFLAIR_201_6002913.h5', 'file_brain_AXFLAIR_200_6002471.h5', 'file_brain_AXFLAIR_209_6001370.h5', 'file_brain_AXFLAIR_202_6000468.h5', 'file_brain_AXFLAIR_201_6002910.h5', 'file_brain_AXFLAIR_202_6000521.h5', 'file_brain_AXFLAIR_201_6002912.h5', 'file_brain_AXFLAIR_200_6002656.h5', 'file_brain_AXFLAIR_202_6000486.h5', 'file_brain_AXFLAIR_201_6003000.h5', 'file_brain_AXFLAIR_201_6002979.h5', 'file_brain_AXFLAIR_201_6002899.h5', 'file_brain_AXFLAIR_202_6000569.h5', 'file_brain_AXFLAIR_201_6002988.h5', 'file_brain_AXFLAIR_201_6002948.h5', 'file_brain_AXFLAIR_202_6000447.h5', 'file_brain_AXFLAIR_200_6002572.h5', 'file_brain_AXFLAIR_201_6003025.h5', 'file_brain_AXFLAIR_206_6000230.h5', 'file_brain_AXFLAIR_209_6001366.h5', 'file_brain_AXFLAIR_201_6002946.h5', 'file_brain_AXFLAIR_202_6000533.h5', 'file_brain_AXFLAIR_202_6000520.h5', 'file_brain_AXFLAIR_201_6003015.h5', 'file_brain_AXFLAIR_200_6002499.h5', 'file_brain_AXFLAIR_210_6001526.h5', 'file_brain_AXFLAIR_201_6002922.h5']
+Valid data loaded
+Start training:
+Epoch: 0
+epoch 0: train_l2_loss 26.540407 train_lat_loss 960.393951 total train_loss 26.540407
+epoch 0: test_l2_loss 0.000562 test_lat_loss 1.727342 total loss 1.727905
+Epoch: 1
+epoch 1: train_l2_loss 6.632032 train_lat_loss 677.484339 total train_loss 40.506248
+epoch 1: test_l2_loss 0.378048 test_lat_loss 6.750959 total loss 7.129007
+Epoch: 2
+epoch 2: train_l2_loss 3.198195 train_lat_loss 599.327832 total train_loss 63.130978
+epoch 2: test_l2_loss 0.788798 test_lat_loss 15.447754 total loss 16.236552
+Epoch: 3
+epoch 3: train_l2_loss 1.917256 train_lat_loss 448.916553 total train_loss 69.254739
+epoch 3: test_l2_loss 0.690903 test_lat_loss 26.265238 total loss 26.956141
+Epoch: 4
+epoch 4: train_l2_loss 1.313487 train_lat_loss 357.709005 total train_loss 72.855288
+epoch 4: test_l2_loss 0.638569 test_lat_loss 39.916150 total loss 40.554719
+Epoch: 5
+epoch 5: train_l2_loss 1.038489 train_lat_loss 289.676353 total train_loss 73.457577
+epoch 5: test_l2_loss 0.564956 test_lat_loss 54.337226 total loss 54.902181
+Epoch: 6
+epoch 6: train_l2_loss 0.923636 train_lat_loss 234.488729 total train_loss 71.270255
+epoch 6: test_l2_loss 0.653701 test_lat_loss 62.953280 total loss 63.606982
+Epoch: 7
+epoch 7: train_l2_loss 0.816438 train_lat_loss 193.589342 total train_loss 68.572708
+epoch 7: test_l2_loss 0.657084 test_lat_loss 62.394850 total loss 63.051933
+Epoch: 8
+epoch 8: train_l2_loss 0.714111 train_lat_loss 168.155339 total train_loss 67.976247
+epoch 8: test_l2_loss 0.494237 test_lat_loss 55.394398 total loss 55.888635
+Epoch: 9
+epoch 9: train_l2_loss 0.646889 train_lat_loss 148.252671 total train_loss 67.360591
+epoch 9: test_l2_loss 0.356285 test_lat_loss 46.361990 total loss 46.718274
+Epoch: 10
+epoch 10: train_l2_loss 0.556956 train_lat_loss 141.401380 total train_loss 71.257646
+epoch 10: test_l2_loss 0.269999 test_lat_loss 40.636748 total loss 40.906748
+Epoch: 11
+epoch 11: train_l2_loss 0.503227 train_lat_loss 133.547165 total train_loss 73.954168
+epoch 11: test_l2_loss 0.214047 test_lat_loss 35.231812 total loss 35.445859
+Epoch: 12
+epoch 12: train_l2_loss 0.413086 train_lat_loss 125.080588 total train_loss 75.461438
+epoch 12: test_l2_loss 0.202907 test_lat_loss 30.679208 total loss 30.882114
+Epoch: 13
+epoch 13: train_l2_loss 0.394737 train_lat_loss 123.850259 total train_loss 80.897406
+epoch 13: test_l2_loss 0.219219 test_lat_loss 27.475877 total loss 27.695096
+Epoch: 14
+epoch 14: train_l2_loss 0.365178 train_lat_loss 121.065463 total train_loss 85.111003
+epoch 14: test_l2_loss 0.173779 test_lat_loss 26.795138 total loss 26.968917
+Epoch: 15
+epoch 15: train_l2_loss 0.324106 train_lat_loss 116.442658 total train_loss 87.656100
+epoch 15: test_l2_loss 0.154986 test_lat_loss 27.621529 total loss 27.776516
+Epoch: 16
+epoch 16: train_l2_loss 0.297759 train_lat_loss 112.869337 total train_loss 90.593229
+epoch 16: test_l2_loss 0.111033 test_lat_loss 33.130727 total loss 33.241759
+Epoch: 17
+epoch 17: train_l2_loss 0.278441 train_lat_loss 111.083068 total train_loss 94.699048
+epoch 17: test_l2_loss 0.116397 test_lat_loss 38.961831 total loss 39.078228
+Epoch: 18
+epoch 18: train_l2_loss 0.253293 train_lat_loss 109.345967 total train_loss 98.664664
+epoch 18: test_l2_loss 0.114393 test_lat_loss 52.132369 total loss 52.246762
+Epoch: 19
+epoch 19: train_l2_loss 0.250383 train_lat_loss 106.885715 total train_loss 101.791812
+epoch 19: test_l2_loss 0.124614 test_lat_loss 87.338402 total loss 87.463016
+Epoch: 20
+epoch 20: train_l2_loss 0.244604 train_lat_loss 106.436637 total train_loss 106.681241
+epoch 20: test_l2_loss 0.110617 test_lat_loss 84.501963 total loss 84.612580
+Epoch: 21
+epoch 21: train_l2_loss 0.217877 train_lat_loss 103.712432 total train_loss 103.930309
+epoch 21: test_l2_loss 0.115391 test_lat_loss 105.442826 total loss 105.558217
+Epoch: 22
+epoch 22: train_l2_loss 0.195301 train_lat_loss 102.742575 total train_loss 102.937876
+epoch 22: test_l2_loss 0.082543 test_lat_loss 73.121421 total loss 73.203964
+Epoch: 23
+epoch 23: train_l2_loss 0.194548 train_lat_loss 101.563680 total train_loss 101.758228
+epoch 23: test_l2_loss 0.137384 test_lat_loss 152.420575 total loss 152.557958
+Epoch: 24
+epoch 24: train_l2_loss 0.173172 train_lat_loss 100.199338 total train_loss 100.372509
+epoch 24: test_l2_loss 0.110272 test_lat_loss 117.174763 total loss 117.285036
+Epoch: 25
+epoch 25: train_l2_loss 0.179274 train_lat_loss 99.779621 total train_loss 99.958894
+epoch 25: test_l2_loss 0.096751 test_lat_loss 103.096409 total loss 103.193160
+Epoch: 26
+epoch 26: train_l2_loss 0.181290 train_lat_loss 99.285299 total train_loss 99.466589
+epoch 26: test_l2_loss 0.096825 test_lat_loss 149.067287 total loss 149.164112
+Epoch: 27
+epoch 27: train_l2_loss 0.155318 train_lat_loss 97.460123 total train_loss 97.615442
+epoch 27: test_l2_loss 0.079382 test_lat_loss 88.062488 total loss 88.141869
+Epoch: 28
+epoch 28: train_l2_loss 0.145062 train_lat_loss 96.225394 total train_loss 96.370456
+epoch 28: test_l2_loss 0.093864 test_lat_loss 131.278132 total loss 131.371996
+Epoch: 29
+epoch 29: train_l2_loss 0.129646 train_lat_loss 95.272212 total train_loss 95.401857
+epoch 29: test_l2_loss 0.068498 test_lat_loss 88.906593 total loss 88.975091
+Epoch: 30
+epoch 30: train_l2_loss 0.131349 train_lat_loss 94.530887 total train_loss 94.662236
+epoch 30: test_l2_loss 0.074478 test_lat_loss 112.694770 total loss 112.769248
+Epoch: 31
+epoch 31: train_l2_loss 0.117107 train_lat_loss 93.498434 total train_loss 93.615541
+epoch 31: test_l2_loss 0.065200 test_lat_loss 76.065310 total loss 76.130510
+Epoch: 32
+epoch 32: train_l2_loss 0.122460 train_lat_loss 93.631755 total train_loss 93.754215
+epoch 32: test_l2_loss 0.064962 test_lat_loss 106.411159 total loss 106.476120
+Epoch: 33
+epoch 33: train_l2_loss 0.129835 train_lat_loss 92.496706 total train_loss 92.626541
+epoch 33: test_l2_loss 0.080318 test_lat_loss 163.078394 total loss 163.158712
+Epoch: 34
+epoch 34: train_l2_loss 0.113919 train_lat_loss 91.237281 total train_loss 91.351200
+epoch 34: test_l2_loss 0.057852 test_lat_loss 84.201643 total loss 84.259496
+Epoch: 35
+epoch 35: train_l2_loss 0.105029 train_lat_loss 91.475648 total train_loss 91.580677
+epoch 35: test_l2_loss 0.078222 test_lat_loss 145.973582 total loss 146.051804
+Epoch: 36
+epoch 36: train_l2_loss 0.109714 train_lat_loss 89.889433 total train_loss 89.999147
+epoch 36: test_l2_loss 0.042148 test_lat_loss 50.647624 total loss 50.689772
+Epoch: 37
+epoch 37: train_l2_loss 0.094979 train_lat_loss 89.827013 total train_loss 89.921991
+epoch 37: test_l2_loss 0.047536 test_lat_loss 86.170688 total loss 86.218224
+Epoch: 38
+epoch 38: train_l2_loss 0.091130 train_lat_loss 88.961898 total train_loss 89.053027
+epoch 38: test_l2_loss 0.065251 test_lat_loss 100.083900 total loss 100.149151
+Epoch: 39
+epoch 39: train_l2_loss 0.086665 train_lat_loss 88.035617 total train_loss 88.122282
+epoch 39: test_l2_loss 0.035185 test_lat_loss 55.120240 total loss 55.155425
+Epoch: 40
+epoch 40: train_l2_loss 0.086287 train_lat_loss 87.164644 total train_loss 87.250930
+epoch 40: test_l2_loss 0.063279 test_lat_loss 101.653021 total loss 101.716300
+Epoch: 41
+epoch 41: train_l2_loss 0.074078 train_lat_loss 86.583363 total train_loss 86.657441
+epoch 41: test_l2_loss 0.040143 test_lat_loss 60.110157 total loss 60.150300
+Epoch: 42
+epoch 42: train_l2_loss 0.073904 train_lat_loss 85.493914 total train_loss 85.567818
+epoch 42: test_l2_loss 0.036834 test_lat_loss 53.351777 total loss 53.388611
+Epoch: 43
+epoch 43: train_l2_loss 0.079161 train_lat_loss 85.588085 total train_loss 85.667246
+epoch 43: test_l2_loss 0.042888 test_lat_loss 74.206425 total loss 74.249313
+Epoch: 44
+epoch 44: train_l2_loss 0.064890 train_lat_loss 84.624435 total train_loss 84.689326
+epoch 44: test_l2_loss 0.051446 test_lat_loss 104.114488 total loss 104.165933
+Epoch: 45
+epoch 45: train_l2_loss 0.077156 train_lat_loss 84.240621 total train_loss 84.317777
+epoch 45: test_l2_loss 0.037331 test_lat_loss 67.390081 total loss 67.427412
+Epoch: 46
+epoch 46: train_l2_loss 0.072900 train_lat_loss 83.686947 total train_loss 83.759848
+epoch 46: test_l2_loss 0.049810 test_lat_loss 128.007768 total loss 128.057579
+Epoch: 47
+epoch 47: train_l2_loss 0.066883 train_lat_loss 83.562694 total train_loss 83.629577
+epoch 47: test_l2_loss 0.078975 test_lat_loss 220.330204 total loss 220.409179
+Epoch: 48
+epoch 48: train_l2_loss 0.064094 train_lat_loss 82.889958 total train_loss 82.954053
+epoch 48: test_l2_loss 0.039208 test_lat_loss 89.342280 total loss 89.381488
+Epoch: 49
+epoch 49: train_l2_loss 0.072357 train_lat_loss 80.603913 total train_loss 80.676270
+epoch 49: test_l2_loss 0.045489 test_lat_loss 69.087058 total loss 69.132547
+Epoch: 50
+epoch 50: train_l2_loss 0.058414 train_lat_loss 81.049763 total train_loss 81.108177
+epoch 50: test_l2_loss 0.065337 test_lat_loss 227.537794 total loss 227.603131
+Epoch: 51
+epoch 51: train_l2_loss 0.053823 train_lat_loss 79.951985 total train_loss 80.005808
+epoch 51: test_l2_loss 0.025564 test_lat_loss 35.417614 total loss 35.443177
+Epoch: 52
+epoch 52: train_l2_loss 0.056437 train_lat_loss 79.810875 total train_loss 79.867312
+epoch 52: test_l2_loss 0.020698 test_lat_loss 30.964188 total loss 30.984886
+Epoch: 53
+epoch 53: train_l2_loss 0.051727 train_lat_loss 79.528821 total train_loss 79.580548
+epoch 53: test_l2_loss 0.021433 test_lat_loss 38.828503 total loss 38.849937
+Epoch: 54
+epoch 54: train_l2_loss 0.051700 train_lat_loss 78.686238 total train_loss 78.737938
+epoch 54: test_l2_loss 0.022153 test_lat_loss 48.945810 total loss 48.967963
+Epoch: 55
+epoch 55: train_l2_loss 0.047782 train_lat_loss 77.717430 total train_loss 77.765212
+epoch 55: test_l2_loss 0.027132 test_lat_loss 37.494974 total loss 37.522106
+Epoch: 56
+epoch 56: train_l2_loss 0.044951 train_lat_loss 77.884056 total train_loss 77.929007
+epoch 56: test_l2_loss 0.031357 test_lat_loss 81.765190 total loss 81.796547
+Epoch: 57
+epoch 57: train_l2_loss 0.053694 train_lat_loss 77.535022 total train_loss 77.588716
+epoch 57: test_l2_loss 0.024766 test_lat_loss 44.917510 total loss 44.942276
+Epoch: 58
+epoch 58: train_l2_loss 0.050831 train_lat_loss 77.368883 total train_loss 77.419713
+epoch 58: test_l2_loss 0.030110 test_lat_loss 132.917187 total loss 132.947298
+Epoch: 59
+epoch 59: train_l2_loss 0.051598 train_lat_loss 75.439850 total train_loss 75.491447
+epoch 59: test_l2_loss 0.031722 test_lat_loss 108.960499 total loss 108.992220
+Epoch: 60
+epoch 60: train_l2_loss 0.040786 train_lat_loss 75.766422 total train_loss 75.807208
+epoch 60: test_l2_loss 0.044923 test_lat_loss 187.930431 total loss 187.975355
+Epoch: 61
+epoch 61: train_l2_loss 0.042366 train_lat_loss 75.865943 total train_loss 75.908310
+epoch 61: test_l2_loss 0.018533 test_lat_loss 44.758309 total loss 44.776842
+Epoch: 62
+epoch 62: train_l2_loss 0.042826 train_lat_loss 75.770323 total train_loss 75.813148
+epoch 62: test_l2_loss 0.022540 test_lat_loss 65.959637 total loss 65.982177
+Epoch: 63
+epoch 63: train_l2_loss 0.039134 train_lat_loss 75.532867 total train_loss 75.572001
+epoch 63: test_l2_loss 0.046906 test_lat_loss 216.579308 total loss 216.626213
+Epoch: 64
+epoch 64: train_l2_loss 0.046717 train_lat_loss 73.785348 total train_loss 73.832066
+epoch 64: test_l2_loss 0.013793 test_lat_loss 44.964333 total loss 44.978127
+Epoch: 65
+epoch 65: train_l2_loss 0.046220 train_lat_loss 74.461500 total train_loss 74.507721
+epoch 65: test_l2_loss 0.040428 test_lat_loss 177.382545 total loss 177.422973
+Epoch: 66
+epoch 66: train_l2_loss 0.046200 train_lat_loss 72.278569 total train_loss 72.324769
+epoch 66: test_l2_loss 0.050180 test_lat_loss 134.585124 total loss 134.635305
+Epoch: 67
+epoch 67: train_l2_loss 0.040260 train_lat_loss 72.685774 total train_loss 72.726034
+epoch 67: test_l2_loss 0.034202 test_lat_loss 156.493707 total loss 156.527909
+Epoch: 68
+epoch 68: train_l2_loss 0.037112 train_lat_loss 72.044077 total train_loss 72.081190
+epoch 68: test_l2_loss 0.020794 test_lat_loss 58.310685 total loss 58.331478
+Epoch: 69
+epoch 69: train_l2_loss 0.036349 train_lat_loss 71.728718 total train_loss 71.765067
+epoch 69: test_l2_loss 0.027931 test_lat_loss 126.476264 total loss 126.504195
+Epoch: 70
+epoch 70: train_l2_loss 0.037111 train_lat_loss 70.993918 total train_loss 71.031029
+epoch 70: test_l2_loss 0.033485 test_lat_loss 122.572000 total loss 122.605485
+Epoch: 71
+epoch 71: train_l2_loss 0.049270 train_lat_loss 72.619120 total train_loss 72.668390
+epoch 71: test_l2_loss 0.054899 test_lat_loss 204.349004 total loss 204.403904
+Epoch: 72
+epoch 72: train_l2_loss 0.039800 train_lat_loss 70.815389 total train_loss 70.855189
+epoch 72: test_l2_loss 0.020117 test_lat_loss 48.338696 total loss 48.358813
+Epoch: 73
+epoch 73: train_l2_loss 0.038374 train_lat_loss 70.894015 total train_loss 70.932388
+epoch 73: test_l2_loss 0.041629 test_lat_loss 121.642628 total loss 121.684256
+Epoch: 74
+epoch 74: train_l2_loss 0.040747 train_lat_loss 70.841972 total train_loss 70.882718
+epoch 74: test_l2_loss 0.065511 test_lat_loss 233.629247 total loss 233.694758
+Epoch: 75
+epoch 75: train_l2_loss 0.034931 train_lat_loss 69.657929 total train_loss 69.692861
+epoch 75: test_l2_loss 0.014569 test_lat_loss 53.917047 total loss 53.931616
+Epoch: 76
+epoch 76: train_l2_loss 0.038320 train_lat_loss 70.380691 total train_loss 70.419010
+epoch 76: test_l2_loss 0.084409 test_lat_loss 332.823914 total loss 332.908323
+Epoch: 77
+epoch 77: train_l2_loss 0.033695 train_lat_loss 69.335460 total train_loss 69.369155
+epoch 77: test_l2_loss 0.023622 test_lat_loss 109.404629 total loss 109.428251
+Epoch: 78
+epoch 78: train_l2_loss 0.040727 train_lat_loss 68.468880 total train_loss 68.509607
+epoch 78: test_l2_loss 0.170125 test_lat_loss 446.022535 total loss 446.192660
+Epoch: 79
+epoch 79: train_l2_loss 0.042975 train_lat_loss 68.283002 total train_loss 68.325977
+epoch 79: test_l2_loss 0.027703 test_lat_loss 110.596066 total loss 110.623769
+Epoch: 80
+epoch 80: train_l2_loss 0.029345 train_lat_loss 68.195685 total train_loss 68.225029
+epoch 80: test_l2_loss 0.022302 test_lat_loss 77.543254 total loss 77.565556
+Epoch: 81
+epoch 81: train_l2_loss 0.033518 train_lat_loss 67.466808 total train_loss 67.500326
+epoch 81: test_l2_loss 0.026078 test_lat_loss 103.787617 total loss 103.813695
+Epoch: 82
+epoch 82: train_l2_loss 0.032039 train_lat_loss 66.045681 total train_loss 66.077720
+epoch 82: test_l2_loss 0.016225 test_lat_loss 82.414541 total loss 82.430766
+Epoch: 83
+epoch 83: train_l2_loss 0.030248 train_lat_loss 67.350063 total train_loss 67.380311
+epoch 83: test_l2_loss 0.099309 test_lat_loss 591.309125 total loss 591.408434
+Epoch: 84
+epoch 84: train_l2_loss 0.028851 train_lat_loss 66.409386 total train_loss 66.438237
+epoch 84: test_l2_loss 0.071214 test_lat_loss 380.575258 total loss 380.646471
+Epoch: 85
+epoch 85: train_l2_loss 0.027895 train_lat_loss 66.029630 total train_loss 66.057525
+epoch 85: test_l2_loss 0.024088 test_lat_loss 136.498315 total loss 136.522404
+Epoch: 86

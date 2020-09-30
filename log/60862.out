@@ -24,12 +24,26 @@
   np_resource = np.dtype([("resource", np.ubyte, 1)])
 >>> lat_dim value: 60
 >>> mode is: jonatank
+2020-09-29 20:41:56.226015: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2020-09-29 20:41:56.262971: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2600115000 Hz
+2020-09-29 20:41:56.263493: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x561b118470c0 executing computations on platform Host. Devices:
+2020-09-29 20:41:56.263536: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+[name: "/device:CPU:0"
+device_type: "CPU"
+memory_limit: 268435456
+locality {
+}
+incarnation: 3227866438586414226
+, name: "/device:XLA_CPU:0"
+device_type: "XLA_CPU"
+memory_limit: 17179869184
+locality {
+}
+incarnation: 11414470133672178877
+physical_device_desc: "device: XLA_CPU device"
+]
 CAME HERE!! 1
 CAME HERE!! 11
-2020-09-29 20:23:45.392910: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
-2020-09-29 20:23:45.397049: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2600015000 Hz
-2020-09-29 20:23:45.397295: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55903a4e1c20 executing computations on platform Host. Devices:
-2020-09-29 20:23:45.397313: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
 CAME HERE!! 12
 WARNING:tensorflow:
 The TensorFlow contrib module will not be included in TensorFlow 2.0.
@@ -42,26 +56,19 @@ If you depend on functionality not listed there, please file an issue.
 WARNING:tensorflow:From /scratch_net/bmicdl03/jonatank/conda_envs/tf1/lib/python3.7/site-packages/tensorflow/contrib/layers/python/layers/layers.py:1634: flatten (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
 Instructions for updating:
 Use keras.layers.flatten instead.
-WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efea00d52d0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efea00d52d0>>: AttributeError: module 'gast' has no attribute 'Index'
-WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efe9bc4f3d0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efe9bc4f3d0>>: AttributeError: module 'gast' has no attribute 'Index'
-WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efe9bc7af90>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7efe9bc7af90>>: AttributeError: module 'gast' has no attribute 'Index'
+WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc047efd0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc047efd0>>: AttributeError: module 'gast' has no attribute 'Index'
+WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc052cfd0>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc052cfd0>>: AttributeError: module 'gast' has no attribute 'Index'
+WARNING:tensorflow:Entity <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc0542490>> could not be transformed and will be executed as-is. Please report this to the AutgoGraph team. When filing the bug, set the verbosity to 10 (on Linux, `export AUTOGRAPH_VERBOSITY=10`) and attach the full output. Cause: converting <bound method Flatten.call of <tensorflow.python.layers.core.Flatten object at 0x7fdfc0542490>>: AttributeError: module 'gast' has no attribute 'Index'
 CAME HERE!! 2
 WARNING:tensorflow:From /scratch_net/bmicdl03/jonatank/conda_envs/tf1/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Use tf.where in 2.0, which has the same broadcast rule as np.where
 CAME HERE!! 3
 CAME HERE!! 31
-2020-09-29 20:23:51.546803: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
+2020-09-29 20:42:04.157187: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
 CAME HERE!! 32
 Initialized parameters
 CAME HERE!! 33
 CAME HERE!! 4
-Step 0 | L2 Loss: -99.071 | KLD Loss: 0.017 | L2 Loss_1: 270.213 | L2 Loss_2: 369.283 | loss_tot: -57.896 | L2 Loss test: 141.327
-Step 500 | L2 Loss: -3769.881 | KLD Loss: 0.009 | L2 Loss_1: 79.538 | L2 Loss_2: 3849.418 | loss_tot: -1912.591 | L2 Loss test: 0.496
-Step 1000 | L2 Loss: -5315.817 | KLD Loss: 0.013 | L2 Loss_1: 715.247 | L2 Loss_2: 6031.064 | loss_tot: -2624.199 | L2 Loss test: 0.324
-Step 1500 | L2 Loss: -5320.817 | KLD Loss: 0.016 | L2 Loss_1: 769.958 | L2 Loss_2: 6090.775 | loss_tot: -2660.636 | L2 Loss test: 0.316
-Step 2000 | L2 Loss: -5350.659 | KLD Loss: 0.017 | L2 Loss_1: 753.832 | L2 Loss_2: 6104.491 | loss_tot: -2675.173 | L2 Loss test: 0.314
-Step 2500 | L2 Loss: -5337.541 | KLD Loss: 0.018 | L2 Loss_1: 785.909 | L2 Loss_2: 6123.450 | loss_tot: -2669.782 | L2 Loss test: 0.315
-Step 3000 | L2 Loss: -5344.070 | KLD Loss: 0.018 | L2 Loss_1: 777.780 | L2 Loss_2: 6121.850 | loss_tot: -2670.668 | L2 Loss test: 0.315
-Step 3500 | L2 Loss: -5325.173 | KLD Loss: 0.018 | L2 Loss_1: 799.949 | L2 Loss_2: 6125.123 | loss_tot: -2663.130 | L2 Loss test: 0.316
-slurmstepd: error: *** JOB 60856 ON bmicgpu02 CANCELLED AT 2020-09-30T09:44:11 ***
+Step 0 | L2 Loss: -119.939 | KLD Loss: 0.020 | L2 Loss_1: 249.521 | L2 Loss_2: 369.460 | loss_tot: -57.872 | L2 Loss test: 152.616
+slurmstepd: error: *** JOB 60862 ON biwirender08 CANCELLED AT 2020-09-29T21:27:37 ***

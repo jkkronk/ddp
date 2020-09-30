@@ -1,0 +1,31 @@
+Using device: cuda:0
+Loading data...
+Train data loaded
+Valid data loaded
+Start training:
+Epoch: 0
+Traceback (most recent call last):
+  File "run_train_vae_pytorch.py", line 67, in <module>
+    loss, lat_loss, l2_loss = train_vae(vae_model, train_data_loader, device, optimizer, epoch)
+  File "/scratch_net/bmicdl03/jonatank/code/ddp/ConvVAE.py", line 214, in train_vae
+    for batch_idx, data in enumerate(train_loader): #tqdm(enumerate(train_loader), total=len(train_loader), desc='train'):
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 582, in __next__
+    return self._process_next_batch(batch)
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 608, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+OSError: Traceback (most recent call last):
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/scratch_net/bmicdl03/jonatank/code/ddp/dataloader_pytorch.py", line 38, in __getitem__
+    with h5py.File(self.dirname + self.folderpath + self.datafiles[index], 'r') as fdset:
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/h5py/_hl/files.py", line 408, in __init__
+    swmr=swmr)
+  File "/scratch_net/bmicdl03/jonatank/conda_envs/pytorch9/lib/python3.7/site-packages/h5py/_hl/files.py", line 173, in make_fid
+    fid = h5f.open(name, flags, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 88, in h5py.h5f.open
+OSError: Unable to open file (truncated file: eof = 369178112, sblock->base_addr = 0, stored_eof = 372751856)
+

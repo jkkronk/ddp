@@ -72,14 +72,6 @@ print(">>> mode is: " + mode)
      
 lat_dim_1 = max(1, np.floor(lat_dim/2))
 lat_dim_2 = lat_dim - lat_dim_1
-#
-#if user=='Kerem':
-#     os.environ["CUDA_VISIBLE_DEVICES"] = os.environ['SGE_GPU']
-#     from tensorflow.python.client import device_lib
-#     print (device_lib.list_local_devices())
-#     
-#     print( os.environ['SGE_GPU'])
-
 
 num_inp_channels=1
 
@@ -103,7 +95,14 @@ tf.compat.v1.reset_default_graph()
 
 print('CAME HERE!! 11')
 
-sess = tf.compat.v1.InteractiveSession()
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+config.allow_soft_placement = True
+sess = tf.compat.v1.InteractiveSession(config=config)
+
+print(tf.compat.v1.test.is_gpu_available(
+    cuda_only=False, min_cuda_compute_capability=None
+))
 
 print('CAME HERE!! 12')
 
@@ -236,59 +235,8 @@ if useMixtureScale:
      y_out_prec_ = tf.compat.v1.exp(y_out_prec_log)
      
      y_out_prec=tf.contrib.layers.flatten(y_out_prec_)
-     
-#     #DBG # y_out_cov=tf.compat.v1.ones_like(y_out)
 
-#####################################
-
-######### One LAYER 
-## a. build the encoder layers
-#enc_L1 = fact(tf.compat.v1.nn.bias_add( tf.compat.v1.matmul(x_inp, enc_fc1_weights),  enc_fc1_biases))
-#
-## b. get the values for drawing z
-#mu = tf.compat.v1.matmul(enc_L1, mu_weights) + mu_biases
-#mu = tf.compat.v1.tile(mu, (nzsamp, 1))# replicate for number of z's you want to draw
-#logVar = tf.compat.v1.matmul(enc_L1, logVar_weights) + logVar_biases
-#logVar = tf.compat.v1.tile(logVar,  (nzsamp, 1))# replicate for number of z's you want to draw
-#std = tf.compat.v1.exp(0.5 * logVar)
-#
-## c. draw an epsilon and get z
-#epsilon = tf.compat.v1.random_normal(tf.compat.v1.shape(logVar), name='epsilon')
-#z = mu + tf.compat.v1.multiply(std, epsilon)
-#
-#
-#if useMixtureScale:
-#     
-#     indices1=tf.compat.v1.range(start=0, limit=lat_dim_1, delta=1, dtype='int32')
-#     indices2=tf.compat.v1.range(start=lat_dim_1, limit=lat_dim, delta=1, dtype='int32')
-#     
-#     z1 = tf.compat.v1.transpose(tf.compat.v1.gather(tf.compat.v1.transpose(z),indices1))
-#     z2 = tf.compat.v1.transpose(tf.compat.v1.gather(tf.compat.v1.transpose(z),indices2))
-#     
-#     
-#     # d. build the decoder layers from z1 for mu(z)
-#     dec_L1 = fact(tf.compat.v1.matmul(z1, dec_fc1_weights) + dec_fc1_biases)
-#else:
-#     dec_L1 = fact(tf.compat.v1.matmul(z, dec_fc1_weights) + dec_fc1_biases)
-#     
-#
-## e. build the output layer w/out activation function
-#y_out = tf.compat.v1.matmul(dec_L1, dec_out_weights) + dec_out_biases
-#                 
-## e.2 build the covariance at the output if using mixture of scales
-#if useMixtureScale:
-#     dec2_L1 = fact(tf.compat.v1.matmul(z2, dec2_fc1_weights) + dec2_fc1_biases)
-#     
-#     y_out_prec_log = tf.compat.v1.matmul(dec2_L1, dec_out_cov_weights) + dec_out_cov_biases
-#     
-#     #y_out_prec = tf.compat.v1.exp(y_out_prec_log) / (tf.compat.v1.exp(y_out_prec_log)*0.00001 + 1.) + 0.01
-#     y_out_prec = tf.compat.v1.exp(y_out_prec_log)
-#     
-#     #DBG # y_out_cov=tf.compat.v1.ones_like(y_out)
-######################################
-     
 print('CAME HERE!! 2')
-
 
 # build the loss functions and the optimizer
 #==============================================================================
@@ -317,22 +265,11 @@ if useMixtureScale:
      train_step = tf.compat.v1.train.AdamOptimizer(5e-4).minimize(loss_tot)
 else:
      train_step = tf.compat.v1.train.AdamOptimizer(5e-3).minimize(loss_tot)
-     
-## cost functions for reconstruction after training
-##==============================================================================
-##==============================================================================
-#x_rec=tf.compat.v1.get_variable('x_rec',shape=[5000,784],initializer=tf.compat.v1.constant_initializer(value=0.0))
-#
-#prior_cost =  - 0.5 * tf.compat.v1.reduce_sum(tf.compat.v1.multiply(tf.compat.v1.pow((y_out - x_rec),2), y_out_prec),axis=1) \
-#             + 0.5 * tf.compat.v1.reduce_sum(tf.compat.v1.log(y_out_prec), axis=1) - 0.5*784*tf.compat.v1.log(2*np.pi)
-
 
 # start session
 #==============================================================================
 #==============================================================================
 print('CAME HERE!! 3')
-
-
 
 print('CAME HERE!! 31')
 
@@ -345,7 +282,6 @@ print("Initialized parameters")
 saver = tf.compat.v1.train.Saver()
 
 print('CAME HERE!! 33')
-
 
 ts=tm.time()
 

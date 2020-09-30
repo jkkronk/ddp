@@ -18,44 +18,20 @@ class MR_image_data:
     #====================================================================
     def __init__(self, dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain', trainset_ratio = 0.5, noiseinvstd=0, patchsize=28):
         self.dirname = dirname
-        #self.imgSize = imgSize
         self.noise = noiseinvstd
-        
         self.patchsize=patchsize
-        
-        
-        #self.testchunks = testchunks
-        
-        self.hdfFileName = []
-         
 
-        self.files_brain = []
-        self.files_segms = []
-        
         self.allfiles = os.listdir(dirname+'/multicoil_train')
 
         with h5py.File(self.dirname + '/multicoil_train/' + self.allfiles[0], 'r') as fdset:
              self.reconstruction_rss_size = fdset['reconstruction_rss'].shape #  The shape of the reconstruction_rss tensor is (number of slices, r_height, r_width)
 
+        fdset.close()
+
         self.data_size = round(trainset_ratio*len(self.allfiles))
 
         self.allfiles_test = os.listdir(dirname + '/multicoil_val_old')
         self.data_size_test = len(self.allfiles_test)
-
-        #self.nochunks = 0
-     
-        #for ix in range(len(allfiles)):
-        #     if (allfiles[ix])[:3] == 'chu':
-        #          self.nochunks = self.nochunks + 1
-                  
-        #self.notrainchunks = self.nochunks - len(self.testchunks)
-        #self.notestchunks = len(self.testchunks)
-        
-        #self.imgSizeCh = self.imgSize.copy()
-        #self.imgSizeCh.append(self.nochunks)
-        
-        #with h5py.File(self.dirname+"chunk"+str(39), 'r') as fdset:
-        #     self.imgSizeCh = fdset['mydataset'].shape
 
     
     #====================================================================
@@ -67,8 +43,6 @@ class MR_image_data:
             random.shuffle(self.allfiles)
             train_files = self.allfiles[:self.data_size]
 
-            #chunkindices = np.sort(np.random.choice(self.notrainchunks, batchsize, replace=True))
-             
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size, 1, replace=False))
                 file = train_files[volindex[0]]
@@ -79,12 +53,6 @@ class MR_image_data:
                     btch[:,:,ix] = fdset['reconstruction_rss'][sliceindex[0], :,:] # vol, sli, x, y
                       
         else:
-            # To be implemented
-            #print('EXIT: Test dataloader not implemented...')
-            #quit()
-
-            # chunkindices = np.sort(np.random.choice(self.notrainchunks, batchsize, replace=True))
-
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.allfiles_test[volindex[0]]
@@ -94,34 +62,19 @@ class MR_image_data:
                     # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
                     btch[:, :, ix] = fdset['reconstruction_rss'][sliceindex[0], :, :]  # vol, sli, x, y
 
-            #chunkindices = np.sort(np.random.choice(self.notestchunks, batchsize, replace=True)) + self.notrainchunks
-             
-             #for ix, ixr in enumerate(chunkindices):
-             #     with h5py.File(self.dirname+"chunk"+str(ixr), 'r') as fdset:
-             #         volindex = np.sort(np.random.choice(self.imgSizeCh[0], 1, replace=False))
-             #         sliceindex = np.sort(np.random.choice(self.imgSizeCh[1], 1, replace=False))
-             #         #print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
-             #         btch[:,:,ix] = fdset['mydataset'][volindex[0], sliceindex[0], :,:]
-                      
-                     
-        #print("KCT-dbg: time for a batch: " + str(tm.time()-tms))   
+        fdset.close()
         
         if self.noise ==0:
              return btch
         elif self.noise > 0:
              return btch + np.random.normal(loc=0, scale=1/self.noise, size=btch.shape)
         
-    def get_patch(self, batchsize, test=False): # rixsb = np.sort(np.random.choice(self.nstrain*len(self.useSlice), batchsize, replace=False))
+    def get_patch(self, batchsize, test=False):
         btch = np.zeros([self.patchsize, self.patchsize, batchsize])
-        #btch = np.zeros([self.patchsize, self.patchsize, batchsize ])
 
         if not test:
-            #chunkindices = np.sort(np.random.choice(self.notrainchunks, batchsize, replace=True))
-
             random.shuffle(self.allfiles)
             train_files = self.allfiles[:self.data_size]
-
-            # chunkindices = np.sort(np.random.choice(self.notrainchunks, batchsize, replace=True))
 
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size, 1, replace=False))
@@ -140,8 +93,6 @@ class MR_image_data:
                                      patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
         else:
-            # To be implemented
-
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.allfiles_test[volindex[0]]
@@ -156,20 +107,8 @@ class MR_image_data:
                                      patchindexr:patchindexr + self.patchsize,
                                      patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
+        fdset.close()
 
-            #chunkindices = np.sort(np.random.choice(self.notestchunks, batchsize, replace=True)) + self.notrainchunks
-            #
-            #for ix, ixr in enumerate(chunkindices):
-            #     with h5py.File(self.dirname+"chunk"+str(ixr), 'r') as fdset:
-            #        volindex = np.sort(np.random.choice(self.imgSizeCh[0], 1, replace=False))
-            #          sliceindex = np.sort(np.random.choice(self.imgSizeCh[1], 1, replace=False))
-            #          patchindexr = np.random.randint(0, self.imgSizeCh[2] - self.patchsize)
-            #          patchindexc =  np.random.randint(self.imgSizeCh[3] - self.patchsize)
-            #          btch[:,:,ix] = fdset['mydataset'][volindex[0], sliceindex[0], patchindexr:patchindexr+self.patchsize, patchindexc:patchindexc+self.patchsize] # vol, sli, x, y
-                      
-                     
-        #print("KCT-dbg: time for a batch: " + str(tm.time()-tms))   
-        
         if self.noise ==0:
              return btch
         elif self.noise > 0:
@@ -236,7 +175,7 @@ class MR_kspace_data:
 
 
     # ====================================================================
-    def get_batch(self, batchsize, subj=0):  # rixsb = np.sort(np.random.choice(self.nstrain*len(self.useSlice), batchsize, replace=False))
+    def get_batch(self, batchsize, subj=0):
         # NOT IMPLEMENTED FOR KSPACE YET
         print('NOT IMPLEMENTED FOR KSPACE YET. EXIT')
         quit()
@@ -258,18 +197,6 @@ class MR_kspace_data:
                 sliceindex = np.sort(np.random.choice(fdset.shape[0], 1, replace=False))
                 # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
                 btch[:, :, ix] = fdset['reconstruction_rss'][sliceindex[0], :, :]  # vol, sli, x, y
-
-            # chunkindices = np.sort(np.random.choice(self.notestchunks, batchsize, replace=True)) + self.notrainchunks
-
-            # for ix, ixr in enumerate(chunkindices):
-            #     with h5py.File(self.dirname+"chunk"+str(ixr), 'r') as fdset:
-            #         volindex = np.sort(np.random.choice(self.imgSizeCh[0], 1, replace=False))
-            #         sliceindex = np.sort(np.random.choice(self.imgSizeCh[1], 1, replace=False))
-            #         #print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
-            #         btch[:,:,ix] = fdset['mydataset'][volindex[0], sliceindex[0], :,:]
-
-        # print("KCT-dbg: time for a batch: " + str(tm.time()-tms))
-
 
     def get_subj(self, subj):
         subj_name = self.allfiles[subj]

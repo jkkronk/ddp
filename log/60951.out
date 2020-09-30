@@ -1,0 +1,110 @@
+>>> lat_dim value: 60
+>>> mode is: jonatank
+2020-09-29 23:29:57.083693: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-09-29 23:29:57.094121: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2200070000 Hz
+2020-09-29 23:29:57.094413: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55972019a610 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-09-29 23:29:57.094437: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-09-29 23:29:57.151533: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2020-09-29 23:29:57.307021: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55972025f100 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2020-09-29 23:29:57.307071: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce GTX TITAN X, Compute Capability 5.2
+2020-09-29 23:29:57.309812: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:08:00.0
+2020-09-29 23:29:57.312912: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudart.so.10.0'; dlerror: libcudart.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.314672: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcublas.so.10.0'; dlerror: libcublas.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.316301: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcufft.so.10.0'; dlerror: libcufft.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.317906: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcurand.so.10.0'; dlerror: libcurand.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.319612: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusolver.so.10.0'; dlerror: libcusolver.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.321359: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusparse.so.10.0'; dlerror: libcusparse.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.323067: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudnn.so.7'; dlerror: libcudnn.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.323096: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1641] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2020-09-29 23:29:57.323121: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-09-29 23:29:57.323134: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-09-29 23:29:57.323145: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+[name: "/device:CPU:0"
+device_type: "CPU"
+memory_limit: 268435456
+locality {
+}
+incarnation: 1243620758296345633
+, name: "/device:XLA_CPU:0"
+device_type: "XLA_CPU"
+memory_limit: 17179869184
+locality {
+}
+incarnation: 15242413219662473192
+physical_device_desc: "device: XLA_CPU device"
+, name: "/device:XLA_GPU:0"
+device_type: "XLA_GPU"
+memory_limit: 17179869184
+locality {
+}
+incarnation: 16535992741324465072
+physical_device_desc: "device: XLA_GPU device"
+]
+2020-09-29 23:29:57.326399: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:08:00.0
+2020-09-29 23:29:57.326565: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudart.so.10.0'; dlerror: libcudart.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.326732: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcublas.so.10.0'; dlerror: libcublas.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.326859: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcufft.so.10.0'; dlerror: libcufft.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.326994: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcurand.so.10.0'; dlerror: libcurand.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.327108: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusolver.so.10.0'; dlerror: libcusolver.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.327221: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusparse.so.10.0'; dlerror: libcusparse.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.327335: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudnn.so.7'; dlerror: libcudnn.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.327350: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1641] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2020-09-29 23:29:57.327366: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-09-29 23:29:57.327377: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-09-29 23:29:57.327387: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+CAME HERE!! 1
+CAME HERE!! 11
+2020-09-29 23:29:57.709166: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:08:00.0
+2020-09-29 23:29:57.709340: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudart.so.10.0'; dlerror: libcudart.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709450: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcublas.so.10.0'; dlerror: libcublas.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709547: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcufft.so.10.0'; dlerror: libcufft.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709640: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcurand.so.10.0'; dlerror: libcurand.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709732: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusolver.so.10.0'; dlerror: libcusolver.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709825: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcusparse.so.10.0'; dlerror: libcusparse.so.10.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709919: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcudnn.so.7'; dlerror: libcudnn.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/pack/slurm-19.05.x-sr/amd64-debian-linux9/lib
+2020-09-29 23:29:57.709931: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1641] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2020-09-29 23:29:57.709949: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-09-29 23:29:57.709958: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2020-09-29 23:29:57.709966: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+CAME HERE!! 12
+WARNING:tensorflow:
+The TensorFlow contrib module will not be included in TensorFlow 2.0.
+For more information, please see:
+  * https://github.com/tensorflow/community/blob/master/rfcs/20180907-contrib-sunset.md
+  * https://github.com/tensorflow/addons
+  * https://github.com/tensorflow/io (for I/O related ops)
+If you depend on functionality not listed there, please file an issue.
+
+WARNING:tensorflow:From /scratch_net/bmicdl03/jonatank/conda_envs/tf1/lib/python3.7/site-packages/tensorflow_core/contrib/layers/python/layers/layers.py:1634: flatten (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.flatten instead.
+WARNING:tensorflow:From /scratch_net/bmicdl03/jonatank/conda_envs/tf1/lib/python3.7/site-packages/tensorflow_core/python/layers/core.py:332: Layer.apply (from tensorflow.python.keras.engine.base_layer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `layer.__call__` method instead.
+CAME HERE!! 2
+WARNING:tensorflow:From /scratch_net/bmicdl03/jonatank/conda_envs/tf1/lib/python3.7/site-packages/tensorflow_core/python/ops/math_grad.py:1375: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+CAME HERE!! 3
+CAME HERE!! 31
+CAME HERE!! 32
+Initialized parameters
+CAME HERE!! 33
+CAME HERE!! 4
+Step 0 | L2 Loss: -100.432 | KLD Loss: 0.020 | L2 Loss_1: 278.146 | L2 Loss_2: 378.578 | loss_tot: -55.704 | L2 Loss test: 150.770
+Step 500 | L2 Loss: -3688.313 | KLD Loss: 0.009 | L2 Loss_1: 206.764 | L2 Loss_2: 3895.077 | loss_tot: -1866.528 | L2 Loss test: 1.035
+Step 1000 | L2 Loss: -5320.663 | KLD Loss: 0.017 | L2 Loss_1: 774.206 | L2 Loss_2: 6094.868 | loss_tot: -2658.885 | L2 Loss test: 0.321
+Step 1500 | L2 Loss: -5332.948 | KLD Loss: 0.018 | L2 Loss_1: 783.874 | L2 Loss_2: 6116.823 | loss_tot: -2668.427 | L2 Loss test: 0.316
+Step 2000 | L2 Loss: -5343.525 | KLD Loss: 0.018 | L2 Loss_1: 765.806 | L2 Loss_2: 6109.331 | loss_tot: -2671.707 | L2 Loss test: 0.316
+Step 2500 | L2 Loss: -5340.540 | KLD Loss: 0.019 | L2 Loss_1: 787.884 | L2 Loss_2: 6128.424 | loss_tot: -2670.437 | L2 Loss test: 0.316
+Step 3000 | L2 Loss: -5341.592 | KLD Loss: 0.020 | L2 Loss_1: 783.872 | L2 Loss_2: 6125.464 | loss_tot: -2669.886 | L2 Loss test: 0.314
+slurmstepd: error: *** JOB 60951 ON biwirender10 CANCELLED AT 2020-09-30T09:44:25 ***
