@@ -1,0 +1,38 @@
+>>> lat_dim value: 60
+>>> mode is: jonatank
+CAME HERE!! 1
+CAME HERE!! 11
+2020-10-01 10:30:54.284022: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-01 10:30:54.566312: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:83:00.0
+totalMemory: 10.92GiB freeMemory: 10.77GiB
+2020-10-01 10:30:54.566355: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-01 10:31:01.695164: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-01 10:31:01.696475: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-01 10:31:01.696490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-01 10:31:01.698415: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10419 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:83:00.0, compute capability: 6.1)
+2020-10-01 10:31:01.699989: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-01 10:31:01.700031: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-01 10:31:01.700040: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-01 10:31:01.700047: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-01 10:31:01.700243: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 10419 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:83:00.0, compute capability: 6.1)
+True
+CAME HERE!! 12
+CAME HERE!! 2
+CAME HERE!! 3
+CAME HERE!! 31
+CAME HERE!! 32
+Initialized parameters
+CAME HERE!! 33
+CAME HERE!! 4
+Step 0 | L2 Loss: -122.529 | KLD Loss: 0.003 | L2 Loss_1: 256.402 | L2 Loss_2: 378.932 | loss_tot: -60.826 | L2 Loss test: 141.569
+Step 10 | L2 Loss: -1909.483 | KLD Loss: 0.011 | L2 Loss_1: 151.556 | L2 Loss_2: 2061.039 | loss_tot: -926.351 | L2 Loss test: 10.719
+Step 20 | L2 Loss: -1265.495 | KLD Loss: 0.000 | L2 Loss_1: 366.062 | L2 Loss_2: 1631.558 | loss_tot: -637.533 | L2 Loss test: 36.171
+Step 30 | L2 Loss: -1855.851 | KLD Loss: 0.000 | L2 Loss_1: 117.801 | L2 Loss_2: 1973.652 | loss_tot: -939.426 | L2 Loss test: 7.673
+Step 40 | L2 Loss: 925.592 | KLD Loss: 0.000 | L2 Loss_1: 4629.384 | L2 Loss_2: 3703.792 | loss_tot: 204.073 | L2 Loss test: 17.675
+Step 50 | L2 Loss: -1024.063 | KLD Loss: 0.000 | L2 Loss_1: 20.133 | L2 Loss_2: 1044.196 | loss_tot: -499.505 | L2 Loss test: 5.121
+Step 60 | L2 Loss: -719.095 | KLD Loss: 0.000 | L2 Loss_1: 16.927 | L2 Loss_2: 736.022 | loss_tot: -359.972 | L2 Loss test: 6.522
+Step 70 | L2 Loss: -1002.136 | KLD Loss: 0.000 | L2 Loss_1: 13.375 | L2 Loss_2: 1015.512 | loss_tot: -482.079 | L2 Loss test: 3.079
+Step 80 | L2 Loss: -1566.647 | KLD Loss: 0.001 | L2 Loss_1: 69.364 | L2 Loss_2: 1636.011 | loss_tot: -772.186 | L2 Loss test: 7.084
+Step 90 | L2 Loss: -2842.655 | KLD Loss: 0.001 | L2 Loss_1: 656.885 | L2 Loss_2: 3499.539 | loss_tot: -1453.750 | L2 Loss test: 5.067

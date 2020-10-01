@@ -30,6 +30,8 @@ args = parser.parse_args()
 
 logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
+#os.environ["CUDA_VISIBLE_DEVICES"]=os.environ['SGE_GPU']
+
 # parameters
 # ==============================================================================
 # ==============================================================================
@@ -87,16 +89,16 @@ print('CAME HERE!! 1')
 # ==============================================================================
 # ==============================================================================
 
-tf.compat.v1.reset_default_graph()
+tf.reset_default_graph()
 
 print('CAME HERE!! 11')
 
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-config.allow_soft_placement = True
-sess = tf.compat.v1.InteractiveSession(config=config)
+#config = tf.ConfigProto()
+#config.gpu_options.allow_growth = True
+#config.allow_soft_placement = True
+sess = tf.InteractiveSession()
 
-print(tf.compat.v1.test.is_gpu_available(
+print(tf.test.is_gpu_available(
     cuda_only=False, min_cuda_compute_capability=None
 ))
 
@@ -105,67 +107,67 @@ print('CAME HERE!! 12')
 
 # define the activation function to use:
 def fact(x):
-    # return tf.compat.v1.nn.tanh(x)
-    return tf.compat.v1.nn.relu(x)
+    # return tf.nn.tanh(x)
+    return tf.nn.relu(x)
 
 
 # define the input place holder
-x_inp = tf.compat.v1.placeholder("float", shape=[None, input_dim])
-# x_rec = tf.compat.v1.placeholder("float", shape=[None, input_dim])
-l2_loss = tf.compat.v1.constant(0.0)
+x_inp = tf.placeholder("float", shape=[None, input_dim])
+# x_rec = tf.placeholder("float", shape=[None, input_dim])
+l2_loss = tf.constant(0.0)
 
 # define the network layer parameters
-intl = tf.compat.v1.truncated_normal_initializer(stddev=std_init, seed=SEED)
-intl_cov = tf.compat.v1.truncated_normal_initializer(stddev=std_init, seed=SEED)
+intl = tf.truncated_normal_initializer(stddev=std_init, seed=SEED)
+intl_cov = tf.truncated_normal_initializer(stddev=std_init, seed=SEED)
 
-with tf.compat.v1.variable_scope("VAE") as scope:
-    enc_conv1_weights = tf.compat.v1.get_variable("enc_conv1_weights", [3, 3, num_inp_channels, 32], initializer=intl)
-    enc_conv1_biases = tf.compat.v1.get_variable("enc_conv1_biases", shape=[32],
-                                                 initializer=tf.compat.v1.constant_initializer(value=0))
+with tf.variable_scope("VAE") as scope:
+    enc_conv1_weights = tf.get_variable("enc_conv1_weights", [3, 3, num_inp_channels, 32], initializer=intl)
+    enc_conv1_biases = tf.get_variable("enc_conv1_biases", shape=[32],
+                                                 initializer=tf.constant_initializer(value=0))
 
-    enc_conv2_weights = tf.compat.v1.get_variable("enc_conv2_weights", [3, 3, 32, 64], initializer=intl)
-    enc_conv2_biases = tf.compat.v1.get_variable("enc_conv2_biases", shape=[64],
-                                                 initializer=tf.compat.v1.constant_initializer(value=0))
+    enc_conv2_weights = tf.get_variable("enc_conv2_weights", [3, 3, 32, 64], initializer=intl)
+    enc_conv2_biases = tf.get_variable("enc_conv2_biases", shape=[64],
+                                                 initializer=tf.constant_initializer(value=0))
 
-    enc_conv3_weights = tf.compat.v1.get_variable("enc_conv3_weights", [3, 3, 64, 64], initializer=intl)
-    enc_conv3_biases = tf.compat.v1.get_variable("enc_conv3_biases", shape=[64],
-                                                 initializer=tf.compat.v1.constant_initializer(value=0))
+    enc_conv3_weights = tf.get_variable("enc_conv3_weights", [3, 3, 64, 64], initializer=intl)
+    enc_conv3_biases = tf.get_variable("enc_conv3_biases", shape=[64],
+                                                 initializer=tf.constant_initializer(value=0))
 
-    mu_weights = tf.compat.v1.get_variable(name="mu_weights", shape=[int(input_dim * 64), lat_dim], initializer=intl)
-    mu_biases = tf.compat.v1.get_variable("mu_biases", shape=[lat_dim],
-                                          initializer=tf.compat.v1.constant_initializer(value=0))
+    mu_weights = tf.get_variable(name="mu_weights", shape=[int(input_dim * 64), lat_dim], initializer=intl)
+    mu_biases = tf.get_variable("mu_biases", shape=[lat_dim],
+                                          initializer=tf.constant_initializer(value=0))
 
-    logVar_weights = tf.compat.v1.get_variable(name="logVar_weights", shape=[int(input_dim * 64), lat_dim],
+    logVar_weights = tf.get_variable(name="logVar_weights", shape=[int(input_dim * 64), lat_dim],
                                                initializer=intl)
-    logVar_biases = tf.compat.v1.get_variable("logVar_biases", shape=[lat_dim],
-                                              initializer=tf.compat.v1.constant_initializer(value=0))
+    logVar_biases = tf.get_variable("logVar_biases", shape=[lat_dim],
+                                              initializer=tf.constant_initializer(value=0))
 
     if useMixtureScale:
 
-        dec_fc1_weights = tf.compat.v1.get_variable(name="dec_fc1_weights", shape=[int(lat_dim), int(input_dim * 48)],
+        dec_fc1_weights = tf.get_variable(name="dec_fc1_weights", shape=[int(lat_dim), int(input_dim * 48)],
                                                     initializer=intl)
-        dec_fc1_biases = tf.compat.v1.get_variable("dec_fc1_biases", shape=[int(input_dim * 48)],
-                                                   initializer=tf.compat.v1.constant_initializer(value=0))
+        dec_fc1_biases = tf.get_variable("dec_fc1_biases", shape=[int(input_dim * 48)],
+                                                   initializer=tf.constant_initializer(value=0))
 
-        dec_conv1_weights = tf.compat.v1.get_variable("dec_conv1_weights", [3, 3, 48, 48], initializer=intl)
-        dec_conv1_biases = tf.compat.v1.get_variable("dec_conv1_biases", shape=[48],
-                                                     initializer=tf.compat.v1.constant_initializer(value=0))
+        dec_conv1_weights = tf.get_variable("dec_conv1_weights", [3, 3, 48, 48], initializer=intl)
+        dec_conv1_biases = tf.get_variable("dec_conv1_biases", shape=[48],
+                                                     initializer=tf.constant_initializer(value=0))
 
-        dec_conv2_weights = tf.compat.v1.get_variable("decc_conv2_weights", [3, 3, 48, 90], initializer=intl)
-        dec_conv2_biases = tf.compat.v1.get_variable("dec_conv2_biases", shape=[90],
-                                                     initializer=tf.compat.v1.constant_initializer(value=0))
+        dec_conv2_weights = tf.get_variable("decc_conv2_weights", [3, 3, 48, 90], initializer=intl)
+        dec_conv2_biases = tf.get_variable("dec_conv2_biases", shape=[90],
+                                                     initializer=tf.constant_initializer(value=0))
 
-        dec_conv3_weights = tf.compat.v1.get_variable("dec_conv3_weights", [3, 3, 90, 90], initializer=intl)
-        dec_conv3_biases = tf.compat.v1.get_variable("dec_conv3_biases", shape=[90],
-                                                     initializer=tf.compat.v1.constant_initializer(value=0))
+        dec_conv3_weights = tf.get_variable("dec_conv3_weights", [3, 3, 90, 90], initializer=intl)
+        dec_conv3_biases = tf.get_variable("dec_conv3_biases", shape=[90],
+                                                     initializer=tf.constant_initializer(value=0))
 
-        dec_out_weights = tf.compat.v1.get_variable("dec_out_weights", [3, 3, 90, 1], initializer=intl)
-        dec_out_biases = tf.compat.v1.get_variable("dec_out_biases", shape=[1],
-                                                   initializer=tf.compat.v1.constant_initializer(value=0))
+        dec_out_weights = tf.get_variable("dec_out_weights", [3, 3, 90, 1], initializer=intl)
+        dec_out_biases = tf.get_variable("dec_out_biases", shape=[1],
+                                                   initializer=tf.constant_initializer(value=0))
 
-        dec1_out_cov_weights = tf.compat.v1.get_variable("dec1_out_cov_weights", [3, 3, 90, 1], initializer=intl)
-        dec1_out_cov_biases = tf.compat.v1.get_variable("dec1_out_cov_biases", shape=[1],
-                                                        initializer=tf.compat.v1.constant_initializer(value=0))
+        dec1_out_cov_weights = tf.get_variable("dec1_out_cov_weights", [3, 3, 90, 1], initializer=intl)
+        dec1_out_cov_biases = tf.get_variable("dec1_out_cov_biases", shape=[1],
+                                                        initializer=tf.constant_initializer(value=0))
 
     else:
 
@@ -174,67 +176,67 @@ with tf.compat.v1.variable_scope("VAE") as scope:
 ######## TWO LAYER
 # a. build the encoder layers
 
-x_inp_ = tf.compat.v1.reshape(x_inp, [batch_size, ndims, ndims, 1])
+x_inp_ = tf.reshape(x_inp, [batch_size, ndims, ndims, 1])
 
-enc_conv1 = tf.compat.v1.nn.conv2d(x_inp_, enc_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
-enc_relu1 = fact(tf.compat.v1.nn.bias_add(enc_conv1, enc_conv1_biases))
+enc_conv1 = tf.nn.conv2d(x_inp_, enc_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
+enc_relu1 = fact(tf.nn.bias_add(enc_conv1, enc_conv1_biases))
 
-enc_conv2 = tf.compat.v1.nn.conv2d(enc_relu1, enc_conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
-enc_relu2 = fact(tf.compat.v1.nn.bias_add(enc_conv2, enc_conv2_biases))
+enc_conv2 = tf.nn.conv2d(enc_relu1, enc_conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
+enc_relu2 = fact(tf.nn.bias_add(enc_conv2, enc_conv2_biases))
 
-enc_conv3 = tf.compat.v1.nn.conv2d(enc_relu2, enc_conv3_weights, strides=[1, 1, 1, 1], padding='SAME')
-enc_relu3 = fact(tf.compat.v1.nn.bias_add(enc_conv3, enc_conv3_biases))
+enc_conv3 = tf.nn.conv2d(enc_relu2, enc_conv3_weights, strides=[1, 1, 1, 1], padding='SAME')
+enc_relu3 = fact(tf.nn.bias_add(enc_conv3, enc_conv3_biases))
 
 flat_relu3 = tf.contrib.layers.flatten(enc_relu3)
 
 # b. get the values for drawing z
-mu = tf.compat.v1.matmul(flat_relu3, mu_weights) + mu_biases
-mu = tf.compat.v1.tile(mu, (nzsamp, 1))  # replicate for number of z's you want to draw
-logVar = tf.compat.v1.matmul(flat_relu3, logVar_weights) + logVar_biases
-logVar = tf.compat.v1.tile(logVar, (nzsamp, 1))  # replicate for number of z's you want to draw
-std = tf.compat.v1.exp(0.5 * logVar)
+mu = tf.matmul(flat_relu3, mu_weights) + mu_biases
+mu = tf.tile(mu, (nzsamp, 1))  # replicate for number of z's you want to draw
+logVar = tf.matmul(flat_relu3, logVar_weights) + logVar_biases
+logVar = tf.tile(logVar, (nzsamp, 1))  # replicate for number of z's you want to draw
+std = tf.exp(0.5 * logVar)
 
 # c. draw an epsilon and get z
-epsilon = tf.compat.v1.random_normal(tf.compat.v1.shape(logVar), name='epsilon')
-z = mu + tf.compat.v1.multiply(std, epsilon)
+epsilon = tf.random_normal(tf.shape(logVar), name='epsilon')
+z = mu + tf.multiply(std, epsilon)
 
 if useMixtureScale:
 
-    indices1 = tf.compat.v1.range(start=0, limit=lat_dim_1, delta=1, dtype='int32')
-    indices2 = tf.compat.v1.range(start=lat_dim_1, limit=lat_dim, delta=1, dtype='int32')
+    indices1 = tf.range(start=0, limit=lat_dim_1, delta=1, dtype='int32')
+    indices2 = tf.range(start=lat_dim_1, limit=lat_dim, delta=1, dtype='int32')
 
-    z1 = tf.compat.v1.transpose(tf.compat.v1.gather(tf.compat.v1.transpose(z), indices1))
-    z2 = tf.compat.v1.transpose(tf.compat.v1.gather(tf.compat.v1.transpose(z), indices2))
+    z1 = tf.transpose(tf.gather(tf.transpose(z), indices1))
+    z2 = tf.transpose(tf.gather(tf.transpose(z), indices2))
 
     # d. build the decoder layers from z1 for mu(z)
-    dec_L1 = fact(tf.compat.v1.matmul(z, dec_fc1_weights) + dec_fc1_biases)
+    dec_L1 = fact(tf.matmul(z, dec_fc1_weights) + dec_fc1_biases)
 else:
     pass
 
-dec_L1_reshaped = tf.compat.v1.reshape(dec_L1, [batch_size, int(ndims), int(ndims), 48])
+dec_L1_reshaped = tf.reshape(dec_L1, [batch_size, int(ndims), int(ndims), 48])
 
-dec_conv1 = tf.compat.v1.nn.conv2d(dec_L1_reshaped, dec_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
-dec_relu1 = fact(tf.compat.v1.nn.bias_add(dec_conv1, dec_conv1_biases))
+dec_conv1 = tf.nn.conv2d(dec_L1_reshaped, dec_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
+dec_relu1 = fact(tf.nn.bias_add(dec_conv1, dec_conv1_biases))
 
-dec_conv2 = tf.compat.v1.nn.conv2d(dec_relu1, dec_conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
-dec_relu2 = fact(tf.compat.v1.nn.bias_add(dec_conv2, dec_conv2_biases))
+dec_conv2 = tf.nn.conv2d(dec_relu1, dec_conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
+dec_relu2 = fact(tf.nn.bias_add(dec_conv2, dec_conv2_biases))
 
-dec_conv3 = tf.compat.v1.nn.conv2d(dec_relu2, dec_conv3_weights, strides=[1, 1, 1, 1], padding='SAME')
-dec_relu3 = fact(tf.compat.v1.nn.bias_add(dec_conv3, dec_conv3_biases))
+dec_conv3 = tf.nn.conv2d(dec_relu2, dec_conv3_weights, strides=[1, 1, 1, 1], padding='SAME')
+dec_relu3 = fact(tf.nn.bias_add(dec_conv3, dec_conv3_biases))
 
 # e. build the output layer w/out activation function
-dec_out = tf.compat.v1.nn.conv2d(dec_relu3, dec_out_weights, strides=[1, 1, 1, 1], padding='SAME')
-y_out_ = tf.compat.v1.nn.bias_add(dec_out, dec_out_biases)
+dec_out = tf.nn.conv2d(dec_relu3, dec_out_weights, strides=[1, 1, 1, 1], padding='SAME')
+y_out_ = tf.nn.bias_add(dec_out, dec_out_biases)
 
 y_out = tf.contrib.layers.flatten(y_out_)
 
 # e.2 build the covariance at the output if using mixture of scales
 if useMixtureScale:
     # e. build the output layer w/out activation function
-    dec_out_cov = tf.compat.v1.nn.conv2d(dec_relu3, dec1_out_cov_weights, strides=[1, 1, 1, 1], padding='SAME')
-    y_out_prec_log = tf.compat.v1.nn.bias_add(dec_out_cov, dec1_out_cov_biases)
+    dec_out_cov = tf.nn.conv2d(dec_relu3, dec1_out_cov_weights, strides=[1, 1, 1, 1], padding='SAME')
+    y_out_prec_log = tf.nn.bias_add(dec_out_cov, dec1_out_cov_biases)
 
-    y_out_prec_ = tf.compat.v1.exp(y_out_prec_log)
+    y_out_prec_ = tf.exp(y_out_prec_log)
 
     y_out_prec = tf.contrib.layers.flatten(y_out_prec_)
 
@@ -245,32 +247,32 @@ print('CAME HERE!! 2')
 # ==============================================================================
 
 # KLD loss per sample in the batch
-KLD = -0.5 * tf.compat.v1.reduce_sum(1 + logVar - tf.compat.v1.pow(mu, 2) - tf.compat.v1.exp(logVar),
+KLD = -0.5 * tf.reduce_sum(1 + logVar - tf.pow(mu, 2) - tf.exp(logVar),
                                      reduction_indices=1)
 
-x_inp_ = tf.compat.v1.tile(x_inp, (nzsamp, 1))
+x_inp_ = tf.tile(x_inp, (nzsamp, 1))
 
 # L2 loss per sample in the batch
 if useMixtureScale:
-    l2_loss_1 = tf.compat.v1.reduce_sum(tf.compat.v1.multiply(tf.compat.v1.pow((y_out - x_inp_), 2), y_out_prec),
+    l2_loss_1 = tf.reduce_sum(tf.multiply(tf.pow((y_out - x_inp_), 2), y_out_prec),
                                         axis=1)
-    l2_loss_2 = tf.compat.v1.reduce_sum(tf.compat.v1.log(y_out_prec),
-                                        axis=1)  # tf.compat.v1.reduce_sum(tf.compat.v1.log(y_out_cov),axis=1)
+    l2_loss_2 = tf.reduce_sum(tf.log(y_out_prec),
+                                        axis=1)  # tf.reduce_sum(tf.log(y_out_cov),axis=1)
     l2_loss_ = l2_loss_1 - l2_loss_2
 else:
-    l2_loss_ = tf.compat.v1.reduce_sum(tf.compat.v1.pow((y_out - x_inp_), 2), axis=1)
+    l2_loss_ = tf.reduce_sum(tf.pow((y_out - x_inp_), 2), axis=1)
     if usebce:
-        l2_loss_ = tf.compat.v1.reduce_sum(
-            tf.compat.v1.nn.sigmoid_cross_entropy_with_logits(logits=y_out, labels=x_inp_), reduction_indices=1)
+        l2_loss_ = tf.reduce_sum(
+            tf.nn.sigmoid_cross_entropy_with_logits(logits=y_out, labels=x_inp_), reduction_indices=1)
 
 # take the total mean loss of this batch
-loss_tot = tf.compat.v1.reduce_mean(1 / kld_div * KLD + 0.5 * l2_loss_)
+loss_tot = tf.reduce_mean(1 / kld_div * KLD + 0.5 * l2_loss_)
 
 # get the optimizer
 if useMixtureScale:
-    train_step = tf.compat.v1.train.AdamOptimizer(5e-4).minimize(loss_tot)
+    train_step = tf.train.AdamOptimizer(5e-4).minimize(loss_tot)
 else:
-    train_step = tf.compat.v1.train.AdamOptimizer(5e-3).minimize(loss_tot)
+    train_step = tf.train.AdamOptimizer(5e-3).minimize(loss_tot)
 
 # start session
 # ==============================================================================
@@ -279,13 +281,13 @@ print('CAME HERE!! 3')
 
 print('CAME HERE!! 31')
 
-sess.run(tf.compat.v1.global_variables_initializer())
+sess.run(tf.global_variables_initializer())
 
 print('CAME HERE!! 32')
 
 print("Initialized parameters")
 
-saver = tf.compat.v1.train.Saver()
+saver = tf.train.Saver()
 
 print('CAME HERE!! 33')
 
@@ -301,11 +303,11 @@ test_batch = np.transpose(np.reshape(test_batch, [-1, batch_size]))
 # test_batch = DS.get_test_batch(batch_size)
 
 # LOG
-writer = tf.compat.v1.summary.FileWriter(logdir)
+writer = tf.summary.FileWriter(logdir)
 
 # summary_writer = tf.summary.FileWriter(log_dir, sess.graph)
 
-with tf.compat.v1.device('/gpu:0'):
+with tf.device('/gpu:0'):
     # train for N steps
     for step in range(0, 500001):  # 500k
         batch = MRi.get_patch(batch_size, test=False)
@@ -316,7 +318,7 @@ with tf.compat.v1.device('/gpu:0'):
         sess.run([train_step], feed_dict={x_inp: batch})
 
         # print some stuf...
-        if step % 500 == 0:  # 500
+        if step % 10 == 0:  # 500
 
             if useMixtureScale:
                 loss_l2_1 = l2_loss_1.eval(feed_dict={x_inp: batch})
@@ -330,11 +332,11 @@ with tf.compat.v1.device('/gpu:0'):
             xh = y_out.eval(feed_dict={x_inp: test_batch})
             test_loss_l2 = np.mean(np.sum(np.power((xh[0:test_batch.shape[0], :] - test_batch), 2), axis=1))
 
-            # tf.compat.v1.summary.scalar('loss_l2', np.mean(loss_l2_1 - loss_l2_2))
-            # tf.compat.v1.summary.scalar('KLD Loss', np.mean(loss_kld))
-            # tf.compat.v1.summary.scalar('loss_tot', np.mean(loss_tot_))
+            # tf.summary.scalar('loss_l2', np.mean(loss_l2_1 - loss_l2_2))
+            # tf.summary.scalar('KLD Loss', np.mean(loss_kld))
+            # tf.summary.scalar('loss_tot', np.mean(loss_tot_))
 
-            # tf.compat.v1.summary.scalar('test_recloss', np.mean(test_loss_l2))
+            # tf.summary.scalar('test_recloss', np.mean(test_loss_l2))
 
             if useMixtureScale:
                 print(
@@ -347,8 +349,8 @@ with tf.compat.v1.device('/gpu:0'):
                         .format(step, np.mean(loss_l2_), np.mean(loss_kld), np.mean(test_loss_l2), np.mean(std_val),
                                 np.mean(mu_val)))
 
-            # tf.compat.v1.summary.image("Input data", test_batch)
-            # tf.compat.v1.summary.image("Recdata data", xh)
+            # tf.summary.image("Input data", test_batch)
+            # tf.summary.image("Recdata data", xh)
 
         if step % 100000 == 0:
             saver.save(sess, os.path.join('/scratch_net/bmicdl03/jonatank/logs/ddp/vae/', str(mode) + '_fcl' + str(

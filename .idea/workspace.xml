@@ -3,61 +3,69 @@
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_train_vae.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>basefolder</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JupyterTrust" id="536be5f7-b0f3-4d9e-8ae5-e29398dab315" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
+  </component>
   <component name="ProjectId" id="1huajtyHrswvjO3Gv9SFLKXSmyy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor.code.editing" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Fewshot_Lesion_Detection_Normative_Prior" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/chunks" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="code4neerav" />
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="ddp" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -79,18 +87,28 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1600863568477</updated>
-      <workItem from="1601366304629" duration="11996000" />
+      <workItem from="1601536726707" duration="7000" />
+      <workItem from="1601536753016" duration="2322000" />
+      <workItem from="1601540144298" duration="1960000" />
+      <workItem from="1601542650610" duration="18000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="602" y="363" width="633" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600863575101">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="602" y="363" width="633" height="397" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1600863575101" />
+    <state x="320" y="161" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1601539085183">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="320" y="161" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.23.1440.877@0.23.1440.877" timestamp="1601539085183" />
     <state x="693" y="362" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600876501017">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
@@ -99,9 +117,5 @@
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601017386008" />
-    <state x="221" y="100" key="SettingsEditor" timestamp="1601379957167">
-      <screen x="0" y="23" width="1440" height="877" />
-    </state>
-    <state x="221" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1601379957167" />
   </component>
 </project>

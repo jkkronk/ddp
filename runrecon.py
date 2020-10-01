@@ -18,108 +18,65 @@ import vaerecon
 import argparse
 
 parser = argparse.ArgumentParser(prog='PROG')
-parser.add_argument('--vol', type=int, default=5)
+parser.add_argument('--subj', type=str, default='multicoil_val/file_brain_AXFLAIR_200_6002462.h5')
 parser.add_argument('--sli', type=int, default=150) 
 parser.add_argument('--usfact', type=float, default=4) 
 parser.add_argument('--contrun', type=int, default=0) 
 parser.add_argument('--skiprecon', type=int, default=1) 
 
 args=parser.parse_args()
+subj=args.subj
+sli=args.sli
+usfact = args.usfact
+contrun = args.contrun
 
 basefolder = '/scratch_net/bmicdl03/jonatank/logs/dpp/vae/'
-
 logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/restore/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-file_writer = tf.summary.create_file_writer(logdir)
-file_writer.set_as_default()
-
-def FT (x, normalize=False):
-     #inp: [nx, ny]
-     #out: [nx, ny]
-     if normalize:
-          return np.fft.fftshift(    np.fft.fft2(  x , axes=(0,1)  ),   axes=(0,1)    ) / np.sqrt(252*308)
-     else:
-          return np.fft.fftshift(    np.fft.fft2(  x , axes=(0,1)  ),   axes=(0,1)    ) 
-
-def tFT (x, normalize=False):
-     #inp: [nx, ny]
-     #out: [nx, ny]
-     if normalize:
-          return np.fft.ifft2(  np.fft.ifftshift( x , axes=(0,1) ),  axes=(0,1)  )   * np.sqrt(252*308)
-     else:
-          return np.fft.ifft2(  np.fft.ifftshift( x , axes=(0,1) ),  axes=(0,1)  )   
-
-def UFT(x, uspat, normalize=False):
-     #inp: [nx, ny], [nx, ny]
-     #out: [nx, ny]
-     
-     return uspat*FT(x, normalize)
-
-def tUFT(x, uspat, normalize=False):
-     #inp: [nx, ny], [nx, ny]
-     #out: [nx, ny]
-     return  tFT( uspat*x ,normalize)
-
-
-def calc_rmse(rec,imorig):
-     return 100*np.sqrt(np.sum(np.square(np.abs(rec) - np.abs(imorig))) / np.sum(np.square(np.abs(imorig))) )
-
 ndims=28
 lat_dim=60
-
 mode = 'MRIunproc'#'Melanie_BFC'
-
-
-USp = US_pattern()
-
-
-#make a dataset to load images
 noise=0
-#DS = Dataset(-1, -1, ndims,noise, 1, mode)
-MRi = MR_kspace_data(dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain')
-
 rmses=np.zeros((1,1,4))
+regtype='reg2_dc'
+reg=0.1
+dcprojiter=1
 
-vol=args.vol
-sli=args.sli
-
-usfact = args.usfact
-
-print(usfact)
 if np.floor(usfact) == usfact: # if it is already an integer
      usfact = int(usfact)
-print(usfact)
-
-
-
-###################
-###### RECON ######
-###################
-          
-
+print('Under sample factor: ', usfact)
 R=usfact
+if R<=3:
+     num_iter = 402 # 302
+else:
+     num_iter = 602 # 602
 
-#               orim = DS.MRi.pad_image(DS.MRi.d_brains_test[imix,:,:].copy(), [252, 308] )
-ksp = MRi.get_image()
+if contrun == 0:
+     contRec = ''
+else:
+     contRec = basefolder+'MAPestimation/rec_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter)
+     numiter = 302
 
-nx, ny = (252, 308)
-x = np.linspace(0, 1, nx)
-y = np.linspace(0, 1, ny)
-xv, yv = np.meshgrid(x, y)
-synthph = np.transpose(np.pi*(xv+yv)-np.pi)
+## CREATE DATA
 
-#          synthph = 1.5
+USp = US_pattern()
+MRi = MR_kspace_data(dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain')
 
-#          orim = orima*np.exp(1j*synthph*(orima>0.1))
+ksp_subj = MRi.get_image(subj)
+ksp = ksp_subj[sli]
 
-
+#nx, ny = (252, 308)
+#x = np.linspace(0, 1, nx)
+#y = np.linspace(0, 1, ny)
+#xv, yv = np.meshgrid(x, y)
+#synthph = np.transpose(np.pi*(xv+yv)-np.pi)
 
 try:
-     uspat = np.load('sample_data_and_uspat/uspat_np_fastmri.npy')
+     uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
      print("Read from existing u.s. pattern file")
 except:
      USp=US_pattern()
-     uspat = USp.generate_opt_US_pattern_1D(ksp[0, 0].shape, R=R, max_iter=100, no_of_training_profs=15)
-     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli), uspat)
+     uspat = USp.generate_opt_US_pattern_1D(ksp.shape[1:], R=R, max_iter=100, no_of_training_profs=15)
+     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli), uspat)
 
 usksp = np.zeros(ksp.shape)
 
@@ -127,27 +84,9 @@ for i in range(ksp.shape[0]):
     for j in range(ksp.shape[1]):
         usksp[i,j] = uspat*ksp[i,j]
 
-#usksp = UFT(orim,uspat, normalize=False)/np.percentile( np.abs(tUFT(UFT(orim,uspat, normalize=False),uspat, normalize=False).flatten())  ,99)
-
-slice = 50
-
-usksp=usksp[slice]
-
-regtype='reg2_dc'
-reg=0.1
-dcprojiter=10
-chunks40=True
-
-if R<=3:
-     num_iter = 402 # 302
-else:
-     num_iter = 602 # 602
-     
-if args.contrun == 0:
-     contRec = ''
-else:
-     contRec = basefolder+'MAPestimation/rec_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter)
-     numiter = 302
+###################
+###### RECON ######
+###################
 
 if not args.skiprecon:
      rec_vae = vaerecon.vaerecon(usksp, sensmaps=np.ones_like(usksp), dcprojiter=dcprojiter, lat_dim=lat_dim, patchsize=ndims, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, half=True, mode=mode, chunks40=chunks40, writer=file_writer)
