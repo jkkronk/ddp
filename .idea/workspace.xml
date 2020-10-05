@@ -2,32 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/code4neerav.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/code4neerav.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Patcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/Patcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/definevae.py" beforeDir="false" afterPath="$PROJECT_DIR$/definevae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/62838.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/62838.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_train_vae.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub_runrecon.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_runrecon.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>basefolder</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="JupyterTrust" id="536be5f7-b0f3-4d9e-8ae5-e29398dab315" />
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1440" />
-    <option name="height" value="877" />
-  </component>
   <component name="ProjectId" id="1huajtyHrswvjO3Gv9SFLKXSmyy" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -38,6 +35,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="ignore_missing_gitignore" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Fewshot_Lesion_Detection_Normative_Prior" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -90,17 +88,23 @@
       <workItem from="1601536726707" duration="7000" />
       <workItem from="1601536753016" duration="2322000" />
       <workItem from="1601540144298" duration="1960000" />
-      <workItem from="1601542650610" duration="18000" />
+      <workItem from="1601542650610" duration="16974000" />
+      <workItem from="1601640323887" duration="10638000" />
+      <workItem from="1601879201915" duration="3627000" />
+      <workItem from="1601886962539" duration="1683000" />
+      <workItem from="1601889817598" duration="2276000" />
+      <workItem from="1601898961754" duration="1617000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="WindowStateProjectService">
+    <state x="184" y="123" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601883177919">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="184" y="123" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1601883177919" />
     <state x="602" y="363" width="633" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600863575101">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
@@ -113,9 +117,17 @@
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="693" y="362" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1600876501017" />
-    <state x="740" y="371" key="FileChooserDialogImpl" timestamp="1601017386008">
+    <state x="740" y="371" key="FileChooserDialogImpl" timestamp="1601628146828">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
-    <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601017386008" />
+    <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601628146828" />
+    <state x="221" y="100" key="SettingsEditor" timestamp="1601883213307">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="221" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1601883213307" />
+    <state x="623" y="289" width="672" height="678" key="search.everywhere.popup" timestamp="1601632393993">
+      <screen x="0" y="27" width="1920" height="1173" />
+    </state>
+    <state x="623" y="289" width="672" height="678" key="search.everywhere.popup/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601632393993" />
   </component>
 </project>

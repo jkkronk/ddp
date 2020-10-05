@@ -21,15 +21,15 @@ class MR_image_data:
         self.noise = noiseinvstd
         self.patchsize=patchsize
 
-        self.allfiles = os.listdir(dirname+'/multicoil_train_old3')
+        self.allfiles = os.listdir(dirname+'/multicoil_train')
         self.datafiles = [s for s in self.allfiles if modality in s]
         self.data_size_train = int(trainset_ratio*len(self.datafiles))
         self.datafiles_train = self.datafiles[:self.data_size_train]
 
-        with h5py.File(self.dirname + '/multicoil_train_old3/' + self.datafiles_train[0], 'r') as fdset:
+        with h5py.File(self.dirname + '/multicoil_train/' + self.datafiles_train[0], 'r') as fdset:
              self.reconstruction_rss_size = fdset['reconstruction_rss'].shape #  The shape of the reconstruction_rss tensor is (number of slices, r_height, r_width)
 
-        self.allfiles_test = os.listdir(dirname + '/multicoil_val2')
+        self.allfiles_test = os.listdir(dirname + '/multicoil_val')
         self.datafiles_test = [s for s in self.allfiles_test if modality in s]
         self.data_size_test = len(self.datafiles_test)
 
@@ -44,7 +44,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_train, 1, replace=False))
                 file = self.datafiles_train[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_train_old3/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_train/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
                     sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
                     #print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
@@ -55,7 +55,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.datafiles_test[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_train_old3/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_train/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
                     sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
                     # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
@@ -76,7 +76,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_train, 1, replace=False))
                 file = self.datafiles_train[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_train_old3/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_train/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
                     sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
                     patchindexr = np.random.randint(0, h5data[sliceindex[0]].shape[0] - self.patchsize)
@@ -91,7 +91,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.datafiles_test[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_val2/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_val/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
                     sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
                     patchindexr = np.random.randint(0, h5data[sliceindex[0]].shape[0] - self.patchsize)
@@ -111,7 +111,7 @@ class MR_image_data:
 
     def get_image(self, subj, slice):
 
-         with h5py.File(self.dirname + '/multicoil_train_old3/' + subj, 'r') as fdset:
+         with h5py.File(self.dirname + '/multicoil_train/' + subj, 'r') as fdset:
               if self.noise == 0:
                    return fdset['reconstruction_rss'][slice, :,:] # sli, x, y
               elif self.noise >0:
@@ -162,13 +162,13 @@ class MR_kspace_data:
     # Class that reads the MR kspace images, prepares them for further work, and generates batches of images/patches
 
     # ====================================================================
-    def __init__(self, dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain'):
+    def __init__(self, dirname='/srv/beegfs02/scratch/fastmri_challenge/data/brain/'):
         self.dirname = dirname
-        self.allfiles = os.listdir(dirname + '/multicoil_valid2')
+        self.allfiles = os.listdir(dirname + 'multicoil_val/')
 
     def get_subj(self, subj_name):
 
-        with h5py.File(self.dirname + '/multicoil_valid2/' + subj_name, 'r') as fdset:
+        with h5py.File(self.dirname + 'multicoil_val/' + subj_name, 'r') as fdset:
             kspace_img = fdset['kspace'][:]  # The shape of kspace tensor is (number of slices, number of coils, height, width)
 
         return kspace_img

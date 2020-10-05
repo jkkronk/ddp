@@ -1,0 +1,71 @@
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/20201005-091052
+>>> lat_dim value: 60
+>>> mode is: jonatank
+CAME HERE!! 1
+CAME HERE!! 11
+2020-10-05 09:10:56.336082: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-05 09:10:56.473411: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:87:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-05 09:10:56.473452: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-05 09:11:02.199799: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-05 09:11:02.200408: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-05 09:11:02.200433: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-05 09:11:02.200752: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:87:00.0, compute capability: 5.2)
+2020-10-05 09:11:02.201788: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-05 09:11:02.201824: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-05 09:11:02.201836: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-05 09:11:02.201845: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-05 09:11:02.202042: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:87:00.0, compute capability: 5.2)
+True
+CAME HERE!! 12
+CAME HERE!! 2
+CAME HERE!! 3
+CAME HERE!! 31
+CAME HERE!! 32
+Initialized parameters
+CAME HERE!! 33
+CAME HERE!! 4
+Step 0 | L2 Loss: -116.733 | KLD Loss: 0.004 | L2 Loss_1: 258.038 | L2 Loss_2: 374.771 | loss_tot: -59.284 | L2 Loss test: 147.507
+Step 10 | L2 Loss: -1912.303 | KLD Loss: 0.013 | L2 Loss_1: 156.825 | L2 Loss_2: 2069.129 | loss_tot: -959.924 | L2 Loss test: 9.297
+Step 20 | L2 Loss: -1245.477 | KLD Loss: 0.001 | L2 Loss_1: 276.916 | L2 Loss_2: 1522.393 | loss_tot: -625.441 | L2 Loss test: 31.252
+Step 30 | L2 Loss: -1573.362 | KLD Loss: 0.000 | L2 Loss_1: 31.874 | L2 Loss_2: 1605.235 | loss_tot: -787.215 | L2 Loss test: 3.540
+Step 40 | L2 Loss: -2756.110 | KLD Loss: 0.001 | L2 Loss_1: 948.716 | L2 Loss_2: 3704.826 | loss_tot: -1367.048 | L2 Loss test: 5.477
+Step 50 | L2 Loss: -1737.486 | KLD Loss: 0.000 | L2 Loss_1: 153.751 | L2 Loss_2: 1891.237 | loss_tot: -868.403 | L2 Loss test: 10.847
+Step 60 | L2 Loss: -1679.869 | KLD Loss: 0.000 | L2 Loss_1: 15.707 | L2 Loss_2: 1695.577 | loss_tot: -842.246 | L2 Loss test: 1.693
+Step 70 | L2 Loss: -2798.598 | KLD Loss: 0.001 | L2 Loss_1: 110.022 | L2 Loss_2: 2908.620 | loss_tot: -1404.841 | L2 Loss test: 1.981
+Step 80 | L2 Loss: 48.246 | KLD Loss: 0.001 | L2 Loss_1: 2592.391 | L2 Loss_2: 2544.144 | loss_tot: 21.687 | L2 Loss test: 75.070
+Step 90 | L2 Loss: -535.176 | KLD Loss: 0.001 | L2 Loss_1: 63.882 | L2 Loss_2: 599.058 | loss_tot: -267.190 | L2 Loss test: 28.478
+Step 100 | L2 Loss: -383.012 | KLD Loss: 0.001 | L2 Loss_1: 18.838 | L2 Loss_2: 401.850 | loss_tot: -191.608 | L2 Loss test: 11.081
+Step 110 | L2 Loss: -635.659 | KLD Loss: 0.001 | L2 Loss_1: 7.053 | L2 Loss_2: 642.712 | loss_tot: -318.803 | L2 Loss test: 2.817
+Step 120 | L2 Loss: -1185.319 | KLD Loss: 0.001 | L2 Loss_1: 287.709 | L2 Loss_2: 1473.028 | loss_tot: -591.440 | L2 Loss test: 36.783
+Step 130 | L2 Loss: -2885.731 | KLD Loss: 0.001 | L2 Loss_1: 151.610 | L2 Loss_2: 3037.341 | loss_tot: -1442.259 | L2 Loss test: 2.332
+Step 140 | L2 Loss: -3666.951 | KLD Loss: 0.001 | L2 Loss_1: 347.967 | L2 Loss_2: 4014.918 | loss_tot: -1844.429 | L2 Loss test: 1.338
+Step 150 | L2 Loss: -3885.100 | KLD Loss: 0.001 | L2 Loss_1: 788.953 | L2 Loss_2: 4674.053 | loss_tot: -1932.947 | L2 Loss test: 1.138
+Step 160 | L2 Loss: -4157.509 | KLD Loss: 0.001 | L2 Loss_1: 519.176 | L2 Loss_2: 4676.684 | loss_tot: -2077.784 | L2 Loss test: 0.804
+Step 170 | L2 Loss: -4663.056 | KLD Loss: 0.001 | L2 Loss_1: 653.626 | L2 Loss_2: 5316.682 | loss_tot: -2333.350 | L2 Loss test: 0.479
+Step 180 | L2 Loss: -3353.562 | KLD Loss: 0.001 | L2 Loss_1: 164.323 | L2 Loss_2: 3517.885 | loss_tot: -1686.694 | L2 Loss test: 1.294
+Step 190 | L2 Loss: -4118.916 | KLD Loss: 0.001 | L2 Loss_1: 247.628 | L2 Loss_2: 4366.543 | loss_tot: -2048.677 | L2 Loss test: 0.613
+Step 200 | L2 Loss: -2154.588 | KLD Loss: 0.002 | L2 Loss_1: 1334.854 | L2 Loss_2: 3489.442 | loss_tot: -1051.203 | L2 Loss test: 10.935
+Step 210 | L2 Loss: -1143.507 | KLD Loss: 0.003 | L2 Loss_1: 17.784 | L2 Loss_2: 1161.291 | loss_tot: -571.088 | L2 Loss test: 3.724
+Step 220 | L2 Loss: -997.865 | KLD Loss: 0.003 | L2 Loss_1: 9.923 | L2 Loss_2: 1007.788 | loss_tot: -500.702 | L2 Loss test: 2.593
+Step 230 | L2 Loss: -1310.507 | KLD Loss: 0.003 | L2 Loss_1: 12.545 | L2 Loss_2: 1323.052 | loss_tot: -654.305 | L2 Loss test: 2.098
+Step 240 | L2 Loss: -2610.915 | KLD Loss: 0.003 | L2 Loss_1: 12.691 | L2 Loss_2: 2623.606 | loss_tot: -1302.878 | L2 Loss test: 0.418
+Step 250 | L2 Loss: -4497.017 | KLD Loss: 0.003 | L2 Loss_1: 233.535 | L2 Loss_2: 4730.552 | loss_tot: -2249.385 | L2 Loss test: 0.496
+Step 260 | L2 Loss: -2097.499 | KLD Loss: 0.004 | L2 Loss_1: 257.095 | L2 Loss_2: 2354.594 | loss_tot: -1046.951 | L2 Loss test: 11.071
+Step 270 | L2 Loss: -2087.763 | KLD Loss: 0.004 | L2 Loss_1: 137.023 | L2 Loss_2: 2224.786 | loss_tot: -1044.201 | L2 Loss test: 7.031
+Step 280 | L2 Loss: -2546.209 | KLD Loss: 0.004 | L2 Loss_1: 21.850 | L2 Loss_2: 2568.060 | loss_tot: -1272.936 | L2 Loss test: 0.731
+Step 290 | L2 Loss: -3265.552 | KLD Loss: 0.004 | L2 Loss_1: 76.318 | L2 Loss_2: 3341.871 | loss_tot: -1631.081 | L2 Loss test: 0.915
+Step 300 | L2 Loss: -4523.244 | KLD Loss: 0.004 | L2 Loss_1: 200.534 | L2 Loss_2: 4723.777 | loss_tot: -2256.362 | L2 Loss test: 0.448
+Step 310 | L2 Loss: -4159.251 | KLD Loss: 0.004 | L2 Loss_1: 1503.126 | L2 Loss_2: 5662.377 | loss_tot: -2077.995 | L2 Loss test: 0.817
+Step 320 | L2 Loss: -4691.847 | KLD Loss: 0.004 | L2 Loss_1: 125.587 | L2 Loss_2: 4817.435 | loss_tot: -2346.862 | L2 Loss test: 0.256
+Step 330 | L2 Loss: -5150.841 | KLD Loss: 0.004 | L2 Loss_1: 118.933 | L2 Loss_2: 5269.773 | loss_tot: -2575.894 | L2 Loss test: 0.150
+Step 340 | L2 Loss: -5911.800 | KLD Loss: 0.004 | L2 Loss_1: 353.472 | L2 Loss_2: 6265.272 | loss_tot: -2956.053 | L2 Loss test: 0.124
+Step 350 | L2 Loss: -3849.621 | KLD Loss: 0.005 | L2 Loss_1: 1372.747 | L2 Loss_2: 5222.368 | loss_tot: -1924.453 | L2 Loss test: 1.235
+Step 360 | L2 Loss: -4190.621 | KLD Loss: 0.005 | L2 Loss_1: 271.469 | L2 Loss_2: 4462.090 | loss_tot: -2095.052 | L2 Loss test: 0.693
+Step 370 | L2 Loss: -4380.348 | KLD Loss: 0.005 | L2 Loss_1: 102.001 | L2 Loss_2: 4482.349 | loss_tot: -2189.924 | L2 Loss test: 0.259
+Step 380 | L2 Loss: -4796.065 | KLD Loss: 0.005 | L2 Loss_1: 38.737 | L2 Loss_2: 4834.802 | loss_tot: -2398.038 | L2 Loss test: 0.082
+Step 390 | L2 Loss: -5327.426 | KLD Loss: 0.005 | L2 Loss_1: 38.443 | L2 Loss_2: 5365.869 | loss_tot: -2663.588 | L2 Loss test: 0.053
+Step 400 | L2 Loss: -6004.516 | KLD Loss: 0.005 | L2 Loss_1: 39.630 | L2 Loss_2: 6044.145 | loss_tot: -3002.147 | L2 Loss test: 0.036
+Step 410 | L2 Loss: -6762.006 | KLD Loss: 0.005 | L2 Loss_1: 105.124 | L2 Loss_2: 6867.130 | loss_tot: -3381.502 | L2 Loss test: 0.036

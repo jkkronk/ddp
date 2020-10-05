@@ -1,92 +1,56 @@
 
+import tensorflow as tf
+import numpy as np
+import os
 
+def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
+     print("---- Defining VAE")
 
-
-def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False, mode=[], chunks40=False, Melmodels=False):
-
-
-     print("---- came here a")
-
-     import tensorflow as tf
-
-     #     config=tf.ConfigProto()
-#     config.gpu_options.allow_growth=True
-#     config.allow_soft_placement=True 
-     
-     import numpy as np
-     import os
-         
-     user='Kerem' #'Ender'
-     
      if mode ==[]:
           mode='MRIunproc'
      
-#     print("---- came here a1")
+     #     print("---- came here a1")
      
      SEED=10
      
-     ndims=patchsize
-     useMixtureScale=True
-     noisy=50
+     ndims = patchsize
+     useMixtureScale = True
+     noisy = 50
      batch_size = batchsize #50#361*2 # 1428#1071#714#714#714 #1000 1785#      
-     usebce=False
-     nzsamp=1
+     usebce = False
+     nzsamp = 1
      
-     kld_div=1.
+     kld_div = 1.
      
-     std_init=0.05               
+     std_init = 0.05
      
-     input_dim=ndims*ndims
-     fcl_dim=500 
-     
-#     print("---- came here a2")
-     
+     input_dim = ndims*ndims
+     fcl_dim = 500
+
      print(">>> lat_dim value: "+str(lat_dim))
      print(">>> mode is: " + mode)
           
      lat_dim_1 = max(1, np.floor(lat_dim/2))
-     
-#     if user=='Kerem':
-##          print("---- came here a2_1")
-#          os.environ["CUDA_VISIBLE_DEVICES"] = os.environ['SGE_GPU']
-##          print("---- came here a2_2")
-#          from tensorflow.python.client import device_lib
-##          print("---- came here a2_3")
-#          print (device_lib.list_local_devices())
-##          print("---- came here a2_4")
-#          
-#          print( os.environ['SGE_GPU'])
-          
-#     print("---- came here a3")     
-     
-     
-     num_inp_channels=1
-     
-#     print("---- came here b")
-     
-     #make a simple fully connected network
-     #==============================================================================
-     #==============================================================================
+
+     num_inp_channels = 1
+
+     # make a simple fully connected network
+     # ==============================================================================
+     # ==============================================================================
      
      tf.reset_default_graph()
-     #tf.compat.v1.reset_default_graph()
 
-     #define the activation function to use:
+     # define the activation function to use:
      def fact(x):
           #return tf.nn.tanh(x)
           return tf.nn.relu(x)
-     
-     
-     #define the input place holder
+
+     # define the input place holder
      x_inp = tf.placeholder("float", shape=[None, input_dim])
-     nsampl=50
-     
-     
-     #define the network layer parameters
+
+     # define the network layer parameters
      intl=tf.truncated_normal_initializer(stddev=std_init, seed=SEED)
-     
-#     print("---- came here c")
-     
+
      with tf.variable_scope("VAE") as scope:
          enc_conv1_weights = tf.get_variable("enc_conv1_weights", [3, 3, num_inp_channels, 32], initializer=intl)
          enc_conv1_biases = tf.get_variable("enc_conv1_biases", shape=[32], initializer=tf.constant_initializer(value=0))
@@ -125,15 +89,11 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
               
          else:        
               pass
-     
-#     print("---- came here d")
-     
-     ######## TWO LAYER 
+
      # a. build the encoder layers
      
      x_inp_ = tf.reshape(x_inp, [batch_size,ndims,ndims,1])
-     #x_inp_ = tf.reshape(x_rec, [batch_size,ndims,ndims,1])
-     
+
      enc_conv1 = tf.nn.conv2d(x_inp_, enc_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
      enc_relu1 = fact(tf.nn.bias_add(enc_conv1, enc_conv1_biases))
      
@@ -146,6 +106,7 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
      flat_relu3 = tf.contrib.layers.flatten(enc_relu3)
      
      # b. get the values for drawing z
+
      mu = tf.matmul(flat_relu3, mu_weights) + mu_biases
      mu = tf.tile(mu, (nzsamp, 1)) # replicate for number of z's you want to draw
      logVar = tf.matmul(flat_relu3, logVar_weights) + logVar_biases
@@ -163,15 +124,12 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
           
           z1 = tf.transpose(tf.gather(tf.transpose(z),indices1))
           z2 = tf.transpose(tf.gather(tf.transpose(z),indices2))
-          
-          
+
           # d. build the decoder layers from z1 for mu(z)
           dec_L1 = fact(tf.matmul(z, dec_fc1_weights) + dec_fc1_biases)     
      else:
           pass
-      
-#     print("---- came here e")     
-     
+
      dec_L1_reshaped = tf.reshape(dec_L1 ,[batch_size,int(ndims),int(ndims),48])
      
      dec_conv1 = tf.nn.conv2d(dec_L1_reshaped, dec_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
@@ -198,9 +156,7 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
           y_out_prec_ = tf.exp(y_out_prec_log)
           
           y_out_prec=tf.contrib.layers.flatten(y_out_prec_)
-          
-     #     #DBG # y_out_cov=tf.ones_like(y_out)
-     
+
      # build the loss functions and the optimizer
      #==============================================================================
      #==============================================================================
@@ -228,52 +184,42 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
           train_step = tf.train.AdamOptimizer(5e-4).minimize(loss_tot)
      else:
           train_step = tf.train.AdamOptimizer(5e-3).minimize(loss_tot)
-          
-#     print("---- came here f")
-     
+
      # start session
      #=====================================definevae2=========================================
      #==============================================================================
      
-     sess=tf.InteractiveSession()#(config=config)
-     
-#     print("---- came here g")
-     
+     sess = tf.InteractiveSession()#(config=config)
+
      sess.run(tf.global_variables_initializer())
      print("Initialized parameters")
-     
-#     print("---- came here h")
-     
+
      saver = tf.train.Saver()
-     
-#     print("---- came here j")
-     
+
      # do post-training predictions
      #==============================================================================
      #==============================================================================
      
-     step=500000
-     saver.restore(sess, './trainedmodel/cvae_MSJhalf_40chunks_fcl'+str(fcl_dim)+'_lat'+str(lat_dim)+'_ns'+str(noisy)+'_ps'+str(patchsize)+'_step'+str(step))
-     print("KCT-info: loaded the new model, trained patchwise on the 40 chunk dataset")
-          
-         
-#     print("---- came here k")
+     step = 500000
+     saver.restore(sess, '/scratch_net/bmicdl03/jonatank/logs/ddp/vae/' + vae_model)
+     print("KCT-info: loaded the new model, trained fastmri")
      
-     #gradient stuff, gd recon etc...
+     # gradient stuff, gd recon etc...
      #==============================================================================
-     nsampl=batchsize#361*2 # 1428#1071#714#714 1785#
-     x_rec=tf.get_variable('x_rec',shape=[nsampl,ndims*ndims],initializer=tf.constant_initializer(value=0.0))
+
+     # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+     # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+
+
+     nsampl = batchsize #361*2 # 1428#1071#714#714 1785#
+     x_rec = tf.get_variable('x_rec',shape=[nsampl,ndims*ndims],initializer=tf.constant_initializer(value=0.0))
      
      z_std_multip = tf.placeholder_with_default(1.0, shape=[])
-     
-     
-     #REWIRE THE GRAPH
-     #you need to rerun all operations after this as well!!!!
-     
-     #qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-     #%qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-     
+
+     # REWIRE THE GRAPH
+     # you need to rerun all operations after this as well!!!!
      # rewire the graph input
+
      x_inp_ = tf.reshape(x_rec, [nsampl,ndims,ndims,1])
      
      enc_conv1 = tf.nn.conv2d(x_inp_, enc_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
@@ -297,15 +243,13 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
      # c. draw an epsilon and get z
      epsilon = tf.random_normal(tf.shape(logVar), name='epsilon')
      z = mu + z_std_multip*tf.multiply(std, epsilon) # z_std_multip*epsilon     #   # KCT!!!  
-     
-     
+
      if useMixtureScale:
           indices1=tf.range(start=0, limit=lat_dim_1, delta=1, dtype='int32')
           indices2=tf.range(start=lat_dim_1, limit=lat_dim, delta=1, dtype='int32')
           
           z1 = tf.transpose(tf.gather(tf.transpose(z),indices1))
           z2 = tf.transpose(tf.gather(tf.transpose(z),indices2))
-          
           
           # d. build the decoder layers from z1 for mu(z)
           dec_L1 = fact(tf.matmul(z, dec_fc1_weights) + dec_fc1_biases)     
@@ -341,18 +285,13 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
           y_out_prec=tf.contrib.layers.flatten(y_out_prec_)
           
      #     #DBG # y_out_cov=tf.ones_like(y_out)
-     
-        
+
      # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
      # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-     
-     
+
      op_p_x_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), y_out_prec),axis=1) \
                   + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1) -  0.5*ndims*ndims*tf.log(2*np.pi) ) 
-     
-     #op_p_x_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), 1),axis=1) \
-     #             + 0.5 * tf.reduce_sum(tf.log(tf.ones_like(y_out_prec)), axis=1) -  0.5*784*tf.log(2*np.pi) ) 
-     
+
      op_q_z_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - mu),2), tf.reciprocal(std)),axis=1) \
                        - 0.5 * tf.reduce_sum(tf.log(std), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
      
@@ -361,10 +300,10 @@ def definevae2(lat_dim=60, patchsize=28,batchsize=50, rescaled=False, half=False
      op_q_zpl_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z_pl - mu),2), tf.reciprocal(std)),axis=1) \
                        - 0.5 * tf.reduce_sum(tf.log(std), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
      
-     op_p_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - tf.zeros_like(mu)),2), tf.reciprocal(tf.ones_like(std))),axis=1) \
-                       - 0.5 * tf.reduce_sum(tf.log(tf.ones_like(std)), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
-     
-     
+     op_p_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - tf.zeros_like(mu)),2), tf.reciprocal(tf.ones_like(std))),\
+                    axis=1) - 0.5 * tf.reduce_sum(tf.log(tf.ones_like(std)), axis=1) \
+                    - 0.5*lat_dim*tf.log(2*np.pi))
+
      funop=op_p_x_z + op_p_z - op_q_z_x
      
      grd = tf.gradients(op_p_x_z + op_p_z - op_q_z_x, x_rec) # 

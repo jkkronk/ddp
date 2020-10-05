@@ -1,3 +1,5 @@
+import numpy as np
+
 def FT(x, normalize=False):
     # inp: [nx, ny]
     # out: [nx, ny]
@@ -17,8 +19,8 @@ def tFT(x, normalize=False):
 
 
 def UFT(x, uspat, normalize=False):
-    # inp: [nx, ny], [nx, ny]
-    # out: [nx, ny]
+    # inp: [nx, ny, coils], [nx, ny]
+    # out: [nx, ny, coils]
 
     return uspat * FT(x, normalize)
 

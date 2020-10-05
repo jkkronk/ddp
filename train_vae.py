@@ -29,7 +29,7 @@ parser.add_argument('--mode', type=str, default='jonatank')
 args = parser.parse_args()
 
 logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-
+print(logdir)
 #os.environ["CUDA_VISIBLE_DEVICES"]=os.environ['SGE_GPU']
 
 # parameters
@@ -46,8 +46,8 @@ mode = args.mode  # 'MRIunproc'
 # ndims=int(sys.argv[3])
 ndims = 28
 useMixtureScale = True
-noisy = 50
-batch_size = 50  # 1000
+noisy = 0
+batch_size = 1024
 usebce = False
 kld_div = 25.0
 nzsamp = 1
@@ -352,9 +352,9 @@ with tf.device('/gpu:0'):
             # tf.summary.image("Input data", test_batch)
             # tf.summary.image("Recdata data", xh)
 
-        if step % 100000 == 0:
-            saver.save(sess, os.path.join('/scratch_net/bmicdl03/jonatank/logs/ddp/vae/', str(mode) + '_fcl' + str(
+        if step % 10000 == 0:
+            saver.save(sess, logdir + '/' + str(mode) + '_fcl' + str(
                 fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_step' + str(
-                step) + '.ckpt'))
+                step) + '.ckpt')
 
 print("elapsed time: {0}".format(tm.time() - ts))

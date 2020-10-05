@@ -16,17 +16,15 @@ class Patcher:
      def __init__(self, imsize, patchsize, step, nopartials, contatedges):
           self.patchsize = patchsize
           self.step = step
-          self.imsize=imsize
-          self.imsizeorig=np.array(imsize)
+          self.imsize = imsize
+          self.imsizeorig = np.array(imsize)
           self.nopartials = nopartials
           self.contatedges = contatedges
           
-          self.diviim =[]
-          self.genpatchsizes=[]
-          self.noOfPatches=0
-          
-          
-          
+          self.diviim = []
+          self.genpatchsizes = []
+          self.noOfPatches = 0
+
           #if you want to be able to use patchsizes not dividor of image size
           if self.contatedges:
                if (self.imsize == (np.ceil(self.imsizeorig/self.patchsize)*self.patchsize).astype(int)).all():
@@ -35,7 +33,7 @@ class Patcher:
                     self.imsize = (np.ceil(self.imsizeorig/self.patchsize)*self.patchsize).astype(int)
                
           self.getDivImage()
-          
+
           
           
      def im2patches(self,img):
@@ -43,10 +41,9 @@ class Patcher:
           
           #pad images with srap to make the image size multiple of patchsize
           if self.contatedges:
-               sd=self.imsize - self.imsizeorig
-               img = np.pad(img,[ (0,sd[0]), (0,sd[1])  ], mode='wrap'  )
-          
-          
+               sd = np.abs(self.imsizeorig - self.imsize)
+
+               img = np.pad(img,[(0,sd[0]), (0,sd[1]) ], mode='wrap'  )
           
           ptchs=[]
           
@@ -66,15 +63,15 @@ class Patcher:
           
      def patches2im(self,patches, combsq=False):
           
-          if len( self.diviim):
+          if len(self.diviim):
                pass
           else:
                self.getDivImage()
               
           if self.contatedges:     
-               tmp=np.zeros(self.imsize, dtype=np.complex128)
+               tmp = np.zeros(self.imsizeorig, dtype=np.complex128)
           else:
-               tmp=np.zeros(self.imsizeorig, dtype=np.complex128)
+               tmp = np.zeros(self.imsizeorig, dtype=np.complex128)
                
           ctr=0
           
@@ -103,7 +100,7 @@ class Patcher:
      def getDivImage(self):
           
           if self.contatedges:
-               tmp=np.zeros(self.imsize)
+               tmp=np.zeros(self.imsizeorig)
           else:
                tmp=np.zeros(self.imsizeorig)
                
