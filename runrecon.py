@@ -10,12 +10,12 @@ import numpy as np
 import pickle
 from datetime import datetime
 import tensorflow as tf
+import h5py
+import argparse
 
 from US_pattern import US_pattern
 from dataloader import MR_image_data, MR_kspace_data
 import vaerecon
-
-import argparse
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
@@ -38,8 +38,8 @@ patch_sz=28
 lat_dim=60
 mode = 'MRIunproc'#'Melanie_BFC'
 noise=0
-rmses=np.zeros((1,1,4))
-regtype='reg2_dc'
+rmses=np.zeros((1, 1, 4))
+regtype='reg2_proj'
 reg=0.1
 dcprojiter=1
 
@@ -47,6 +47,7 @@ if np.floor(usfact) == usfact: # if it is already an integer
      usfact = int(usfact)
 print('Under sample factor: ', usfact)
 R=usfact
+
 if R<=3:
      num_iter = 402 # 302
 else:
@@ -55,7 +56,7 @@ else:
 if contrun == 0:
      contRec = ''
 else:
-     contRec = basefolder+'MAPestimation/rec_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter)
+     contRec = basefolder+'MAPestimation/rec_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter)
      numiter = 302
 
 ## CREATE DATA
@@ -66,6 +67,8 @@ MRi = MR_kspace_data(dirname=datapath)
 ksp_subj = MRi.get_subj(subj)
 print('Shape ksp_subj: ', ksp_subj.shape)
 ksp = ksp_subj[sli]
+
+img_size = ksp.shape
 
 try:
      uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
@@ -80,10 +83,10 @@ uspat_allcoils = np.repeat(uspat[:, :, np.newaxis], usksp.shape[-1], axis=2)
 usksp = uspat_allcoils * usksp
 
 try:
-     with h5py.File(basefolder + 'sensmaps/' + coilmap_r_ + subj_name, 'r') as fdset:
+     with h5py.File(basefolder + 'sensmaps/' + 'coilmap_r_' + subj, 'r') as fdset:
           coilmap_r = fdset['coilmaps'][sli]  # (number of slices, number of coils, height, width)
 
-     with h5py.File(basefolder + 'sensmaps/' + coilmap_i_ + subj_name, 'r') as fdset:
+     with h5py.File(basefolder + 'sensmaps/' + 'coilmap_i_' + subj, 'r') as fdset:
           coilmap_i = fdset['coilmaps'][sli]  # (number of slices, number of coils, height, width)
 
      sensmap = coilmap_r + coilmap_i * 1j
@@ -101,12 +104,21 @@ except:
 
 if not args.skiprecon:
      print(usksp.shape)
-     rec_vae = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model)
-     rec_vae = rec_vae[0]
-     pickle.dump(rec_vae, open(basefolder+'MAPestimation/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+str(vol)+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb')   )
-    
+     rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model)
+
+     pickle.dump(rec_vae, open(basefolder+'MAPestimation/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb'))
+
+     GT_img = MRi.get_gt(subj)[sli]
+
      lastiter = int((np.floor(rec_vae.shape[1]/13)-2)*13)
-     maprecon = rec_vae[:,lastiter].reshape([252, 308]) # this is the final reconstructed image
+     maprecon = rec_vae[:, lastiter].reshape(img_size) # this is the final reconstructed image
+
+     mse_rec = ((maprecon - GT_img) ** 2).mean()
+
+     ssim_rec = -1
+     #ssim_rec = ssim(maprecon, GT_img, data_range=maprecon.max() - maprecon.min())
+
+     print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     MSE = ', mse_rec, '     SSIM = ', ssim_rec)
 
 
 

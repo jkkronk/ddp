@@ -73,6 +73,9 @@ lat_dim_2 = lat_dim - lat_dim_1
 
 num_inp_channels = 1
 
+modality = 'T1POST' #'FLAIR' 'T1_' 'T1POST' 'T1PRE' 'T2'
+
+
 # make a dataset to use later
 # ==============================================================================
 # ==============================================================================
@@ -81,7 +84,7 @@ datapath = '/srv/beegfs02/scratch/fastmri_challenge/data/brain'
 # (train_size, test_size, ndims, noisy, seed, mode, downscale=True)
 from dataloader import MR_image_data
 
-MRi = MR_image_data(dirname=datapath, trainset_ratio=0.5, noiseinvstd=50, patchsize=28)
+MRi = MR_image_data(dirname=datapath, trainset_ratio=0.5, noiseinvstd=50, patchsize=28, modality=modality)
 
 print('CAME HERE!! 1')
 
@@ -352,7 +355,7 @@ with tf.device('/gpu:0'):
             # tf.summary.image("Input data", test_batch)
             # tf.summary.image("Recdata data", xh)
 
-        if step % 10000 == 0:
+        if step % 2500 == 0:
             saver.save(sess, logdir + '/' + str(mode) + '_fcl' + str(
                 fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_step' + str(
                 step) + '.ckpt')

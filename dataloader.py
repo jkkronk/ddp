@@ -90,7 +90,6 @@ class MR_image_data:
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.datafiles_test[volindex[0]]
-
                 with h5py.File(self.dirname + '/multicoil_val/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
                     sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
@@ -172,4 +171,10 @@ class MR_kspace_data:
             kspace_img = fdset['kspace'][:]  # The shape of kspace tensor is (number of slices, number of coils, height, width)
 
         return kspace_img
+
+    def get_gt(self, subj_name):
+        with h5py.File(self.dirname + 'multicoil_val/' + subj_name, 'r') as fdset:
+            gt_img = fdset['reconstruction_rss'][:]  # The shape of kspace tensor is (number of slices, number of coils, height, width)
+
+        return gt_img
 

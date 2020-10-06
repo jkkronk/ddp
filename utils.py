@@ -17,7 +17,6 @@ def tFT(x, normalize=False):
     else:
         return np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1))
 
-
 def UFT(x, uspat, normalize=False):
     # inp: [nx, ny, coils], [nx, ny]
     # out: [nx, ny, coils]

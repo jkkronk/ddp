@@ -23,7 +23,7 @@ from utils import UFT, tUFT, tFT
 
 ## direk precision optimize etmek daha da iyi olabilir. 
 
-def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], N4BFcorr=False, z_multip=1.0, vae_model=''):
+def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model=''):
      print('xxxxxxxxxxxxxxxxxxx contRec is ' + contRec)
      print('xxxxxxxxxxxxxxxxxxx parfact is ' + str(parfact) )
 
@@ -53,16 +53,13 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #inp: [nx, ny]
           #out: [nx, ny]
           
-          return np.linalg.norm( UFT(us, uspat) - us_ksp) **2
+          return np.linalg.norm(UFT(us, uspat) - us_ksp) **2
      
      def dconst_grad(us):
           #inp: [nx, ny]
           #out: [nx, ny]
 
-          tmp_us = np.repeat(us[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          tmp_us_sens = sensmaps * tmp_us
-
-          return 2*tUFT(UFT(tmp_us_sens, uspat) - us_ksp, uspat)
+          return 2*tUFT(UFT(us, uspat) - us_ksp, uspat)
      
      def likelihood(us):
           #inp: [parfact,ps*ps]
@@ -169,11 +166,15 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           grd_lik = likelihood_grad_patches(ptchs)
 
           grd_lik = (-1)* Ptchr.patches2im(grd_lik)
-          
-          grd_dconst = dconst_grad(np.reshape(image, [imsizer,imrizec]))
 
-          grd_dconst_sens = sensmaps * grd_dconst  # mult sensmaps
-          grd_dconst = np.sqrt(np.sum(np.square(grd_dconst_sens), axis=-1)).copy()  # root-sum-squared
+          img_tmp = np.reshape(image, [imsizer, imrizec])
+
+          tmp_img = np.repeat(img_tmp[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          tmp_img_sens = abs(sensmaps) * tmp_img
+
+          grd_dconst = dconst_grad(tmp_img_sens)
+
+          grd_dconst = np.sqrt(np.sum(np.square(grd_dconst), axis=-1)).copy()  # root-sum-squared
 
           return grd_lik + grd_dconst, grd_lik, grd_dconst
      
@@ -183,9 +184,8 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #out: [1], [1], [1]
           tmpimg = np.reshape(image, [imsizer,imrizec])
           recs_copy = np.repeat(tmpimg[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          #tmpimg_sens = np.sqrt(np.sum(np.square(sensmaps * recs_copy), axis=-1)).copy()
 
-          dc = dconst(sensmaps * recs_copy)
+          dc = dconst(abs(sensmaps) * recs_copy)
 
           ptchs = Ptchr.im2patches(np.reshape(image, [imsizer,imrizec]))
           ptchs = np.array(ptchs)
@@ -233,40 +233,11 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
                us[:,:,:,it+1] = tmp3 - f_st(tmp3, lmb=lmb)
 
           return im - fdivg(us[:,:,:,it+1])
-     
-     
-     def low_pass(im):
-          import scipy.ndimage as sndi
-          filtered = sndi.gaussian_filter(im,15)
-          
-          return filtered
-     
-     def tikh_proj(usph, niter=100, alpha=0.05):
-          ims = np.zeros((imsizer,imrizec,niter))
-          ims[:,:,0]=usph.copy()
 
-          for ix in range(niter-1):
-              ims[:,:,ix+1] = ims[:,:,ix] + alpha*2*fdivg(fgrad(ims[:,:,ix]))
+     def reg2_dcproj(usph, magim, niter=100, alpha_reg=0.05, alpha_dc=0.05):
+          # from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
+          # sph=usph+np.pi
 
-          return ims[:,:,-1]
-     
-     def reg2_proj(usph, niter=100, alpha=0.05):
-          #from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
-          usph=usph+np.pi
-          ims = np.zeros((imsizer,imrizec,niter))
-          ims[:,:,0]=usph.copy()
-          regval = reg2eval(ims[:,:,0].flatten())
-          print(regval)
-
-          for ix in range(niter-1):
-              ims[:,:,ix+1] = ims[:,:,ix] +alpha*reg2grd(ims[:,:,ix].flatten()).reshape([252,308]) # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
-              regval = reg2eval(ims[:,:,ix+1].flatten())
-
-          return ims[:,:,-1]-np.pi    
-     
-     def reg2_dcproj(usph, magim, bfestim, niter=100, alpha_reg=0.05, alpha_dc=0.05):
-          #from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
-          #usph=usph+np.pi
           ims = np.zeros((imsizer,imrizec,niter))
           grds_reg = np.zeros((imsizer,imrizec,niter))
           grds_dc = np.zeros((imsizer,imrizec,niter))
@@ -278,20 +249,20 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           for ix in range(niter-1):
               grd_reg = reg2grd(ims[:,:,ix].flatten()).reshape([imsizer,imrizec])  # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
               grds_reg[:,:,ix]  = grd_reg
-              grd_dc = reg2_dcgrd(ims[:,:,ix].flatten() , magim, bfestim).reshape([imsizer,imrizec])
+              grd_dc = reg2_dcgrd(ims[:,:,ix].flatten() , magim).reshape([imsizer,imrizec])
               grds_dc[:,:,ix]  = grd_dc
-              ims[:,:,ix+1] = ims[:,:,ix] + alpha_reg*grd_reg  - alpha_dc*grd_dc
-              regval = reg2eval(ims[:,:,ix+1].flatten())
+              ims[:,:,ix+1] = ims[:,:,ix] + alpha_reg*grd_reg - alpha_dc*grd_dc
 
-              ims_re_sens = sensmaps * np.repeat((magim * np.exp(1j * ims[:, :, ix + 1]))[:, :, np.newaxis],
-                                                sensmaps.shape[-1], axis=2)
+              # regval = reg2eval(ims[:,:,ix+1].flatten())
 
-              f_dc = dconst(ims_re_sens*bfestim)
+              # ims_re_sens = sensmaps * np.repeat((magim * np.exp(1j * ims[:, :, ix + 1]))[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+
+              # f_dc = dconst(ims_re_sens)
               
-              print("norm grad reg: " + str(np.linalg.norm(grd_reg)))
-              print("norm grad dc: " + str(np.linalg.norm(grd_dc)) )
-              print("regval: " + str(regval))
-              print("fdc: (*1e9) {0:.6f}".format(f_dc/1e9))
+              # print("norm grad reg: " + str(np.linalg.norm(grd_reg)))
+              # print("norm grad dc: " + str(np.linalg.norm(grd_dc)) )
+              # print("regval: " + str(regval))
+              # print("fdc: (*1e9) {0:.6f}".format(f_dc/1e9))
           
 #          np.save('/home/ktezcan/unnecessary_stuff/phase', ims)
 #          np.save('/home/ktezcan/unnecessary_stuff/grds_reg', grds_reg)
@@ -307,25 +278,23 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      
      def reg2grd(im):
           #takes in 1d, returns 1d
-          im=im.reshape([imsizer,imrizec])
-
-
+          im = im.reshape([imsizer,imrizec])
 
           return -2*np.real(1j*np.exp(-1j*im) * fdivg(fgrad(np.exp(1j * im)))).flatten()
      
      
-     def reg2_dcgrd(phim, magim, bfestim):
+     def reg2_dcgrd(phim, magim):
           #takes in 1d, returns 1d
           phim=phim.reshape([imsizer,imrizec])
           magim=magim.reshape([imsizer,imrizec])
 
-          bfestim_re = sensmaps * np.repeat((bfestim*np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          bfestim_re = abs(sensmaps) * np.repeat((np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
           UFT_bfestim = UFT(bfestim_re, uspat)
 
           tUFT_bfestim = tUFT(UFT_bfestim - us_ksp, uspat)
           tUFT_bfestim = np.sqrt(np.sum(np.square(tUFT_bfestim), axis=-1)).copy()  # root-sum-squared
 
-          return -2*np.real(1j*np.exp(-1j*phim)*magim * bfestim * tUFT_bfestim).flatten()
+          return -2*np.real(1j*np.exp(-1j*phim)*magim * tUFT_bfestim).flatten()
      
      
      def reg2_proj_ls(usph, niter=100):
@@ -351,34 +320,6 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
              
           return ims[:,:,-1]-np.pi 
 
-     def N4corrf(im):
-          phasetmp = np.angle(im)
-          ddimcabs = np.abs(im)
-          inputImage = sitk.GetImageFromArray(ddimcabs, isVector=False)
-          corrector = sitk.N4BiasFieldCorrectionImageFilter();
-          inputImage = sitk.Cast(inputImage, sitk.sitkFloat32)
-          output = corrector.Execute(inputImage)
-          N4biasfree_output = sitk.GetArrayFromImage(output)
-          
-          n4biasfield = ddimcabs/(N4biasfree_output+1e-9)
-          
-          if np.isreal(im).all():
-               return n4biasfield, N4biasfree_output 
-          else:
-               return n4biasfield, N4biasfree_output*np.exp(1j*phasetmp)
-
-     #make the data
-     #===============================
-
-     # trpat = np.zeros_like(uspat)
-     # trpat[:,120:136] = 1
-     #     lrphase = np.angle( tUFT(data*trpat[:,:,np.newaxis],uspat) )
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lowresphase','rb'))
-     #     truephase = pickle.load(open('/home/ktezcan/unnecessary_stuff/truephase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/usphase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrusphase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrmaskphase','rb'))
-
      # make the functions for POCS
      #=====================================
      multip = 0 #0.1
@@ -392,43 +333,28 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      
      # initialize data
      recs = np.zeros((imsizer*imrizec,num_iter+30), dtype=complex)
-     
-     # recs[:,0] = np.abs(tUFT(data, uspat).flatten().copy()) #kct
-     # recs[:,0] = tUFT(us_ksp, uspat).flatten().copy()
 
      m0 = tUFT(us_ksp, uspat) # mult sensmaps
      recs[:, 0] = np.sqrt(np.sum(np.square(m0), axis=-1)).flatten().copy() # root-sum-squared
 
-     if N4BFcorr:
-     #    phasetmp = np.reshape(np.angle(recs[:,0]),[imsizer,imrizec])
-          n4bf, N4bf_image = N4corrf( np.reshape(recs[:,0],[imsizer,imrizec]) )
-          recs[:,0] = N4bf_image.flatten()
-     else:
-          n4bf=1
-
-     # recs[:,0] = np.abs(tUFT(data, uspat).flatten().copy() )*np.exp(1j*lrphase).flatten()
-
      phaseregvals = []
 
-     pickle.dump(recs[:,0],open('/scratch_net/bmicdl03/jonatank/logs/ddp/rec/rec','wb'))
-
+     pickle.dump(recs[:,0], open('/scratch_net/bmicdl03/jonatank/logs/ddp/rec/rec', 'wb'))
 
      print('contRec is ' + contRec)
      if contRec != '':
           try:
                print('KCT-INFO: reading from a previous pickle file '+contRec)
-               rr=pickle.load(open(contRec,'rb'))
-               recs[:,0]=rr[:,-1]
+               rr = pickle.load(open(contRec, 'rb'))
+               recs[:, 0] = rr[:, -1]
                print('KCT-INFO: initialized to the previous recon from pickle: ' + contRec)
           except:
                print('KCT-INFO: reading from a previous numpy file '+contRec)
                rr=np.load(contRec)
-               recs[:,0]=rr[:,-1]
+               recs[:, 0] = rr[:, -1]
                print('KCT-INFO: initialized to the previous recon from numpy: ' + contRec)
 
-     n4biasfields=[]
-
-     for it in range(0, num_iter-1, 1):
+     for it in range(0, num_iter-1, 2):
           alpha=alphas[it]
 
            # FOR NEERAV:
@@ -460,14 +386,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
 
                ftot, f_lik, f_dc = feval(recstmp)
 
-               if N4BFcorr:
-                    f_dc = dconst(recstmp*n4bf)
-
-               tmp_resized = np.reshape(recstmp, [imsizer, imrizec])
-               tmp_img = sensmaps * np.repeat(tmp_resized[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-               tmp_img = np.sqrt(np.sum(np.square(tmp_img), axis=-1)).flatten().copy()  # root-sum-squared
-
-               gtot, g_lik, g_dc = geval(tmp_img)
+               gtot, g_lik, g_dc = geval(recstmp)
 
                print("it no: " + str(it+ix) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " + str(f_dc/1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(np.linalg.norm(g_dc)) )
 
@@ -481,31 +400,24 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #===============================================
           #===============================================
 
-          tmpa = np.abs(np.reshape(recs[:,it+n+1],[imsizer,imrizec]))
-          tmpp = np.angle(np.reshape(recs[:,it+n+1],[imsizer,imrizec]))
+          tmpa = np.abs(np.reshape(recs[:, it+n+1], [imsizer, imrizec]))
+          tmpp = np.angle(np.reshape(recs[:, it+n+1], [imsizer, imrizec]))
           tmpatv = tmpa.copy().flatten()
            
           if reglmb == 0:
                print("skipping phase proj")
                tmpptv=tmpp.copy().flatten()
           else:
-               if regtype=='TV':
-                    tmpptv=tv_proj(tmpp, mu=0.125,lmb=reglmb,IT=regiter).flatten() #0.1, 15
-               elif regtype=='reg2':
-                    tmpptv=reg2_proj(tmpp, alpha=reglmb,niter=100).flatten() #0.1, 15
-                    regval=reg2eval(tmpp)
-                    phaseregvals.append(regval)
-                    print("KCT-dbg: pahse reg value is " + str(regval))
-               elif regtype=='reg2_dc': # Normal
-                    tmpptv=reg2_dcproj(tmpp, tmpa, n4bf, alpha_reg=reglmb, alpha_dc=reglmb, niter=100).flatten()
-                    #regval=reg2_dceval(tmpp, tmpa)
-                    #phaseregvals.append(regval)
+               if regtype == 'TV':
+                    tmpptv = tv_proj(tmpp, mu=0.125, lmb=reglmb, IT=regiter).flatten() #0.1, 15
+               elif regtype == 'reg2_proj': # Normal
+                    tmpptv = reg2_dcproj(tmpp, tmpa, alpha_reg=reglmb, alpha_dc=reglmb, niter=100).flatten()
                     #print("KCT-dbg: reg2+DC pahse reg value is " + str(regval))
-               elif regtype=='abs':
-                    tmpptv=np.zeros_like(tmpp).flatten()
-               elif regtype=='reg2_ls':
-                    tmpptv=reg2_proj_ls(tmpp, niter=regiter).flatten() #0.1, 15
-                    regval=reg2eval(tmpp)
+               elif regtype == 'abs':
+                    tmpptv = np.zeros_like(tmpp).flatten()
+               elif regtype == 'reg2_ls':
+                    tmpptv = reg2_proj_ls(tmpp, niter=regiter).flatten() #0.1, 15
+                    regval = reg2eval(tmpp)
                     phaseregvals.append(regval)
                     print("KCT-dbg: pahse reg value is " + str(regval))
                else:
@@ -517,46 +429,27 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           # now do again a data consistency projection
           #===============================================
           #===============================================
-          if not N4BFcorr:
-               recs_itr = np.reshape(recs[:,it+n+2],[imsizer,imrizec])
-               recs_sens = sensmaps * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
-               tmp1 = UFT(recs_sens, (1 - uspat))
-               tmp2 = UFT(recs_sens, uspat)
+          recs_itr = np.reshape(recs[:,it+n+2],[imsizer,imrizec])
+          recs_sens = abs(sensmaps) * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
-               #tmp1 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (1-uspat)  )
-               #tmp2 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (uspat)  )
-               tmp3 = us_ksp*uspat
+          tmp1 = UFT(recs_sens, (1 - uspat))
+          tmp2 = UFT(recs_sens, uspat)
+
+          #tmp1 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (1-uspat)  )
+          #tmp2 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (uspat)  )
+          tmp3 = us_ksp*uspat
                
-               tmp = tmp1 + multip*tmp2 + (1-multip)*tmp3
+          tmp = tmp1 + multip*tmp2 + (1-multip)*tmp3
 
-               #recs[:,it+n+3] = tFT(tmp).flatten()
-               sens_fFT_tmp = sensmaps * tFT(tmp)
-               recs[:, it + n + 3] = np.sqrt(np.sum(np.square(sens_fFT_tmp), axis=-1)).flatten().copy()
+          #recs[:,it+n+3] = tFT(tmp).flatten()
+          fFT_tmp = tFT(tmp)
+          recs[:, it+n+3] = np.sqrt(np.sum(np.square(fFT_tmp), axis=-1)).flatten().copy()
 
-               ftot, f_lik, f_dc = feval(recs[:,it+1])
-               print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(us_ksp)**2))
-               
-          elif N4BFcorr:
-               n4bf_prev = n4bf.copy()
-               imgtmp = np.reshape(recs[:,it+12],[imsizer,imrizec]) # biasfree
-               imgtmp_bf = imgtmp*n4bf_prev # img with bf
-               n4bf, N4bf_image = N4corrf( imgtmp_bf ) # correct the bf, this correction is supposed to be better now.
-               imgtmp_new = imgtmp*n4bf
-               n4biasfields.append(n4bf)
+          ftot, f_lik, f_dc = feval(recs[:,it+1])
+          print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(us_ksp)**2))
 
-               tmp1 = UFT(imgtmp_new, (1-uspat)  )
-               tmp3= us_ksp*uspat[:,:,np.newaxis]
-               
-               tmp=tmp1 + (1-multip)*tmp3 # multip=0 by default
-               recs[:,it+13] = (tFT(tmp)/n4bf).flatten()
-               ftot, f_lik, f_dc = feval(recs[:,it+13])
-
-               if N4BFcorr:
-                     f_dc = dconst(recs[:,it+13].reshape([imsizer,imrizec])*n4bf)
-               print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(us_ksp)**2))
-          
-     return recs, 0, phaseregvals, n4biasfields
+     return recs, phaseregvals
 
 def ADMM_recon(imo, usfact2us, usfactnet):
 
