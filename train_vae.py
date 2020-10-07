@@ -33,7 +33,9 @@ args = parser.parse_args()
 mode = args.mode  # 'MRIunproc'
 modality = args.modality # 'FLAIR' 'T1_' 'T1POST' 'T1PRE' 'T2'
 
-logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+print('Modality: ', modality)
+
+logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + modality + datetime.now().strftime("%Y%m%d-%H%M%S")
 print(logdir)
 #os.environ["CUDA_VISIBLE_DEVICES"]=os.environ['SGE_GPU']
 
@@ -334,9 +336,9 @@ with tf.device('/gpu:0'):
             sess.run(loss_valid_tb.assign(np.mean(test_loss_l2)))
             writer.add_summary(sess.run(loss_valid_summ), step)
 
-            img_summary = tf.summary.image("Test reconstructions", xh, max_outputs=16)
-            x = sess.run(img_summary)
-            writer.add_summary(x)
+            #img_summary = tf.summary.image("Test reconstructions", xh[0:test_batch.shape[0], :], max_outputs=16)
+            #x = sess.run(img_summary)
+            #writer.add_summary(x)
 
             writer.flush()
 
@@ -353,7 +355,7 @@ with tf.device('/gpu:0'):
 
         if step % 500 == 0:
             saver.save(sess, logdir + '/' + str(mode) + '_fcl' + str(
-                fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_step' + str(
+                fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_modality' + modality + '_step' + str(
                 step) + '.ckpt')
 
 print("elapsed time: {0}".format(tm.time() - ts))

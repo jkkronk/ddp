@@ -1,0 +1,31 @@
+Modality:  T2
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/T220201007-104715
+>>> lat_dim value: 60
+>>> mode is: jonatank
+CAME HERE!! 1
+2020-10-07 10:47:19.610555: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-07 10:47:19.875331: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: TITAN Xp major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:04:00.0
+totalMemory: 11.91GiB freeMemory: 11.76GiB
+2020-10-07 10:47:19.875366: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-07 10:47:25.966696: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-07 10:47:25.966746: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-07 10:47:25.966760: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-07 10:47:25.966981: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11376 MB memory) -> physical GPU (device: 0, name: TITAN Xp, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2020-10-07 10:47:25.968083: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-07 10:47:25.968118: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-07 10:47:25.968132: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-07 10:47:25.968142: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-07 10:47:25.968300: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 11376 MB memory) -> physical GPU (device: 0, name: TITAN Xp, pci bus id: 0000:04:00.0, compute capability: 6.1)
+True
+CAME HERE!! 2
+CAME HERE!! 3
+Initialized parameters
+CAME HERE!! 4
+Step 0 | L2 Loss: -119.874 | KLD Loss: 0.004 | L2 Loss_1: 255.478 | L2 Loss_2: 375.351 | loss_tot: -58.202 | L2 Loss test: 147.277
+Step 10 | L2 Loss: -1917.855 | KLD Loss: 0.018 | L2 Loss_1: 155.789 | L2 Loss_2: 2073.644 | loss_tot: -960.734 | L2 Loss test: 9.339
+Step 20 | L2 Loss: -1258.085 | KLD Loss: 0.001 | L2 Loss_1: 295.152 | L2 Loss_2: 1553.237 | loss_tot: -629.371 | L2 Loss test: 32.365
+Step 30 | L2 Loss: -1677.338 | KLD Loss: 0.021 | L2 Loss_1: 33.454 | L2 Loss_2: 1710.792 | loss_tot: -835.656 | L2 Loss test: 3.360
+Step 40 | L2 Loss: 36.434 | KLD Loss: 0.345 | L2 Loss_1: 4079.492 | L2 Loss_2: 4043.057 | loss_tot: -64.005 | L2 Loss test: 11.905
+Step 50 | L2 Loss: -1285.650 | KLD Loss: 0.077 | L2 Loss_1: 243.847 | L2 Loss_2: 1529.497 | loss_tot: -642.360 | L2 Loss test: 29.020

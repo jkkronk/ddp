@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/67387.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/67387.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/69218.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/69218.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/70567.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/70567.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71487.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/71487.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71488.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/71488.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_reconsamp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_train_vae.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/71828.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +61,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SshConsoleOptionsProvider">
     <option name="myEncoding" value="UTF-8" />
   </component>
@@ -93,7 +86,7 @@
       <workItem from="1601898961754" duration="1617000" />
       <workItem from="1601902845444" duration="2783000" />
       <workItem from="1601924315358" duration="2127000" />
-      <workItem from="1602058224443" duration="371000" />
+      <workItem from="1602058224443" duration="3372000" />
     </task>
     <servers />
   </component>
