@@ -56,9 +56,6 @@ usebce = False
 kld_div = 25.0
 nzsamp = 1
 
-train_size = 5000
-test_size = 1000
-
 if useMixtureScale:
     kld_div = 1.
 

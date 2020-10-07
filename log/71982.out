@@ -35,3 +35,8 @@ Step 80 | L2 Loss: -95.285 | KLD Loss: 0.001 | L2 Loss_1: 4451.023 | L2 Loss_2: 
 Step 90 | L2 Loss: -983.031 | KLD Loss: 0.001 | L2 Loss_1: 184.497 | L2 Loss_2: 1167.528 | loss_tot: -489.033 | L2 Loss test: 37.694
 Step 100 | L2 Loss: -608.714 | KLD Loss: 0.001 | L2 Loss_1: 47.352 | L2 Loss_2: 656.066 | loss_tot: -303.796 | L2 Loss test: 19.644
 Step 110 | L2 Loss: -611.897 | KLD Loss: 0.001 | L2 Loss_1: 25.957 | L2 Loss_2: 637.854 | loss_tot: -307.410 | L2 Loss test: 11.050
+Step 120 | L2 Loss: -1154.550 | KLD Loss: 0.001 | L2 Loss_1: 95.683 | L2 Loss_2: 1250.234 | loss_tot: -572.773 | L2 Loss test: 17.057
+Step 130 | L2 Loss: -2005.185 | KLD Loss: 0.001 | L2 Loss_1: 26.869 | L2 Loss_2: 2032.054 | loss_tot: -1004.227 | L2 Loss test: 1.825
+Step 140 | L2 Loss: -2639.380 | KLD Loss: 0.001 | L2 Loss_1: 1814.678 | L2 Loss_2: 4454.058 | loss_tot: -1321.140 | L2 Loss test: 3.826
+Step 150 | L2 Loss: -3801.809 | KLD Loss: 0.001 | L2 Loss_1: 223.035 | L2 Loss_2: 4024.844 | loss_tot: -1903.184 | L2 Loss test: 0.959
+Step 160 | L2 Loss: -3824.023 | KLD Loss: 0.001 | L2 Loss_1: 712.670 | L2 Loss_2: 4536.692 | loss_tot: -1898.164 | L2 Loss test: 1.294

@@ -2,14 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/train_vae_res_conv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vae_models/vae_res_conv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71828.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/definevae.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/71979.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/71981.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/71982.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/71982.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_train_vae_original.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,15 +42,16 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Fewshot_Lesion_Detection_Normative_Prior" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/chunks" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/vae_models" />
+      <recent name="$PROJECT_DIR$/chunks" />
     </key>
   </component>
   <component name="RunManager">
