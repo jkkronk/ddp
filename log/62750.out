@@ -1,8 +1,0 @@
->>> lat_dim value: 60
->>> mode is: jonatank
-Traceback (most recent call last):
-  File "train_vae.py", line 84, in <module>
-    MRi = MR_image_data(dirname=datapath, trainset_ratio=0.5, noiseinvstd=50, patchsize=28)
-  File "/scratch_net/bmicdl03/jonatank/code/ddp/dataloader.py", line 27, in __init__
-    self.datafiles_train = self.allfiles[:self.data_size]
-AttributeError: MR_image_data instance has no attribute 'data_size'

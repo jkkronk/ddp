@@ -25,8 +25,13 @@ import argparse
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--mode', type=str, default='jonatank')
+parser.add_argument('--modality', type=str, default='FLAIR')
 
 args = parser.parse_args()
+
+# mode=sys.argv[2]
+mode = args.mode  # 'MRIunproc'
+modality = args.modality # 'FLAIR' 'T1_' 'T1POST' 'T1PRE' 'T2'
 
 logdir = "/scratch_net/bmicdl03/jonatank/logs/ddp/vae/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 print(logdir)
@@ -37,9 +42,6 @@ print(logdir)
 # ==============================================================================
 
 user = 'jonatank'
-
-# mode=sys.argv[2]
-mode = args.mode  # 'MRIunproc'
 
 # mode='MRIunproc' #'sparse', 'nonsparse', 'MNIST', 'circ', 'Lshape', 'edge', 'Lapedge', 'spiketrain', 'Gaussedge'
 
@@ -62,8 +64,6 @@ std_init = 0.05
 
 input_dim = ndims * ndims
 fcl_dim = 500
-
-# lat_dim=int(sys.argv[1])
 lat_dim = 60
 print(">>> lat_dim value: " + str(lat_dim))
 print(">>> mode is: " + mode)
@@ -72,9 +72,6 @@ lat_dim_1 = max(1, np.floor(lat_dim / 2))
 lat_dim_2 = lat_dim - lat_dim_1
 
 num_inp_channels = 1
-
-modality = 'T1POST' #'FLAIR' 'T1_' 'T1POST' 'T1PRE' 'T2'
-
 
 # make a dataset to use later
 # ==============================================================================
@@ -93,20 +90,11 @@ print('CAME HERE!! 1')
 # ==============================================================================
 
 tf.reset_default_graph()
-
-print('CAME HERE!! 11')
-
-#config = tf.ConfigProto()
-#config.gpu_options.allow_growth = True
-#config.allow_soft_placement = True
 sess = tf.InteractiveSession()
 
 print(tf.test.is_gpu_available(
     cuda_only=False, min_cuda_compute_capability=None
 ))
-
-print('CAME HERE!! 12')
-
 
 # define the activation function to use:
 def fact(x):
@@ -282,17 +270,11 @@ else:
 # ==============================================================================
 print('CAME HERE!! 3')
 
-print('CAME HERE!! 31')
-
 sess.run(tf.global_variables_initializer())
-
-print('CAME HERE!! 32')
 
 print("Initialized parameters")
 
 saver = tf.train.Saver()
-
-print('CAME HERE!! 33')
 
 ts = tm.time()
 
@@ -307,6 +289,14 @@ test_batch = np.transpose(np.reshape(test_batch, [-1, batch_size]))
 
 # LOG
 writer = tf.summary.FileWriter(logdir)
+loss_tot_tb = tf.Variable(0, dtype=tf.float32)
+loss_tot_summ = tf.summary.scalar('Tot Loss', loss_tot_tb)
+loss_l2_tb = tf.Variable(0, dtype=tf.float32)
+loss_l2_summ = tf.summary.scalar('L2 Loss', loss_l2_tb)
+loss_kld_tb = tf.Variable(0, dtype=tf.float32)
+loss_kld_summ = tf.summary.scalar('Kdl Loss', loss_kld_tb)
+loss_valid_tb = tf.Variable(0, dtype=tf.float32)
+loss_valid_summ = tf.summary.scalar('Valid tot Loss', loss_valid_tb)
 
 # summary_writer = tf.summary.FileWriter(log_dir, sess.graph)
 
@@ -335,11 +325,20 @@ with tf.device('/gpu:0'):
             xh = y_out.eval(feed_dict={x_inp: test_batch})
             test_loss_l2 = np.mean(np.sum(np.power((xh[0:test_batch.shape[0], :] - test_batch), 2), axis=1))
 
-            # tf.summary.scalar('loss_l2', np.mean(loss_l2_1 - loss_l2_2))
-            # tf.summary.scalar('KLD Loss', np.mean(loss_kld))
-            # tf.summary.scalar('loss_tot', np.mean(loss_tot_))
+            sess.run(loss_tot_tb.assign(loss_tot_))
+            writer.add_summary(sess.run(loss_tot_summ), step)
+            sess.run(loss_l2_tb.assign(np.mean(loss_l2_)))
+            writer.add_summary(sess.run(loss_l2_summ), step)
+            sess.run(loss_kld_tb.assign(np.mean(loss_kld)))
+            writer.add_summary(sess.run(loss_kld_summ), step)
+            sess.run(loss_valid_tb.assign(np.mean(test_loss_l2)))
+            writer.add_summary(sess.run(loss_valid_summ), step)
 
-            # tf.summary.scalar('test_recloss', np.mean(test_loss_l2))
+            img_summary = tf.summary.image("Test reconstructions", xh, max_outputs=16)
+            x = sess.run(img_summary)
+            writer.add_summary(x)
+
+            writer.flush()
 
             if useMixtureScale:
                 print(
@@ -352,10 +351,7 @@ with tf.device('/gpu:0'):
                         .format(step, np.mean(loss_l2_), np.mean(loss_kld), np.mean(test_loss_l2), np.mean(std_val),
                                 np.mean(mu_val)))
 
-            # tf.summary.image("Input data", test_batch)
-            # tf.summary.image("Recdata data", xh)
-
-        if step % 2500 == 0:
+        if step % 500 == 0:
             saver.save(sess, logdir + '/' + str(mode) + '_fcl' + str(
                 fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_step' + str(
                 step) + '.ckpt')

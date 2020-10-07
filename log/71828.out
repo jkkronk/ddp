@@ -1,0 +1,24 @@
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/20201007-101958
+>>> lat_dim value: 60
+>>> mode is: jonatank
+CAME HERE!! 1
+2020-10-07 10:20:11.632529: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-07 10:20:11.782534: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:87:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-07 10:20:11.782572: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-07 10:20:24.807311: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-07 10:20:24.807365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-07 10:20:24.807377: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-07 10:20:24.807609: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:87:00.0, compute capability: 5.2)
+2020-10-07 10:20:24.808711: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-07 10:20:24.808748: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-07 10:20:24.808759: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-07 10:20:24.808768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-07 10:20:24.808932: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:87:00.0, compute capability: 5.2)
+True
+CAME HERE!! 2
+CAME HERE!! 3
+Initialized parameters
+CAME HERE!! 4

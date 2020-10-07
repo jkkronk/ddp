@@ -106,8 +106,6 @@ if not args.skiprecon:
      print(usksp.shape)
      rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model)
 
-     pickle.dump(rec_vae, open(basefolder+'MAPestimation/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb'))
-
      GT_img = MRi.get_gt(subj)[sli]
 
      lastiter = int((np.floor(rec_vae.shape[1]/13)-2)*13)
@@ -119,6 +117,9 @@ if not args.skiprecon:
      #ssim_rec = ssim(maprecon, GT_img, data_range=maprecon.max() - maprecon.min())
 
      print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     MSE = ', mse_rec, '     SSIM = ', ssim_rec)
+
+     pickle.dump(rec_vae, open(basefolder+'MAPestimation/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb'))
+
 
 
 

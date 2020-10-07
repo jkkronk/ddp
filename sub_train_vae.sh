@@ -6,4 +6,4 @@
 source /scratch_net/bmicdl03/jonatank/conda/etc/profile.d/conda.sh shell.bash hook
 conda activate tfv1
 
-python -u train_vae.py
+python -u train_vae.py --modality FLAIR
