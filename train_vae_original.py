@@ -3,8 +3,6 @@
 # initial: 28.05.2017
 # last mod: 30.05.2017 
 
-## direk precision optimize etmek daha da iyi olabilir. 
-
 from __future__ import division
 from __future__ import print_function
 # import os.path
@@ -16,6 +14,9 @@ import os
 import sys
 from datetime import datetime
 import random
+import time
+
+t0 = time.time()
 
 SEED = 1001
 seed = 1
@@ -43,18 +44,24 @@ print(logdir)
 # ==============================================================================
 # ==============================================================================
 
-user = 'jonatank'
+user = 'jonatank'  # 'Ender'
+
+# mode=sys.argv[2]
+mode = args.mode  # 'MRIunproc'
 
 # mode='MRIunproc' #'sparse', 'nonsparse', 'MNIST', 'circ', 'Lshape', 'edge', 'Lapedge', 'spiketrain', 'Gaussedge'
 
 # ndims=int(sys.argv[3])
 ndims = 28
 useMixtureScale = True
-noisy = 0
-batch_size = 1024
+noisy = 50
+batch_size = 1000
 usebce = False
 kld_div = 25.0
 nzsamp = 1
+
+train_size = 5000
+test_size = 1000
 
 if useMixtureScale:
     kld_div = 1.
@@ -63,6 +70,8 @@ std_init = 0.05
 
 input_dim = ndims * ndims
 fcl_dim = 500
+
+# lat_dim=int(sys.argv[1])
 lat_dim = 60
 print(">>> lat_dim value: " + str(lat_dim))
 print(">>> mode is: " + mode)
@@ -75,12 +84,9 @@ num_inp_channels = 1
 # make a dataset to use later
 # ==============================================================================
 # ==============================================================================
-datapath = '/srv/beegfs02/scratch/fastmri_challenge/data/brain'
-# DS = SliceData(datapath, transform, sample_rate=0.1) # sample_rate = how much ratio of data to use
-# (train_size, test_size, ndims, noisy, seed, mode, downscale=True)
+#DS = Dataset(train_size, test_size, ndims, noisy, seed, mode, downscale=True)
 from dataloader import MR_image_data
-
-MRi = MR_image_data(dirname=datapath, trainset_ratio=0.5, noiseinvstd=50, patchsize=28, modality=modality)
+MRi = MR_image_data(dirname='/scratch_net/bmicdl03/jonatank/data/', trainset_ratio = 1, noiseinvstd=0, patchsize=28, modality='AXFLAIR_')
 
 print('CAME HERE!! 1')
 
@@ -89,11 +95,13 @@ print('CAME HERE!! 1')
 # ==============================================================================
 
 tf.reset_default_graph()
+
+print('CAME HERE!! 11')
+
 sess = tf.InteractiveSession()
 
-print(tf.test.is_gpu_available(
-    cuda_only=False, min_cuda_compute_capability=None
-))
+print('CAME HERE!! 12')
+
 
 # define the activation function to use:
 def fact(x):
@@ -112,52 +120,42 @@ intl_cov = tf.truncated_normal_initializer(stddev=std_init, seed=SEED)
 
 with tf.variable_scope("VAE") as scope:
     enc_conv1_weights = tf.get_variable("enc_conv1_weights", [3, 3, num_inp_channels, 32], initializer=intl)
-    enc_conv1_biases = tf.get_variable("enc_conv1_biases", shape=[32],
-                                                 initializer=tf.constant_initializer(value=0))
+    enc_conv1_biases = tf.get_variable("enc_conv1_biases", shape=[32], initializer=tf.constant_initializer(value=0))
 
     enc_conv2_weights = tf.get_variable("enc_conv2_weights", [3, 3, 32, 64], initializer=intl)
-    enc_conv2_biases = tf.get_variable("enc_conv2_biases", shape=[64],
-                                                 initializer=tf.constant_initializer(value=0))
+    enc_conv2_biases = tf.get_variable("enc_conv2_biases", shape=[64], initializer=tf.constant_initializer(value=0))
 
     enc_conv3_weights = tf.get_variable("enc_conv3_weights", [3, 3, 64, 64], initializer=intl)
-    enc_conv3_biases = tf.get_variable("enc_conv3_biases", shape=[64],
-                                                 initializer=tf.constant_initializer(value=0))
+    enc_conv3_biases = tf.get_variable("enc_conv3_biases", shape=[64], initializer=tf.constant_initializer(value=0))
 
     mu_weights = tf.get_variable(name="mu_weights", shape=[int(input_dim * 64), lat_dim], initializer=intl)
-    mu_biases = tf.get_variable("mu_biases", shape=[lat_dim],
-                                          initializer=tf.constant_initializer(value=0))
+    mu_biases = tf.get_variable("mu_biases", shape=[lat_dim], initializer=tf.constant_initializer(value=0))
 
-    logVar_weights = tf.get_variable(name="logVar_weights", shape=[int(input_dim * 64), lat_dim],
-                                               initializer=intl)
-    logVar_biases = tf.get_variable("logVar_biases", shape=[lat_dim],
-                                              initializer=tf.constant_initializer(value=0))
+    logVar_weights = tf.get_variable(name="logVar_weights", shape=[int(input_dim * 64), lat_dim], initializer=intl)
+    logVar_biases = tf.get_variable("logVar_biases", shape=[lat_dim], initializer=tf.constant_initializer(value=0))
 
     if useMixtureScale:
 
         dec_fc1_weights = tf.get_variable(name="dec_fc1_weights", shape=[int(lat_dim), int(input_dim * 48)],
-                                                    initializer=intl)
+                                          initializer=intl)
         dec_fc1_biases = tf.get_variable("dec_fc1_biases", shape=[int(input_dim * 48)],
-                                                   initializer=tf.constant_initializer(value=0))
+                                         initializer=tf.constant_initializer(value=0))
 
         dec_conv1_weights = tf.get_variable("dec_conv1_weights", [3, 3, 48, 48], initializer=intl)
-        dec_conv1_biases = tf.get_variable("dec_conv1_biases", shape=[48],
-                                                     initializer=tf.constant_initializer(value=0))
+        dec_conv1_biases = tf.get_variable("dec_conv1_biases", shape=[48], initializer=tf.constant_initializer(value=0))
 
         dec_conv2_weights = tf.get_variable("decc_conv2_weights", [3, 3, 48, 90], initializer=intl)
-        dec_conv2_biases = tf.get_variable("dec_conv2_biases", shape=[90],
-                                                     initializer=tf.constant_initializer(value=0))
+        dec_conv2_biases = tf.get_variable("dec_conv2_biases", shape=[90], initializer=tf.constant_initializer(value=0))
 
         dec_conv3_weights = tf.get_variable("dec_conv3_weights", [3, 3, 90, 90], initializer=intl)
-        dec_conv3_biases = tf.get_variable("dec_conv3_biases", shape=[90],
-                                                     initializer=tf.constant_initializer(value=0))
+        dec_conv3_biases = tf.get_variable("dec_conv3_biases", shape=[90], initializer=tf.constant_initializer(value=0))
 
         dec_out_weights = tf.get_variable("dec_out_weights", [3, 3, 90, 1], initializer=intl)
-        dec_out_biases = tf.get_variable("dec_out_biases", shape=[1],
-                                                   initializer=tf.constant_initializer(value=0))
+        dec_out_biases = tf.get_variable("dec_out_biases", shape=[1], initializer=tf.constant_initializer(value=0))
 
         dec1_out_cov_weights = tf.get_variable("dec1_out_cov_weights", [3, 3, 90, 1], initializer=intl)
         dec1_out_cov_biases = tf.get_variable("dec1_out_cov_biases", shape=[1],
-                                                        initializer=tf.constant_initializer(value=0))
+                                              initializer=tf.constant_initializer(value=0))
 
     else:
 
@@ -237,23 +235,20 @@ print('CAME HERE!! 2')
 # ==============================================================================
 
 # KLD loss per sample in the batch
-KLD = -0.5 * tf.reduce_sum(1 + logVar - tf.pow(mu, 2) - tf.exp(logVar),
-                                     reduction_indices=1)
+KLD = -0.5 * tf.reduce_sum(1 + logVar - tf.pow(mu, 2) - tf.exp(logVar), reduction_indices=1)
 
 x_inp_ = tf.tile(x_inp, (nzsamp, 1))
 
 # L2 loss per sample in the batch
 if useMixtureScale:
-    l2_loss_1 = tf.reduce_sum(tf.multiply(tf.pow((y_out - x_inp_), 2), y_out_prec),
-                                        axis=1)
-    l2_loss_2 = tf.reduce_sum(tf.log(y_out_prec),
-                                        axis=1)  # tf.reduce_sum(tf.log(y_out_cov),axis=1)
+    l2_loss_1 = tf.reduce_sum(tf.multiply(tf.pow((y_out - x_inp_), 2), y_out_prec), axis=1)
+    l2_loss_2 = tf.reduce_sum(tf.log(y_out_prec), axis=1)  # tf.reduce_sum(tf.log(y_out_cov),axis=1)
     l2_loss_ = l2_loss_1 - l2_loss_2
 else:
     l2_loss_ = tf.reduce_sum(tf.pow((y_out - x_inp_), 2), axis=1)
     if usebce:
-        l2_loss_ = tf.reduce_sum(
-            tf.nn.sigmoid_cross_entropy_with_logits(logits=y_out, labels=x_inp_), reduction_indices=1)
+        l2_loss_ = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits=y_out, labels=x_inp_),
+                                 reduction_indices=1)
 
 # take the total mean loss of this batch
 loss_tot = tf.reduce_mean(1 / kld_div * KLD + 0.5 * l2_loss_)
@@ -264,16 +259,31 @@ if useMixtureScale:
 else:
     train_step = tf.train.AdamOptimizer(5e-3).minimize(loss_tot)
 
+## cost functions for reconstruction after training
+##==============================================================================
+##==============================================================================
+# x_rec=tf.get_variable('x_rec',shape=[5000,784],initializer=tf.constant_initializer(value=0.0))
+#
+# prior_cost =  - 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), y_out_prec),axis=1) \
+#             + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1) - 0.5*784*tf.log(2*np.pi)
+
+
 # start session
 # ==============================================================================
 # ==============================================================================
 print('CAME HERE!! 3')
 
+print('CAME HERE!! 31')
+
 sess.run(tf.global_variables_initializer())
+
+print('CAME HERE!! 32')
 
 print("Initialized parameters")
 
 saver = tf.train.Saver()
+
+print('CAME HERE!! 33')
 
 ts = tm.time()
 
@@ -282,9 +292,7 @@ print('CAME HERE!! 4')
 # do the training
 # ==============================================================================
 # ==============================================================================
-test_batch = MRi.get_patch(batch_size, test=True)
-test_batch = np.transpose(np.reshape(test_batch, [-1, batch_size]))
-# test_batch = DS.get_test_batch(batch_size)
+
 
 # LOG
 writer = tf.summary.FileWriter(logdir)
@@ -297,20 +305,44 @@ loss_kld_summ = tf.summary.scalar('Kdl Loss', loss_kld_tb)
 loss_valid_tb = tf.Variable(0, dtype=tf.float32)
 loss_valid_summ = tf.summary.scalar('Valid tot Loss', loss_valid_tb)
 
-# summary_writer = tf.summary.FileWriter(log_dir, sess.graph)
+input_img = tf.Variable(tf.zeros([10, ndims, ndims, 1]), dtype=tf.float32)
+input_img_s = tf.summary.image('Input image', input_img)
+rec_img = tf.Variable(tf.zeros([10, ndims, ndims, 1]), dtype=tf.float32)
+rec_img_s = tf.summary.image('Valid tot Loss', rec_img)
+sampled_img = tf.Variable(tf.zeros([10, ndims, ndims, 1]), dtype=tf.float32)
+sampled_img_s = tf.summary.image('Valid tot Loss', sampled_img)
 
-with tf.device('/gpu:0'):
+t1 = time.time()
+total = t1-t0
+print('TIME TO TRAIN START: ', total)
+
+with tf.device('/GPU:0'):
     # train for N steps
     for step in range(0, 500001):  # 500k
+        #t0 = time.time()
+
         batch = MRi.get_patch(batch_size, test=False)
-        batch = np.transpose(np.reshape(batch, [-1, batch_size]))
+
+        batch = np.reshape(batch, [batch_size, ndims*ndims])
         # batch = MRi.get_train_batch(batch_size)
 
+        #t1 = time.time()
+        #total = t1 - t0
+        #print('TIME TO LOAD DATA: ', total)
+
+        #t0 = time.time()
         # run the training step
         sess.run([train_step], feed_dict={x_inp: batch})
 
+        #t1 = time.time()
+        #total = t1 - t0
+        #print('TIME TO TRAIN: ', total)
+
         # print some stuf...
-        if step % 10 == 0:  # 500
+        if step % 500 == 0:  # 500
+            test_batch = MRi.get_patch(batch_size, test=True)
+            test_batch = np.reshape(test_batch, [batch_size, ndims*ndims])
+
 
             if useMixtureScale:
                 loss_l2_1 = l2_loss_1.eval(feed_dict={x_inp: batch})
@@ -321,8 +353,8 @@ with tf.device('/gpu:0'):
                 mu_val = mu.eval(feed_dict={x_inp: batch})
                 loss_tot_ = loss_tot.eval(feed_dict={x_inp: batch})
 
-            xh = y_out.eval(feed_dict={x_inp: test_batch})
-            test_loss_l2 = np.mean(np.sum(np.power((xh[0:test_batch.shape[0], :] - test_batch), 2), axis=1))
+            rec_test_batch = y_out.eval(feed_dict={x_inp: test_batch})
+            test_loss_l2 = np.mean(np.sum(np.power((rec_test_batch[0:test_batch.shape[0], :] - test_batch), 2), axis=1))
 
             sess.run(loss_tot_tb.assign(loss_tot_))
             writer.add_summary(sess.run(loss_tot_summ), step)
@@ -350,9 +382,24 @@ with tf.device('/gpu:0'):
                         .format(step, np.mean(loss_l2_), np.mean(loss_kld), np.mean(test_loss_l2), np.mean(std_val),
                                 np.mean(mu_val)))
 
-        if step % 500 == 0:
-            saver.save(sess, logdir + '/' + str(mode) + '_fcl' + str(
-                fcl_dim) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_modality' + modality + '_step' + str(
+        if step % 5000 == 0:
+            input_img_re = np.reshape(test_batch[:10], [10, ndims, ndims])
+            out_img_re = np.reshape(rec_test_batch[:10], [10, ndims, ndims])
+
+            sess.run(input_img.assign(input_img_re[:,:,:,np.newaxis]))
+            writer.add_summary(sess.run(input_img_s), step)
+            sess.run(rec_img.assign(out_img_re[:,:,:,np.newaxis]))
+            writer.add_summary(sess.run(rec_img_s), step)
+
+            #sess.run(sampled_img.assign())
+            #writer.add_summary(sess.run(loss_valid_summ), step)
+
+            writer.flush()
+
+            saver.save(sess, logdir + '/' + str(mode) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_modality' + modality + '_step' + str(
+                step) + '.ckpt')
+
+            print(logdir + '/' + str(mode) + '_lat' + str(lat_dim) + '_ns' + str(noisy) + '_ps' + str(ndims) + '_modality' + modality + '_step' + str(
                 step) + '.ckpt')
 
 print("elapsed time: {0}".format(tm.time() - ts))

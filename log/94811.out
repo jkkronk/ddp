@@ -1,0 +1,31 @@
+Modality:  FLAIR
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201014-142309
+>>> lat_dim value: 180
+>>> mode is: jonatank
+28 PATCHES
+CAME HERE!! 1
+2020-10-14 14:23:10.250955: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-14 14:23:10.696305: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:88:00.0
+totalMemory: 10.92GiB freeMemory: 10.77GiB
+2020-10-14 14:23:10.696372: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-14 14:23:11.363764: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-14 14:23:11.363822: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-14 14:23:11.363833: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-14 14:23:11.364075: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10419 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:88:00.0, compute capability: 6.1)
+2020-10-14 14:23:11.365303: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-14 14:23:11.365332: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-14 14:23:11.365342: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-14 14:23:11.365350: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-14 14:23:11.365523: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/device:GPU:0 with 10419 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:88:00.0, compute capability: 6.1)
+True
+CAME HERE!! 2
+CAME HERE!! 3
+Initialized parameters
+CAME HERE!! 4
+TIME TO TRAIN START:  6.21174693108
+No Kl varmup
+Step 0 | L2 Loss: -109.808 | KLD Loss: 0.000 | L2 Loss_1: 108.448 | L2 Loss_2: 218.256 | loss_tot: -56667.648 | L2 Loss test: 70.645
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201014-142309/jonatank_lat180_ns0_ps28_modalityFLAIR_step0.ckpt
+slurmstepd: error: *** JOB 94811 ON biwirender20 CANCELLED AT 2020-10-14T14:23:37 ***

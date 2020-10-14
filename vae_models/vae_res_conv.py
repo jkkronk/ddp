@@ -257,21 +257,22 @@ class VariationalAutoencoder():
             #self._activation_value_res1=res1
 
             # s2*s2
-            res2 = resblock_down(res1, gf_dim, gf_dim * 2, "res2", reuse, is_train)
+            #res2 = resblock_down(res1, gf_dim, gf_dim * 2, "res2", reuse, is_train)
             #self._activation_value_res2=res2
             # s4*s4
-            res3 = resblock_down(res2, gf_dim * 2, gf_dim * 4, "res3", reuse, is_train)
+            #res3 = resblock_down(res2, gf_dim * 2, gf_dim * 4, "res3", reuse, is_train)
 
             #self._activation_value_res3=res3
             # s8*s8
-            res4 = resblock_down(res3, gf_dim * 4, gf_dim * 8, "res4", reuse, is_train)
+            #res4 = resblock_down(res3, gf_dim * 4, gf_dim * 8, "res4", reuse, is_train)
             #self._activation_value_res4=res4
             # s16*s16
-            res5 = resblock_down(res4, gf_dim * 8, gf_dim * 16, "res5", reuse, is_train)
+            res5 = resblock_down(res1, gf_dim * 1, gf_dim * 2, "res5", reuse, is_train)
             #self._activation_value_res5=res5
             # s32*s32
-            res6 = resblock_down(res5, gf_dim * 16, gf_dim *32, "res6", reuse, is_train, act=False)
-            res6_stddev = resblock_down(res5, gf_dim * 16, gf_dim *32, "res6_stddev", reuse, is_train, act=False)
+            res6 = resblock_down(res5, gf_dim * 2, gf_dim * 4, "res6", reuse, is_train, act=False)
+            res6_stddev = resblock_down(res5, gf_dim * 2, gf_dim * 4, "res6_stddev", reuse, is_train, act=False)
+
             # s64*s64
             # res7 = resblock_valid_enc(res6, gf_dim * 16, gf_dim * 32, "res7", reuse, is_train)
 
@@ -290,42 +291,42 @@ class VariationalAutoencoder():
             # 40 x 40
 
             #res6_res = ResBlockDown(res5, gf_dim * 16, gf_dim * 4, "res6_res", reuse, is_train)
-            conv2 = tf.layers.conv2d(conv1, gf_dim, (3,3), dilation_rate =2, padding='same',
-                                     kernel_initializer=w_init,
-                                     bias_initializer=b_init, trainable=True, name="e_conv2",
-                                     reuse=reuse)
-            conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
-                                                 trainable=True, training=is_train,
-                                                  gamma_initializer=gamma_init, name='e_bn2',
-                                                  reuse=reuse)
-            conv2 = tf.nn.leaky_relu(conv2, 0.2)
-            conv2 = tf.layers.conv2d(conv2, gf_dim*2, (3,3), dilation_rate=2, padding='same',
-                                     kernel_initializer=w_init,
-                                     bias_initializer=b_init, trainable=True,name="e_conv3",
-                                     reuse=reuse)
-            conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
-                                                 trainable=True, training=is_train,
-                                                  gamma_initializer=gamma_init, name='e_bn3',
-                                                  reuse=reuse)
-            conv2 = tf.nn.leaky_relu(conv2, 0.2)
-            conv2 = tf.layers.conv2d(conv2, gf_dim, (3,3), dilation_rate=2, padding='same',
-                                     kernel_initializer=w_init,
-                                     bias_initializer=b_init, trainable=True, name="e_conv4",
-                                     reuse=reuse)
-            conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
-                                                 trainable=True, training=is_train,
-                                                  gamma_initializer=gamma_init, name='e_bn4',
-                                                  reuse=reuse)
-            conv2 = tf.nn.leaky_relu(conv2, 0.2)
-            conv2 = tf.layers.conv2d(conv2, 1, (3,3), dilation_rate=2, padding='same',
-                                     kernel_initializer=w_init,
-                                     bias_initializer=b_init, trainable=True, name="e_conv5",
-                                     reuse=reuse)
+            # conv2 = tf.layers.conv2d(conv1, gf_dim, (3,3), dilation_rate =2, padding='same',
+            #                          kernel_initializer=w_init,
+            #                          bias_initializer=b_init, trainable=True, name="e_conv2",
+            #                          reuse=reuse)
+            # conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
+            #                                      trainable=True, training=is_train,
+            #                                       gamma_initializer=gamma_init, name='e_bn2',
+            #                                       reuse=reuse)
+            # conv2 = tf.nn.leaky_relu(conv2, 0.2)
+            # conv2 = tf.layers.conv2d(conv2, gf_dim*2, (3,3), dilation_rate=2, padding='same',
+            #                          kernel_initializer=w_init,
+            #                          bias_initializer=b_init, trainable=True,name="e_conv3",
+            #                          reuse=reuse)
+            # conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
+            #                                      trainable=True, training=is_train,
+            #                                       gamma_initializer=gamma_init, name='e_bn3',
+            #                                       reuse=reuse)
+            # conv2 = tf.nn.leaky_relu(conv2, 0.2)
+            # conv2 = tf.layers.conv2d(conv2, gf_dim, (3,3), dilation_rate=2, padding='same',
+            #                          kernel_initializer=w_init,
+            #                          bias_initializer=b_init, trainable=True, name="e_conv4",
+            #                          reuse=reuse)
+            # conv2 = tf.layers.batch_normalization(conv2,  center=True, scale=True,
+            #                                      trainable=True, training=is_train,
+            #                                       gamma_initializer=gamma_init, name='e_bn4',
+            #                                       reuse=reuse)
+            # conv2 = tf.nn.leaky_relu(conv2, 0.2)
+            # conv2 = tf.layers.conv2d(conv2, 1, (3,3), dilation_rate=2, padding='same',
+            #                          kernel_initializer=w_init,
+            #                          bias_initializer=b_init, trainable=True, name="e_conv5",
+            #                          reuse=reuse)
 
             #conv7_mean_flat = tf.contrib.layers.flatten(res_mean)
             #conv7_std_flat = tf.contrib.layers.flatten(res_stddev)
             #conv7_mean_res = tf.contrib.layers.flatten(res6_res)
-        return res6, res6_stddev, conv2
+        return res6, res6_stddev, None
 
     def decoder(self, x, name, reuse=False, is_train=True):
         """
@@ -337,7 +338,7 @@ class VariationalAutoencoder():
         image_size = self.image_size
         # s2, s4, s8, s16, s32, s64 = int(image_size / 2), int(image_size / 4), int(image_size / 8), int(image_size / 16), \
         #                        int(image_size/32), int(image_size/64)
-        gf_dim = 16 # Dimension of gen filters in first conv layer. [64]
+        gf_dim = 8 # Dimension of gen filters in first conv layer. [64]
         with tf.variable_scope(self.model_name+"_decoder_"+name, reuse=reuse):
             #tl.layers.set_name_reuse(reuse)
             w_init = tf.truncated_normal_initializer(stddev=0.01)
@@ -347,34 +348,41 @@ class VariationalAutoencoder():
             #z_develop = tf.reshape(x, [-1, dim, dim, gf_dim*10])
             # s64
 
-            resp1 = resblock_up(x, gf_dim*32, gf_dim * 16, "gresp1", reuse, is_train)
+            resp1 = resblock_up(x, gf_dim*4, gf_dim * 2, "gresp1", reuse, is_train)
 
             # s32*s32
-            res0 = resblock_up(resp1, gf_dim*16, gf_dim * 8, "gres0", reuse, is_train)
+            res0 = resblock_up(resp1, gf_dim*2, gf_dim * 1, "gres0", reuse, is_train)
 
-            res1 = resblock_up(res0, gf_dim * 8, gf_dim * 4, "gres1", reuse, is_train)
+            #res1 = resblock_up(res0, gf_dim * 8, gf_dim * 4, "gres1", reuse, is_train)
 
-            res2 = resblock_up(res1, gf_dim * 4, gf_dim * 2, "gres2", reuse, is_train)
+            #res2 = resblock_up(res1, gf_dim * 4, gf_dim * 2, "gres2", reuse, is_train)
 
-            res3 = resblock_up(res2, gf_dim * 2, gf_dim, "gres3", reuse, is_train)
+            #res3 = resblock_up(res2, gf_dim * 2, gf_dim, "gres3", reuse, is_train)
 
-            res4 = resblock_up(res3, gf_dim, gf_dim, "gres4", reuse, is_train)
+            res4 = resblock_up(res0, gf_dim, gf_dim, "gres4", reuse, is_train)
 
-            conv1 = tf.layers.conv2d(res4, gf_dim, (3, 3), (1, 1),
-                                        padding='same', kernel_initializer=w_init,
+            conv1 = tf.layers.conv2d(res4, gf_dim, (1, 1), (1, 1),
+                                        padding='valid', kernel_initializer=w_init,
                                         bias_initializer=b_init, trainable=True,
                                         name="g_conv1", reuse=reuse)
-            conv1 = tf.layers.batch_normalization(conv1, center=True,
+            conv1_out = tf.layers.batch_normalization(conv1, center=True,
                                                   scale=True, trainable=True,
                                                   gamma_initializer=gamma_init,
                                                   training=is_train,
                                                   name='g_bn1',
                                                   reuse=reuse)
-            conv1 = tf.nn.leaky_relu(conv1, 0.2)
+            conv1_out = tf.nn.leaky_relu(conv1_out, 0.2)
 
             # res5 = resblock_up(res4, gf_dim, gf_dim, "gres5", reuse, is_train)
 
-            conv2 = tf.layers.conv2d(conv1, 1, (3, 3), padding='same', kernel_initializer=w_init,
+            conv2 = tf.layers.conv2d(conv1_out, 1, (1, 1), padding='valid', kernel_initializer=w_init,
                                      bias_initializer=b_init, trainable=True, name="g_conv2",
                                      reuse=reuse)
-        return conv2#, res4
+
+            dec_out_cov = tf.layers.conv2d(res4, 1, (1, 1), padding='valid', kernel_initializer=w_init,
+                                     bias_initializer=b_init, trainable=True, name="g_conv3",
+                                     reuse=reuse)
+
+            y_out_prec_ = tf.exp(dec_out_cov)
+
+        return conv2, y_out_prec_ #, res4

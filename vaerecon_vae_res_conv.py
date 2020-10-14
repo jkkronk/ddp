@@ -21,16 +21,15 @@ from Patcher import Patcher
 from vae_models.definevae_original import definevae
 from utils import UFT, tUFT, tFT
 
-## direk precision optimize etmek daha da iyi olabilir. 
+## Optimizing the direct precision can be even better.
 
-def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model=''):
+def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, model=None):
      print('xxxxxxxxxxxxxxxxxxx contRec is ' + contRec)
      print('xxxxxxxxxxxxxxxxxxx parfact is ' + str(parfact) )
 
      # set parameters
      #==============================================================================
      np.random.seed(seed=1)
-     
      imsizer = us_ksp.shape[0] #252#256#252
      imrizec = us_ksp.shape[1] #308#256#308
      
@@ -39,7 +38,16 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      # make a network and a patcher to use later
      #==============================================================================
 
-     x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=100)
+     x_rec = model.image_matrix
+     funop = model.funop
+     grd0 = model.grd0
+     y_out = model.decoder_output
+     y_out_prec = model.y_out_prec
+     mu = model.z_mean
+     std = model.z_std
+     z = model.guessed_z
+
+     #    z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=100)
 
      Ptchr=Patcher(imsize=[imsizer,imrizec],patchsize=patchsize,step=int(patchsize/2), nopartials=True, contatedges=True)
 
@@ -66,7 +74,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #out: parfact
           
           us = np.abs(us)
-          funeval = funop.eval(feed_dict={x_rec: np.tile(us,(nsampl,1)), z_std_multip: z_multip }) # ,x_inp: np.tile(us,(nsampl,1))
+          funeval = funop.eval(feed_dict={x_rec: np.tile(us,(nsampl,1))}) # ,x_inp: np.tile(us,(nsampl,1))
           #funeval: [500x1]
           funeval=np.array(np.split(funeval,nsampl,axis=0))# [nsampl x parfact x 1]
           return np.mean(funeval,axis=0).astype(np.float64)
@@ -79,7 +87,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           usabs=np.abs(us)
           
           
-          grd0eval = grd0.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)), z_std_multip: z_multip }) # ,x_inp: np.tile(usabs,(nsampl,1))
+          grd0eval = grd0.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1))}) # ,x_inp: np.tile(usabs,(nsampl,1))
           
           #grd0eval: [500x784]
           grd0eval=np.array(np.split(grd0eval,nsampl,axis=0))# [nsampl x parfact x 784]

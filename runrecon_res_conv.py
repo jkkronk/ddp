@@ -15,7 +15,9 @@ import argparse
 
 from US_pattern import US_pattern
 from dataloader import MR_image_data, MR_kspace_data
-import vaerecon
+import vaerecon_vae_res_conv
+from vae_models.vae_res_conv import VariationalAutoencoder
+from vae_models.definevae_res_conv import VAEModel
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
@@ -30,7 +32,7 @@ sli=args.sli
 usfact = args.usfact
 contrun = args.contrun
 
-vae_model = 'FLAIR20201013-165522/jonatank_lat60_ns0_ps32_modalityFLAIR_step10000.ckpt'
+vae_model = 'FLAIR20201014-091338/FLAIR20201014-091338_step_0.ckpt'
 datapath = '/scratch_net/bmicdl03/jonatank/data/'#'/srv/beegfs02/scratch/fastmri_challenge/data/brain/'
 sensmap_path = '/scratch_net/bmicdl03/jonatank/data/est_coilmaps_cal/' #'/srv/beegfs02/scratch/fastmri_challenge/data/brain_sensmap_espirit/multicoil_val'
 basefolder = '/scratch_net/bmicdl03/jonatank/logs/ddp/'
@@ -70,6 +72,7 @@ ksp = ksp_subj[sli]
 ksp_size = ksp.shape
 img_sizex = ksp.shape[1]
 img_sizey = ksp.shape[2]
+batch_size = 512
 
 try:
      uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
@@ -98,6 +101,14 @@ except:
      sensmap = np.ones_like(usksp)
      print('Warning sensmaps is not found. Continues with zero sensitivitly maps.')
 
+## LOAD VAE
+
+with tf.device('/GPU:0'):
+     tf.reset_default_graph()
+     vae_network = VariationalAutoencoder
+     model = VAEModel(vae_network, batch_size, patch_sz, model_name='FLAIR')
+     model.load('/scratch_net/bmicdl03/jonatank/logs/ddp/vae/' + vae_model)
+
 #import matplotlib.image as mpimg
 #mpimg.imsave("tmp/ksp.png", 20*np.log(np.abs(ksp[-1])))
 
@@ -106,7 +117,7 @@ except:
 ###################
 
 if not args.skiprecon:
-     rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model, logdir=logdir)
+     rec_vae, phaseregvals = vaerecon_vae_res_conv.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, model=model, logdir=logdir)
 
      GT_img = MRi.get_gt(subj)[sli]
 

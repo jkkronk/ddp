@@ -20,13 +20,9 @@ import pickle
 from Patcher import Patcher
 from vae_models.definevae_original import definevae
 from utils import UFT, tUFT, tFT
+import time
 
-## direk precision optimize etmek daha da iyi olabilir. 
-
-def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0.05, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model=''):
-     print('xxxxxxxxxxxxxxxxxxx contRec is ' + contRec)
-     print('xxxxxxxxxxxxxxxxxxx parfact is ' + str(parfact) )
-
+def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model='', logdir=''):
      # set parameters
      #==============================================================================
      np.random.seed(seed=1)
@@ -108,8 +104,8 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           tmp =  (-1) * tmp * y_out_preceval
 
           # grd0eval: [500x784]
-          grd0eval=np.array(np.split(tmp,nsampl,axis=0))# [nsampl x parfact x 784]
-          grd0m=np.mean(grd0eval,axis=0) #[parfact,784]
+          grd0eval = np.array(np.split(tmp,nsampl,axis=0))# [nsampl x parfact x 784]
+          grd0m = np.mean(grd0eval,axis=0) #[parfact,784]
 
           grd0m = usc/np.abs(usc)*grd0m
 
@@ -121,7 +117,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #takes set of patches as input and returns a set of their grad.s 
           #both grads are in the positive direction
           
-          shape_orig=ptchs.shape
+          shape_orig = ptchs.shape
           ptchs = np.reshape(ptchs, [ptchs.shape[0], -1] )
           
           grds = np.zeros([int(np.ceil(ptchs.shape[0]/parfact)*parfact), np.prod(ptchs.shape[1:])], dtype=np.complex64)
@@ -244,7 +240,6 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           ims[:,:,0]=usph.copy()
 
           regval = reg2eval(ims[:,:,0].flatten())
-          print(regval)
 
           for ix in range(niter-1):
               grd_reg = reg2grd(ims[:,:,ix].flatten()).reshape([imsizer,imrizec])  # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
@@ -324,7 +319,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      #=====================================
      multip = 0 #0.1
      
-     alphas=stepsize*np.ones(num_iter) # np.logspace(-4,-4,numiter)
+     alphas = stepsize*np.ones(num_iter) # np.logspace(-4,-4,numiter)
      # alphas=np.ones_like(np.logspace(-4,-4,numiter))*5e-3
      
      def geval(img):
@@ -334,14 +329,13 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      # initialize data
      recs = np.zeros((imsizer*imrizec,num_iter+30), dtype=complex)
 
-     m0 = tUFT(us_ksp, uspat) # mult sensmaps
+     m0 = tUFT(us_ksp, uspat)
      recs[:, 0] = np.sqrt(np.sum(np.square(m0), axis=-1)).flatten().copy() # root-sum-squared
 
      phaseregvals = []
 
-     pickle.dump(recs[:,0], open('/scratch_net/bmicdl03/jonatank/logs/ddp/rec/rec', 'wb'))
+     pickle.dump(recs[:,0], open(logdir + '_rec', 'wb'))
 
-     print('contRec is ' + contRec)
      if contRec != '':
           try:
                print('KCT-INFO: reading from a previous pickle file '+contRec)
@@ -425,10 +419,11 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
 
            
           recs[:,it+n+2] = tmpatv*np.exp(1j*tmpptv)
-                
+
           # now do again a data consistency projection
           #===============================================
           #===============================================
+
 
           recs_itr = np.reshape(recs[:,it+n+2],[imsizer,imrizec])
           recs_sens = abs(sensmaps) * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
@@ -447,9 +442,12 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           recs[:, it+n+3] = np.sqrt(np.sum(np.square(fFT_tmp), axis=-1)).flatten().copy()
 
           ftot, f_lik, f_dc = feval(recs[:,it+1])
+
           print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(us_ksp)**2))
 
      return recs, phaseregvals
+
+
 
 def ADMM_recon(imo, usfact2us, usfactnet):
 
@@ -479,7 +477,6 @@ def ADMM_recon(imo, usfact2us, usfactnet):
      print("ADMMNet recon ended")
      
      return imout_admm
-
 
 def TV_recon(imo, uspat):
      

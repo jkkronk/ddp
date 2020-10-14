@@ -2,23 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/train_vae_res_conv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vae_models/vae_res_conv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/runrecon_res_conv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sub_train_vae_res_conv.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vae_models/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vae_models/definevae_direct.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vaerecon_direct.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/definevae.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71979.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71981.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71982.out" beforeDir="false" afterPath="$PROJECT_DIR$/log/71982.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_train_vae.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_train_vae_original.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/71982.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_vae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_res_conv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/definevae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/vae_res_conv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="ddp" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -42,12 +49,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../direct_ddp" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/vae_models" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/vae_models" />
@@ -104,6 +112,12 @@
       <workItem from="1601902845444" duration="2783000" />
       <workItem from="1601924315358" duration="2127000" />
       <workItem from="1602058224443" duration="3372000" />
+      <workItem from="1602225424213" duration="7574000" />
+      <workItem from="1602488661284" duration="11000" />
+      <workItem from="1602488683028" duration="2073000" />
+      <workItem from="1602492039464" duration="6000" />
+      <workItem from="1602492061820" duration="2000000" />
+      <workItem from="1602500454882" duration="13617000" />
     </task>
     <servers />
   </component>
@@ -115,10 +129,11 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="184" y="123" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1601883177919" />
-    <state x="602" y="363" width="633" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600863575101">
+    <state x="602" y="363" width="649" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602169661024">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="602" y="363" width="633" height="397" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1600863575101" />
+    <state x="602" y="363" width="649" height="397" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1920.1173@0.27.1920.1173" timestamp="1602169661024" />
     <state x="320" y="161" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1601539085183">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
@@ -127,10 +142,19 @@
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="693" y="362" width="524" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1600876501017" />
-    <state x="740" y="371" key="FileChooserDialogImpl" timestamp="1601628146828">
+    <state x="549" y="157" width="812" height="919" key="CommitChangelistDialog2" timestamp="1602148254991">
+      <screen x="0" y="27" width="1920" height="1173" />
+    </state>
+    <state x="549" y="157" width="812" height="919" key="CommitChangelistDialog2/0.27.1920.1173@0.27.1920.1173" timestamp="1602148254991" />
+    <state x="740" y="371" key="FileChooserDialogImpl" timestamp="1602662726424">
       <screen x="0" y="27" width="1920" height="1173" />
     </state>
     <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601628146828" />
+    <state x="740" y="371" key="FileChooserDialogImpl/0.27.1920.1173@0.27.1920.1173" timestamp="1602662726424" />
+    <state x="713" y="275" width="483" height="683" key="RollbackChangesDialog" timestamp="1602607124182">
+      <screen x="0" y="27" width="1920" height="1173" />
+    </state>
+    <state x="713" y="275" width="483" height="683" key="RollbackChangesDialog/0.27.1920.1173@0.27.1920.1173" timestamp="1602607124182" />
     <state x="221" y="100" key="SettingsEditor" timestamp="1601883213307">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
