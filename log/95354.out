@@ -1,5 +1,0 @@
-Modality:  FLAIR
-/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201014-175700
->>> lat_dim value: 60
->>> mode is: jonatank
-slurmstepd: error: *** JOB 95354 ON biwirender05 CANCELLED AT 2020-10-14T17:57:06 ***

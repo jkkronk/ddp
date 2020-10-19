@@ -32,3 +32,9 @@ def tUFT(x, uspat, normalize=False):
 
 def calc_rmse(rec, imorig):
     return 100 * np.sqrt(np.sum(np.square(np.abs(rec) - np.abs(imorig))) / np.sum(np.square(np.abs(imorig))))
+
+def normalize_tensor(input_tens):
+    i_max = input_tens.max()
+    i_min = input_tens.min()
+    input_tens = (input_tens-i_min)/(i_max-i_min)
+    return input_tens

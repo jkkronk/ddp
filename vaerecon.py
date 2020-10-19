@@ -19,24 +19,22 @@ import pickle
 
 from Patcher import Patcher
 from vae_models.definevae_original import definevae
-from utils import UFT, tUFT, tFT
+from utils import UFT, tUFT, tFT, normalize_tensor
 import time
 
 def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model='', logdir=''):
      # set parameters
      #==============================================================================
      np.random.seed(seed=1)
-     
+
      imsizer = us_ksp.shape[0] #252#256#252
      imrizec = us_ksp.shape[1] #308#256#308
-     
-     nsampl = 4
+     nsampl = 50
 
      # make a network and a patcher to use later
      #==============================================================================
 
-     x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=100)
-
+     x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=parfact*nsampl)
      Ptchr=Patcher(imsize=[imsizer,imrizec],patchsize=patchsize,step=int(patchsize/2), nopartials=True, contatedges=True)
 
      nopatches=len(Ptchr.genpatchsizes)
@@ -49,19 +47,19 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #inp: [nx, ny]
           #out: [nx, ny]
           
-          return np.linalg.norm(UFT(us, uspat) - us_ksp) **2
+          return np.linalg.norm(UFT(us, uspat) / np.sqrt(imsizer * imrizec) - us_ksp) ** 2
      
      def dconst_grad(us):
           #inp: [nx, ny]
           #out: [nx, ny]
 
-          return 2*tUFT(UFT(us, uspat) - us_ksp, uspat)
+          return 2 * tUFT(UFT(us, uspat) / np.sqrt(imsizer * imrizec) - us_ksp, uspat) * np.sqrt(imsizer * imrizec)
      
      def likelihood(us):
           #inp: [parfact,ps*ps]
           #out: parfact
-          
           us = np.abs(us)
+
           funeval = funop.eval(feed_dict={x_rec: np.tile(us,(nsampl,1)), z_std_multip: z_multip }) # ,x_inp: np.tile(us,(nsampl,1))
           #funeval: [500x1]
           funeval=np.array(np.split(funeval,nsampl,axis=0))# [nsampl x parfact x 1]
@@ -73,44 +71,54 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           
           usc=us.copy()
           usabs=np.abs(us)
-          
-          
+
+          #pickle.dump(usabs, open("/scratch_net/bmicdl03/jonatank/tmp/usabs.p", "wb"))
+          pickle.dump(usabs, open('/scratch_net/bmicdl03/jonatank/tmp/ptchs_usabs.p', 'wb'))
+
           grd0eval = grd0.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)), z_std_multip: z_multip }) # ,x_inp: np.tile(usabs,(nsampl,1))
-          
+
+          pickle.dump(grd0eval, open('/scratch_net/bmicdl03/jonatank/tmp/ptchs_usabs_grad.p', 'wb'))
+
+          #pickle.dump(grd0eval, open("/scratch_net/bmicdl03/jonatank/tmp/usabs_grad.p", "wb"))
+          #exit()
+
           #grd0eval: [500x784]
           grd0eval=np.array(np.split(grd0eval,nsampl,axis=0))# [nsampl x parfact x 784]
+
           grd0m=np.mean(grd0eval,axis=0) #[parfact,784]
+
+
 
           grd0m = usc/np.abs(usc)*grd0m
                             
 
           return grd0m #.astype(np.float64)
-     
-     def likelihood_grad_meth3(us):
-          #inp: [parfact, ps*ps]
-          #out: [parfact, ps*ps]
-          usc=us.copy()
-          usabs=np.abs(us)
-          
-          mueval = mu.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)) }) # ,x_inp: np.tile(usabs,(nsampl,1))
-          stdeval = std.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)) }) # ,x_inp: np.tile(usabs,(nsampl,1))
-          
-          zvals = mueval + np.random.rand(mueval.shape[0],mueval.shape[1])*stdeval
-          
-          y_outeval = y_out.eval( feed_dict={ z : zvals } )
-          y_out_preceval = y_out_prec.eval( feed_dict={ z : zvals } )
-          
-          tmp = np.tile(usabs,(nsampl,1)) - y_outeval
-          tmp =  (-1) * tmp * y_out_preceval
-
-          # grd0eval: [500x784]
-          grd0eval = np.array(np.split(tmp,nsampl,axis=0))# [nsampl x parfact x 784]
-          grd0m = np.mean(grd0eval,axis=0) #[parfact,784]
-
-          grd0m = usc/np.abs(usc)*grd0m
-
-          return grd0m #.astype(np.float64)
-     
+     #
+     # def likelihood_grad_meth3(us):
+     #      #inp: [parfact, ps*ps]
+     #      #out: [parfact, ps*ps]
+     #      usc=us.copy()
+     #      usabs=np.abs(us)
+     #
+     #      mueval = mu.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)) }) # ,x_inp: np.tile(usabs,(nsampl,1))
+     #      stdeval = std.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)) }) # ,x_inp: np.tile(usabs,(nsampl,1))
+     #
+     #      zvals = mueval + np.random.rand(mueval.shape[0],mueval.shape[1])*stdeval
+     #
+     #      y_outeval = y_out.eval( feed_dict={ z : zvals } )
+     #      y_out_preceval = y_out_prec.eval( feed_dict={ z : zvals } )
+     #
+     #      tmp = np.tile(usabs,(nsampl,1)) - y_outeval
+     #      tmp =  (-1) * tmp * y_out_preceval
+     #
+     #      # grd0eval: [500x784]
+     #      grd0eval = np.array(np.split(tmp,nsampl,axis=0))# [nsampl x parfact x 784]
+     #      grd0m = np.mean(grd0eval,axis=0) #[parfact,784]
+     #
+     #      grd0m = usc/np.abs(usc)*grd0m
+     #
+     #      return grd0m #.astype(np.float64)
+     #
      def likelihood_grad_patches(ptchs):
           #inp: [np, ps, ps] 
           #out: [np, ps, ps] 
@@ -119,16 +127,17 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           
           shape_orig = ptchs.shape
           ptchs = np.reshape(ptchs, [ptchs.shape[0], -1] )
-          
-          grds = np.zeros([int(np.ceil(ptchs.shape[0]/parfact)*parfact), np.prod(ptchs.shape[1:])], dtype=np.complex64)
-          extraind = int(np.ceil(ptchs.shape[0]/parfact)*parfact) - ptchs.shape[0]
-          ptchs = np.pad(ptchs,( (0,extraind),(0,0)  ), mode='edge' )
 
-          for ix in range(int(np.ceil(ptchs.shape[0]/parfact))):
+          grds = np.zeros([int(np.ceil(float(ptchs.shape[0])/float(parfact))*parfact), np.prod(ptchs.shape[1:])], dtype=np.complex64)
+          extraind = int(np.ceil(float(ptchs.shape[0])/float(parfact))*parfact) - ptchs.shape[0]
+          ptchs = np.pad(ptchs, ((0, extraind), (0, 0)), mode='edge')
+
+          for ix in range(int(np.ceil(float(ptchs.shape[0])/float(parfact)))):
                if usemeth==1:
-                    grds[parfact*ix:parfact*ix+parfact,:]=likelihood_grad(ptchs[parfact*ix:parfact*ix+parfact,:]) 
-               elif usemeth==3:
-                    grds[parfact*ix:parfact*ix+parfact,:]=likelihood_grad_meth3(ptchs[parfact*ix:parfact*ix+parfact,:]) 
+                    grds[parfact*ix:parfact*ix+parfact,:] = likelihood_grad(ptchs[parfact*ix:parfact*ix+parfact,:])
+
+               #elif usemeth==3:
+                    #grds[parfact*ix:parfact*ix+parfact,:]=likelihood_grad_meth3(ptchs[parfact*ix:parfact*ix+parfact,:])
                else:
                     assert(1==0)
                   
@@ -138,9 +147,9 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      def likelihood_patches(ptchs):
           #inp: [np, ps, ps] 
           #out: 1
-          fvls=np.zeros([int(np.ceil(ptchs.shape[0]/parfact)*parfact) ])
+          fvls=np.zeros([int(np.ceil(float(ptchs.shape[0])/float(parfact))*parfact) ])
           
-          extraind=int(np.ceil(ptchs.shape[0]/parfact)*parfact) - ptchs.shape[0]
+          extraind=int(np.ceil(float(ptchs.shape[0])/float(parfact))*parfact) - ptchs.shape[0]
           ptchs=np.pad(ptchs,[ (0,extraind),(0,0), (0,0)  ],mode='edge' )
 
           for ix in range(int(np.ceil(ptchs.shape[0]/parfact))):
@@ -155,22 +164,21 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #out: [nx, ny], [nx, ny]
           #returns both gradients in the respective positive direction.
           #i.e. must 
-          
-          ptchs = Ptchr.im2patches(np.reshape(image, [imsizer,imrizec]))
+          img_tmp = np.reshape(image, [imsizer, imrizec])
+
+          ptchs = Ptchr.im2patches(img_tmp)
           ptchs = np.array(ptchs)
 
           grd_lik = likelihood_grad_patches(ptchs)
 
           grd_lik = (-1) * Ptchr.patches2im(grd_lik)
 
-          img_tmp = np.reshape(image, [imsizer, imrizec])
-
           tmp_img = np.repeat(img_tmp[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          tmp_img_sens = abs(sensmaps) * tmp_img
+          tmp_img_sens = sensmaps * tmp_img
 
           grd_dconst = dconst_grad(tmp_img_sens)
 
-          grd_dconst = np.sqrt(np.sum(np.square(grd_dconst), axis=-1)).copy()  # root-sum-squared
+          grd_dconst = np.sqrt(np.sum(np.square(np.abs(grd_dconst)), axis=-1)).copy()  # root-sum-squared
 
           return grd_lik + grd_dconst, grd_lik, grd_dconst
      
@@ -181,9 +189,9 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           tmpimg = np.reshape(image, [imsizer,imrizec])
           recs_copy = np.repeat(tmpimg[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
-          dc = dconst(abs(sensmaps) * recs_copy)
+          dc = dconst(sensmaps * recs_copy)
 
-          ptchs = Ptchr.im2patches(np.reshape(image, [imsizer,imrizec]))
+          ptchs = Ptchr.im2patches(tmpimg)
           ptchs = np.array(ptchs)
           
           lik = (-1)*likelihood_patches(np.abs(ptchs))
@@ -283,11 +291,11 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           phim=phim.reshape([imsizer,imrizec])
           magim=magim.reshape([imsizer,imrizec])
 
-          bfestim_re = abs(sensmaps) * np.repeat((np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          UFT_bfestim = UFT(bfestim_re, uspat)
+          bfestim_re = sensmaps * np.repeat((np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          UFT_bfestim = UFT(bfestim_re, uspat) / np.sqrt(imsizer * imrizec)
 
-          tUFT_bfestim = tUFT(UFT_bfestim - us_ksp, uspat)
-          tUFT_bfestim = np.sqrt(np.sum(np.square(tUFT_bfestim), axis=-1)).copy()  # root-sum-squared
+          tUFT_bfestim = tUFT(UFT_bfestim - us_ksp, uspat) * np.sqrt(imsizer * imrizec)
+          tUFT_bfestim = np.sqrt(np.sum(np.square(np.abs(tUFT_bfestim)), axis=-1)).copy()  # root-sum-squared
 
           return -2*np.real(1j*np.exp(-1j*phim)*magim * tUFT_bfestim).flatten()
      
@@ -313,7 +321,11 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
 
               print("regval: " + str(regval) )
              
-          return ims[:,:,-1]-np.pi 
+          return ims[:,:,-1]-np.pi
+
+     def geval(img):
+          t1, t2, t3 = full_gradient(img)
+          return np.reshape(t1, [-1]), np.reshape(t2, [-1]), np.reshape(t3, [-1])
 
      # make the functions for POCS
      #=====================================
@@ -321,20 +333,17 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      
      alphas = stepsize*np.ones(num_iter) # np.logspace(-4,-4,numiter)
      # alphas=np.ones_like(np.logspace(-4,-4,numiter))*5e-3
-     
-     def geval(img):
-          t1, t2, t3 = full_gradient(img)
-          return np.reshape(t1,[-1]), np.reshape(t2,[-1]), np.reshape(t3,[-1])
-     
-     # initialize data
-     recs = np.zeros((imsizer*imrizec,num_iter+30), dtype=complex)
 
-     m0 = tUFT(us_ksp, uspat)
-     recs[:, 0] = np.sqrt(np.sum(np.square(m0), axis=-1)).flatten().copy() # root-sum-squared
+     # initialize data
+     recs = np.zeros((imsizer*imrizec, num_iter*2), dtype=complex)
+
+     m0 = tUFT(us_ksp, uspat) * np.sqrt(imsizer * imrizec)
+
+     recs[:, 0] = np.sqrt(np.sum(np.square(np.abs(m0)), axis=-1)).flatten().copy() # root-sum-squared
 
      phaseregvals = []
 
-     pickle.dump(recs[:,0], open(logdir + '_rec', 'wb'))
+     pickle.dump(recs[:, 0], open(logdir + '_rec', 'wb'))
 
      if contRec != '':
           try:
@@ -349,7 +358,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
                print('KCT-INFO: initialized to the previous recon from numpy: ' + contRec)
 
      for it in range(0, num_iter-1, 2):
-          alpha=alphas[it]
+          alpha = alphas[it]
 
            # FOR NEERAV:
            # 1. I would do your optimization here as x* = max_phi ELBO(N_phi(|x|)) with x as the current estimate of the image, i.e. recs[:,it]
@@ -366,70 +375,65 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           #===============================================
           #===============================================
 
-          #m0 = sensmaps * tUFT(us_ksp, uspat)  # mult sensmaps
-          #recs[:, 0] = np.sqrt(np.sum(np.square(m0), axis=-1)).flatten().copy()  # root-sum-squared
-
-          #recstmp = np.reshape(recs[:, it].copy(), [imsizer, imrizec])
-          #recstmp = np.repeat(recstmp[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          #recstmp = sensmaps * recstmp
-
           recstmp = recs[:, it].copy()
 
-          n = 1
-          for ix in range(n):
+          n = 0
+          #for ix in range(n):
 
-               ftot, f_lik, f_dc = feval(recstmp)
+          ftot, f_lik, f_dc = feval(recstmp)
 
-               gtot, g_lik, g_dc = geval(recstmp)
+          gtot, g_lik, g_dc = geval(recstmp)
 
-               print("it no: " + str(it+ix) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " + str(f_dc/1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(np.linalg.norm(g_dc)) )
+          print("it no: " + str(it) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " + str(f_dc/1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(np.linalg.norm(g_dc)) )
 
-               recstmp = recstmp - alpha * g_lik
-               recs[:,it+ix+1] = recstmp.copy()
+          #recs[:, 19] = g_lik
+
+          recstmp = recstmp - alpha * g_lik
+          recs[:, it+1] = recstmp.copy()
            
           # Now do a  DC projection
-          recs[:,it+n+1] = recs[:,it+n]    # skip the DC projection
+          #recs[:,it+1] = recs[:,it+n]    # skip the DC projection
 
           # now do a phase projection
           #===============================================
           #===============================================
-
-          tmpa = np.abs(np.reshape(recs[:, it+n+1], [imsizer, imrizec]))
-          tmpp = np.angle(np.reshape(recs[:, it+n+1], [imsizer, imrizec]))
-          tmpatv = tmpa.copy().flatten()
-           
-          if reglmb == 0:
-               print("skipping phase proj")
-               tmpptv=tmpp.copy().flatten()
-          else:
-               if regtype == 'TV':
-                    tmpptv = tv_proj(tmpp, mu=0.125, lmb=reglmb, IT=regiter).flatten() #0.1, 15
-               elif regtype == 'reg2_proj': # Normal
-                    tmpptv = reg2_dcproj(tmpp, tmpa, alpha_reg=reglmb, alpha_dc=reglmb, niter=100).flatten()
-                    #print("KCT-dbg: reg2+DC pahse reg value is " + str(regval))
-               elif regtype == 'abs':
-                    tmpptv = np.zeros_like(tmpp).flatten()
-               elif regtype == 'reg2_ls':
-                    tmpptv = reg2_proj_ls(tmpp, niter=regiter).flatten() #0.1, 15
-                    regval = reg2eval(tmpp)
-                    phaseregvals.append(regval)
-                    print("KCT-dbg: pahse reg value is " + str(regval))
-               else:
-                    print("hey mistake!!!!!!!!!!")
-
-           
-          recs[:,it+n+2] = tmpatv*np.exp(1j*tmpptv)
+          #
+          # tmpa = np.abs(np.reshape(recs[:, it+1], [imsizer, imrizec]))
+          # tmpp = np.angle(np.reshape(recs[:, it+1], [imsizer, imrizec]))
+          # tmpatv = tmpa.copy().flatten()
+          #
+          # if reglmb == 0:
+          #      print("skipping phase proj")
+          #      tmpptv=tmpp.copy().flatten()
+          # else:
+          #      if regtype == 'TV':
+          #           tmpptv = tv_proj(tmpp, mu=0.125, lmb=reglmb, IT=regiter).flatten() #0.1, 15
+          #      elif regtype == 'reg2_proj': # Normal
+          #           tmpptv = reg2_dcproj(tmpp, tmpa, alpha_reg=reglmb, alpha_dc=reglmb, niter=100).flatten()
+          #           #print("KCT-dbg: reg2+DC pahse reg value is " + str(regval))
+          #      elif regtype == 'abs':
+          #           tmpptv = np.zeros_like(tmpp).flatten()
+          #      elif regtype == 'reg2_ls':
+          #           tmpptv = reg2_proj_ls(tmpp, niter=regiter).flatten() #0.1, 15
+          #           regval = reg2eval(tmpp)
+          #           phaseregvals.append(regval)
+          #           print("KCT-dbg: pahse reg value is " + str(regval))
+          #      else:
+          #           print("hey mistake!!!!!!!!!!")
+          #
+          #
+          # recs[:,it+n+2] = tmpatv*np.exp(1j*tmpptv)
 
           # now do again a data consistency projection
           #===============================================
           #===============================================
 
 
-          recs_itr = np.reshape(recs[:,it+n+2],[imsizer,imrizec])
-          recs_sens = abs(sensmaps) * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          recs_itr = np.reshape(recs[:, it+1], [imsizer, imrizec])
+          recs_sens = sensmaps * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
-          tmp1 = UFT(recs_sens, (1 - uspat))
-          tmp2 = UFT(recs_sens, uspat)
+          tmp1 = UFT(recs_sens, (1 - uspat)) / np.sqrt(imsizer * imrizec)
+          tmp2 = UFT(recs_sens, uspat) / np.sqrt(imsizer * imrizec)
 
           #tmp1 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (1-uspat)  )
           #tmp2 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (uspat)  )
@@ -438,236 +442,235 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           tmp = tmp1 + multip*tmp2 + (1-multip)*tmp3
 
           #recs[:,it+n+3] = tFT(tmp).flatten()
-          fFT_tmp = tFT(tmp)
-          recs[:, it+n+3] = np.sqrt(np.sum(np.square(fFT_tmp), axis=-1)).flatten().copy()
+          recs[:, it+2] = np.sqrt(np.sum(np.square(np.abs(tFT(tmp))), axis=-1)).flatten().copy()
 
-          ftot, f_lik, f_dc = feval(recs[:,it+1])
+          ftot, f_lik, f_dc = feval(recs[:,it+2])
 
           print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(us_ksp)**2))
 
      return recs, phaseregvals
 
-
-
-def ADMM_recon(imo, usfact2us, usfactnet):
-
-     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
-     
-     print("starting the ADMMNet recon")
-     
-     pars = (" 5*77, "
-     "clear all;"
-     "global usfact2us; "
-     "global usfactnet; "
-     "usfact2us = " + str(usfact2us) + "; "
-     "usfactnet = " + str(usfactnet) + "; "
-     "cd '/home/ktezcan/Code/from_other_people/Deep-ADMM-Net-master/Deep-ADMM-Net-master', " 
-     "main_ADMM_Net_test_3, "
-     ""
-     "exit ")
-     
-     proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
-     
-#     print(proc.stdout)
-     
-     r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/rec_image.mat')
-     imout_admm = r['rec_image']
-     
-     
-     print("ADMMNet recon ended")
-     
-     return imout_admm
-
-def TV_recon(imo, uspat):
-     
-     
-     print("starting the BART TV recon")
-     
-     import subprocess
-     
-     path = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00/python"
-     os.environ["TOOLBOX_PATH"] = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00"
-     sys.path.append(path);
-     
-     from bart import bart
-     import cfl
-
-     
-     #uspatf = pickle.load(open('/home/ktezcan/modelrecon/recon_results/j_pat_'+flname,'rb'))
-     
-     print("writing cfl files")
-     
-     #cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  data )  
-     cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  np.fft.fftshift(np.fft.fft2( (imo)))*uspat /np.sum(np.abs(imo)) )  
-     cfl.writecfl('/scratch_net/bmicdl02/Data/test/sens', np.ones(imo.shape))
-     
-     #proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R I:0:0.045 -R T:3:0:0.025 -u1 -C20 -i500 -d4 \
-     
-     print("cfl files written")
-                             
-     proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R T:3:0:0.0075 -u1 -C20 -i4500 -d4 \
-                             /scratch_net/bmicdl02/Data/test/ksp /scratch_net/bmicdl02/Data/test/sens \
-                             /scratch_net/bmicdl02/Data/test/imout"], stdout=subprocess.PIPE, shell=True)
-     
-     imout_tv=np.fft.ifftshift(cfl.readcfl('/scratch_net/bmicdl02/Data/test/imout'))
-     imout_tv = imout_tv * np.sum(np.abs(imo))/np.sum(np.abs(imout_tv))
-     
-     print('BART TV recon ended')
-     
-     return imout_tv
-
-def TV_reconu(usksp, uspat):
-     
-     
-     print("starting the BART TV recon")
-     
-     import subprocess
-     
-     path = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00/python"
-     os.environ["TOOLBOX_PATH"] = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00"
-     sys.path.append(path);
-     
-     from bart import bart
-     import cfl
-
-     
-     #uspatf = pickle.load(open('/home/ktezcan/modelrecon/recon_results/j_pat_'+flname,'rb'))
-     
-     print("writing cfl files")
-     
-     #cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  data )  
-     cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp', usksp )  
-     cfl.writecfl('/scratch_net/bmicdl02/Data/test/sens', np.ones(usksp.shape))
-     
-     #proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R I:0:0.045 -R T:3:0:0.025 -u1 -C20 -i500 -d4 \
-     
-     print("cfl files written")
-                             
-     proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R T:3:0:0.0075 -u1 -C20 -i4500 -d4 \
-                             /scratch_net/bmicdl02/Data/test/ksp /scratch_net/bmicdl02/Data/test/sens \
-                             /scratch_net/bmicdl02/Data/test/imout"], stdout=subprocess.PIPE, shell=True)
-     
-     imout_tv=np.fft.ifftshift(cfl.readcfl('/scratch_net/bmicdl02/Data/test/imout'))
-     
-     
-     print('BART TV recon ended')
-     
-     return imout_tv
-
-
-#do the matlab DLMRI recon
-#=======================================================================
-#=======================================================================
-#=======================================================================
-#=======================================================================
-#=======================================================================
-
-def DLMRI_recon(imo, uspat):
-     
-     def FT (x):
-          #inp: [nx, ny]
-          #out: [nx, ny]
-          return np.fft.fftshift(    np.fft.fft2(  x , axes=(0,1)  ),   axes=(0,1)    )
-     
-     def UFT(x, uspat):
-          #inp: [nx, ny], [nx, ny]
-          #out: [nx, ny]
-          
-          return uspat*FT(x)
-     
-     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/uspat.mat', {'Q1': uspat})
-     dd=UFT(np.fft.fftshift(imo), uspat)
-     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imku.mat', {'imku': dd})
-     
-     pars = (" 5*77, "
-     "clear all;"
-     "DLMRIparams.num = 100; " 
-     "DLMRIparams.nu = 100000; "
-     "DLMRIparams.r = 2; "
-     "DLMRIparams.n = 36; "
-     "DLMRIparams.K2 = 36; "
-     "DLMRIparams.N = 200*36; "
-     "DLMRIparams.T0 = round((0.2)*DLMRIparams.n); "
-     "DLMRIparams.KSVDopt = 2; "
-     "DLMRIparams.thr = (0.023)*[2 2 2 2 1.4*ones(1,DLMRIparams.num-4)]; "
-     "DLMRIparams.numiterateKSVD = 15; "
-     "load '/home/ktezcan/unnecessary_stuff/uspat.mat' , "
-     "load '/home/ktezcan/unnecessary_stuff/imku.mat' , "
-     #"disp('CAME HERE 3'), "
-     "addpath '/home/ktezcan/Code/from_other_people/DLMRI/DLMRI_v6/', "
-     "[imo, ps] = DLMRI(imku,Q1,DLMRIparams,0,[],0);"
-     "imo = ifftshift(imo), "
-     "5*7, "
-     #"disp('CAME HERE 4'), "
-     "save '/home/ktezcan/unnecessary_stuff/imotestback.mat','imo', "
-     "exit ")
-     
-     print("starting the DLMRI recon")
-     
-     proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
-     
-     r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/imotestback.mat')
-     imout_dlmri = np.fft.fftshift(r['imo'])
-     
-     imout_dlmri = imout_dlmri * np.linalg.norm(imo) / np.linalg.norm(imout_dlmri)
-          
-     print('DLMRI recon ended')
-     
-     return imout_dlmri
 #
 #
-#def ADMM_recon(imo, usfact):
+# def ADMM_recon(imo, usfact2us, usfactnet):
 #
-#     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
-#     
-#     print("starting the ADMMNet recon")
-#     
-#     pars = (" 5*77, "
-#     "clear all;"
-#     "global usrat; "
-#     "usrat = " + str(usfact) + "; "
-#     "cd '/home/ktezcan/Code/from_other_people/Deep-ADMM-Net-master/Deep-ADMM-Net-master', " 
-#     "main_ADMM_Net_test_2, "
-#     ""
-#     "exit ")
-#     
-#     proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
-#     
-#     r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/rec_image.mat')
-#     imout_admm = r['rec_image']
-#     
-#     
-#     print("ADMMNet recon ended")
-#     
-#     return imout_admm
-
-def BM3D_MRI_recon(imo, uspat):
-
-     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
-     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/mask.mat', {'Q1': np.fft.fftshift(uspat) })
-     
-     print("starting the BM3D MRI recon")
-     
-     pars = (" 5*77, "
-     "cd '/home/ktezcan/Code/from_other_people/BM3D_MRI_toolbox/', " 
-     "BM3D_MRI_v1_kerem, "
-     ""
-     "exit ")
-     
-     proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
-     
-     r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/imout_bm3d.mat')
-     imout_bm3d = r['im_rec_BM3D']
-     
-     imout_bm3d = imout_bm3d * np.sum(np.abs(imo))/np.sum(np.abs(imout_bm3d))
-     
-     print("BM3D MRI recon ended")
-     
-     return imout_bm3d
-
-
-
-
+#      scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
+#
+#      print("starting the ADMMNet recon")
+#
+#      pars = (" 5*77, "
+#      "clear all;"
+#      "global usfact2us; "
+#      "global usfactnet; "
+#      "usfact2us = " + str(usfact2us) + "; "
+#      "usfactnet = " + str(usfactnet) + "; "
+#      "cd '/home/ktezcan/Code/from_other_people/Deep-ADMM-Net-master/Deep-ADMM-Net-master', "
+#      "main_ADMM_Net_test_3, "
+#      ""
+#      "exit ")
+#
+#      proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
+#
+# #     print(proc.stdout)
+#
+#      r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/rec_image.mat')
+#      imout_admm = r['rec_image']
+#
+#
+#      print("ADMMNet recon ended")
+#
+#      return imout_admm
+#
+# def TV_recon(imo, uspat):
+#
+#
+#      print("starting the BART TV recon")
+#
+#      import subprocess
+#
+#      path = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00/python"
+#      os.environ["TOOLBOX_PATH"] = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00"
+#      sys.path.append(path);
+#
+#      from bart import bart
+#      import cfl
+#
+#
+#      #uspatf = pickle.load(open('/home/ktezcan/modelrecon/recon_results/j_pat_'+flname,'rb'))
+#
+#      print("writing cfl files")
+#
+#      #cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  data )
+#      cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  np.fft.fftshift(np.fft.fft2( (imo)))*uspat /np.sum(np.abs(imo)) )
+#      cfl.writecfl('/scratch_net/bmicdl02/Data/test/sens', np.ones(imo.shape))
+#
+#      #proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R I:0:0.045 -R T:3:0:0.025 -u1 -C20 -i500 -d4 \
+#
+#      print("cfl files written")
+#
+#      proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R T:3:0:0.0075 -u1 -C20 -i4500 -d4 \
+#                              /scratch_net/bmicdl02/Data/test/ksp /scratch_net/bmicdl02/Data/test/sens \
+#                              /scratch_net/bmicdl02/Data/test/imout"], stdout=subprocess.PIPE, shell=True)
+#
+#      imout_tv=np.fft.ifftshift(cfl.readcfl('/scratch_net/bmicdl02/Data/test/imout'))
+#      imout_tv = imout_tv * np.sum(np.abs(imo))/np.sum(np.abs(imout_tv))
+#
+#      print('BART TV recon ended')
+#
+#      return imout_tv
+#
+# def TV_reconu(usksp, uspat):
+#
+#
+#      print("starting the BART TV recon")
+#
+#      import subprocess
+#
+#      path = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00/python"
+#      os.environ["TOOLBOX_PATH"] = "/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00"
+#      sys.path.append(path);
+#
+#      from bart import bart
+#      import cfl
+#
+#
+#      #uspatf = pickle.load(open('/home/ktezcan/modelrecon/recon_results/j_pat_'+flname,'rb'))
+#
+#      print("writing cfl files")
+#
+#      #cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp',  data )
+#      cfl.writecfl('/scratch_net/bmicdl02/Data/test/ksp', usksp )
+#      cfl.writecfl('/scratch_net/bmicdl02/Data/test/sens', np.ones(usksp.shape))
+#
+#      #proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R I:0:0.045 -R T:3:0:0.025 -u1 -C20 -i500 -d4 \
+#
+#      print("cfl files written")
+#
+#      proc = subprocess.run(["/scratch_net/bmicdl02/ktezcan/apps/BART/source-bart/bart-0.4.00//bart pics -R T:3:0:0.0075 -u1 -C20 -i4500 -d4 \
+#                              /scratch_net/bmicdl02/Data/test/ksp /scratch_net/bmicdl02/Data/test/sens \
+#                              /scratch_net/bmicdl02/Data/test/imout"], stdout=subprocess.PIPE, shell=True)
+#
+#      imout_tv=np.fft.ifftshift(cfl.readcfl('/scratch_net/bmicdl02/Data/test/imout'))
+#
+#
+#      print('BART TV recon ended')
+#
+#      return imout_tv
+#
+#
+# #do the matlab DLMRI recon
+# #=======================================================================
+# #=======================================================================
+# #=======================================================================
+# #=======================================================================
+# #=======================================================================
+#
+# def DLMRI_recon(imo, uspat):
+#
+#      def FT (x):
+#           #inp: [nx, ny]
+#           #out: [nx, ny]
+#           return np.fft.fftshift(    np.fft.fft2(  x , axes=(0,1)  ),   axes=(0,1)    )
+#
+#      def UFT(x, uspat):
+#           #inp: [nx, ny], [nx, ny]
+#           #out: [nx, ny]
+#
+#           return uspat*FT(x)
+#
+#      scipy.io.savemat('/home/ktezcan/unnecessary_stuff/uspat.mat', {'Q1': uspat})
+#      dd=UFT(np.fft.fftshift(imo), uspat)
+#      scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imku.mat', {'imku': dd})
+#
+#      pars = (" 5*77, "
+#      "clear all;"
+#      "DLMRIparams.num = 100; "
+#      "DLMRIparams.nu = 100000; "
+#      "DLMRIparams.r = 2; "
+#      "DLMRIparams.n = 36; "
+#      "DLMRIparams.K2 = 36; "
+#      "DLMRIparams.N = 200*36; "
+#      "DLMRIparams.T0 = round((0.2)*DLMRIparams.n); "
+#      "DLMRIparams.KSVDopt = 2; "
+#      "DLMRIparams.thr = (0.023)*[2 2 2 2 1.4*ones(1,DLMRIparams.num-4)]; "
+#      "DLMRIparams.numiterateKSVD = 15; "
+#      "load '/home/ktezcan/unnecessary_stuff/uspat.mat' , "
+#      "load '/home/ktezcan/unnecessary_stuff/imku.mat' , "
+#      #"disp('CAME HERE 3'), "
+#      "addpath '/home/ktezcan/Code/from_other_people/DLMRI/DLMRI_v6/', "
+#      "[imo, ps] = DLMRI(imku,Q1,DLMRIparams,0,[],0);"
+#      "imo = ifftshift(imo), "
+#      "5*7, "
+#      #"disp('CAME HERE 4'), "
+#      "save '/home/ktezcan/unnecessary_stuff/imotestback.mat','imo', "
+#      "exit ")
+#
+#      print("starting the DLMRI recon")
+#
+#      proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
+#
+#      r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/imotestback.mat')
+#      imout_dlmri = np.fft.fftshift(r['imo'])
+#
+#      imout_dlmri = imout_dlmri * np.linalg.norm(imo) / np.linalg.norm(imout_dlmri)
+#
+#      print('DLMRI recon ended')
+#
+#      return imout_dlmri
+# #
+# #
+# #def ADMM_recon(imo, usfact):
+# #
+# #     scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
+# #
+# #     print("starting the ADMMNet recon")
+# #
+# #     pars = (" 5*77, "
+# #     "clear all;"
+# #     "global usrat; "
+# #     "usrat = " + str(usfact) + "; "
+# #     "cd '/home/ktezcan/Code/from_other_people/Deep-ADMM-Net-master/Deep-ADMM-Net-master', "
+# #     "main_ADMM_Net_test_2, "
+# #     ""
+# #     "exit ")
+# #
+# #     proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
+# #
+# #     r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/rec_image.mat')
+# #     imout_admm = r['rec_image']
+# #
+# #
+# #     print("ADMMNet recon ended")
+# #
+# #     return imout_admm
+#
+# def BM3D_MRI_recon(imo, uspat):
+#
+#      scipy.io.savemat('/home/ktezcan/unnecessary_stuff/imorig.mat', {'im_ori': imo})
+#      scipy.io.savemat('/home/ktezcan/unnecessary_stuff/mask.mat', {'Q1': np.fft.fftshift(uspat) })
+#
+#      print("starting the BM3D MRI recon")
+#
+#      pars = (" 5*77, "
+#      "cd '/home/ktezcan/Code/from_other_people/BM3D_MRI_toolbox/', "
+#      "BM3D_MRI_v1_kerem, "
+#      ""
+#      "exit ")
+#
+#      proc = subprocess.run([" matlab -nosplash -r '"+ pars + "' "], stdout=subprocess.PIPE, shell=True)
+#
+#      r = scipy.io.loadmat('/home/ktezcan/unnecessary_stuff/imout_bm3d.mat')
+#      imout_bm3d = r['im_rec_BM3D']
+#
+#      imout_bm3d = imout_bm3d * np.sum(np.abs(imo))/np.sum(np.abs(imout_bm3d))
+#
+#      print("BM3D MRI recon ended")
+#
+#      return imout_bm3d
+#
+#
+#
+#
 
 
 

@@ -55,7 +55,7 @@ mode = args.mode  # 'MRIunproc'
 ndims = 28
 useMixtureScale = True
 noisy = 50
-batch_size = 1000
+batch_size = 256
 usebce = False
 kld_div = 25.0
 nzsamp = 1
@@ -86,7 +86,7 @@ num_inp_channels = 1
 # ==============================================================================
 #DS = Dataset(train_size, test_size, ndims, noisy, seed, mode, downscale=True)
 from dataloader import MR_image_data
-MRi = MR_image_data(dirname='/scratch_net/bmicdl03/jonatank/data/', trainset_ratio = 1, noiseinvstd=0, patchsize=28, modality='AXFLAIR_')
+MRi = MR_image_data(dirname='/scratch_net/bmicdl03/jonatank/data', trainset_ratio = 1, noiseinvstd=0, patchsize=28, modality='AXFLAIR_')
 
 print('CAME HERE!! 1')
 
@@ -110,7 +110,7 @@ def fact(x):
 
 
 # define the input place holder
-x_inp = tf.placeholder("float", shape=[None, input_dim])
+x_inp = tf.placeholder(tf.float32, shape=[None, input_dim])
 # x_rec = tf.placeholder("float", shape=[None, input_dim])
 l2_loss = tf.constant(0.0)
 
@@ -189,7 +189,6 @@ epsilon = tf.random_normal(tf.shape(logVar), name='epsilon')
 z = mu + tf.multiply(std, epsilon)
 
 if useMixtureScale:
-
     indices1 = tf.range(start=0, limit=lat_dim_1, delta=1, dtype='int32')
     indices2 = tf.range(start=lat_dim_1, limit=lat_dim, delta=1, dtype='int32')
 
@@ -318,10 +317,10 @@ print('TIME TO TRAIN START: ', total)
 
 with tf.device('/GPU:0'):
     # train for N steps
-    for step in range(0, 500001):  # 500k
+    for step in range(0, 100001):  # 500k
         #t0 = time.time()
 
-        batch = MRi.get_patch(batch_size, test=False)
+        batch = MRi.get_patch_subj(batch_size, test=False)
 
         batch = np.reshape(batch, [batch_size, ndims*ndims])
         # batch = MRi.get_train_batch(batch_size)
@@ -340,9 +339,8 @@ with tf.device('/GPU:0'):
 
         # print some stuf...
         if step % 500 == 0:  # 500
-            test_batch = MRi.get_patch(batch_size, test=True)
+            test_batch = MRi.get_patch_subj(batch_size, test=True)
             test_batch = np.reshape(test_batch, [batch_size, ndims*ndims])
-
 
             if useMixtureScale:
                 loss_l2_1 = l2_loss_1.eval(feed_dict={x_inp: batch})

@@ -275,42 +275,44 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
      # qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
-     op_p_x_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), y_out_prec),axis=1) \
-                  + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1) -  0.5*ndims*ndims*tf.log(2*np.pi) ) 
+     op_p_x_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec), 2), y_out_prec), axis=1)
+                 + 0.5 * tf.reduce_sum(tf.log(y_out_prec), axis=1) - 0.5 * ndims * ndims * tf.log(2 * np.pi))
 
-     op_q_z_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - mu),2), tf.reciprocal(std)),axis=1) \
-                       - 0.5 * tf.reduce_sum(tf.log(std), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
-     
-     z_pl = tf.get_variable('z_pl',shape=[nsampl,lat_dim],initializer=tf.constant_initializer(value=0.0))
-     
-     op_q_zpl_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z_pl - mu),2), tf.reciprocal(std)),axis=1) \
-                       - 0.5 * tf.reduce_sum(tf.log(std), axis=1) -  0.5*lat_dim*tf.log(2*np.pi))
-     
-     op_p_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - tf.zeros_like(mu)),2), tf.reciprocal(tf.ones_like(std))),\
-                    axis=1) - 0.5 * tf.reduce_sum(tf.log(tf.ones_like(std)), axis=1) \
-                    - 0.5*lat_dim*tf.log(2*np.pi))
+     # op_p_x_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((y_out - x_rec),2), 1),axis=1) \
+     #             + 0.5 * tf.reduce_sum(tf.log(tf.ones_like(y_out_prec)), axis=1) -  0.5*784*tf.log(2*np.pi) )
+
+     op_q_z_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - mu), 2), tf.reciprocal(std)), axis=1)
+                 - 0.5 * tf.reduce_sum(tf.log(std), axis=1) - 0.5 * lat_dim * tf.log(2 * np.pi))
+
+     z_pl = tf.get_variable('z_pl', shape=[nsampl, lat_dim], initializer=tf.constant_initializer(value=0.0))
+
+     op_q_zpl_x = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z_pl - mu), 2), tf.reciprocal(std)), axis=1)
+                   - 0.5 * tf.reduce_sum(tf.log(std), axis=1) - 0.5 * lat_dim * tf.log(2 * np.pi))
+
+     op_p_z = (- 0.5 * tf.reduce_sum(tf.multiply(tf.pow((z - tf.zeros_like(mu)), 2), tf.reciprocal(tf.ones_like(std))),
+                                     axis=1) \
+               - 0.5 * tf.reduce_sum(tf.log(tf.ones_like(std)), axis=1) - 0.5 * lat_dim * tf.log(2 * np.pi))
 
      funop = op_p_x_z + op_p_z - op_q_z_x
-     
-     grd = tf.gradients(op_p_x_z + op_p_z - op_q_z_x, x_rec) # 
+
+     grd = tf.gradients(op_p_x_z + op_p_z - op_q_z_x, x_rec)  #
      grd_p_x_z0 = tf.gradients(op_p_x_z, x_rec)[0]
      grd_p_z0 = tf.gradients(op_p_z, x_rec)[0]
      grd_q_z_x0 = tf.gradients(op_q_z_x, x_rec)[0]
-     
+
      grd_q_zpl_x_az0 = tf.gradients(op_q_zpl_x, z_pl)[0]
-     
+
      grd2 = tf.gradients(grd[0], x_rec)
-     
+
      print("KCT-INFO: the gradients: ")
      print(grd_p_x_z0)
      print(grd_p_z0)
      print(grd_q_z_x0)
-     
-     grd0=grd[0]
-     grd20=grd2[0]
-                                                          
-          
-     return x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z                               
+
+     grd0 = grd[0]
+     grd20 = grd2[0]
+
+     return x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z
 
 
 

@@ -20,15 +20,15 @@ class MR_image_data:
         self.noise = noiseinvstd
         self.patchsize=patchsize
 
-        self.allfiles = os.listdir(dirname+'/multicoil_train/h5_slices/')
+        self.allfiles = os.listdir(dirname+'/multicoil_train/') #/h5_slices
         self.datafiles = [s for s in self.allfiles if modality in s]
         self.data_size_train = int(trainset_ratio*len(self.datafiles))
         self.datafiles_train = self.datafiles[:self.data_size_train]
 
-        with h5py.File(self.dirname + '/multicoil_train/' + self.datafiles_train[0], 'r') as fdset:
+        with h5py.File(self.dirname + '/multicoil_train/' + self.datafiles_train[0], 'r') as fdset: # /h5_slices
              self.reconstruction_rss_size = fdset['reconstruction_rss'].shape #  The shape of the reconstruction_rss tensor is (number of slices, r_height, r_width)
 
-        self.allfiles_test = os.listdir(dirname + '/multicoil_val/h5_slices/')
+        self.allfiles_test = os.listdir(dirname + '/multicoil_val/') # /h5_slices
         self.datafiles_test = [s for s in self.allfiles_test if modality in s]
         self.data_size_test = len(self.datafiles_test)
 
@@ -67,7 +67,53 @@ class MR_image_data:
              return btch
         elif self.noise > 0:
              return btch + np.random.normal(loc=0, scale=1/self.noise, size=btch.shape)
-        
+
+    def get_patch_subj(self, batchsize,
+                  test=False):  # rixsb = np.sort(np.random.choice(self.nstrain*len(self.useSlice), batchsize, replace=False))
+        btch = np.zeros([batchsize, self.patchsize, self.patchsize])
+
+        if not test:  # If train
+            random.shuffle(self.datafiles_train)
+
+            volindex = np.sort(np.random.choice(self.data_size_train, 1, replace=False))
+            subj_file = self.datafiles_train[volindex[0]]
+            with h5py.File(self.dirname + '/multicoil_train/' + subj_file, 'r') as fdset:
+                h5data = fdset['reconstruction_rss'][:]
+
+            for ix in range(batchsize):
+                sliceindex = np.random.randint(0, h5data.shape[0])
+
+                patchindexr = np.random.randint(0, h5data.shape[1] - self.patchsize)
+                patchindexc = np.random.randint(h5data.shape[2] - self.patchsize)
+                # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+                btch[ix, :, :] = h5data[sliceindex,
+                                    patchindexr:patchindexr + self.patchsize,
+                                    patchindexc:patchindexc + self.patchsize]  # sli, x, y
+
+        else:
+            volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
+            subj_file = self.datafiles_test[volindex[0]]
+            with h5py.File(self.dirname + '/multicoil_val/' + subj_file, 'r') as fdset:
+                h5data = fdset['reconstruction_rss'][:]
+
+            for ix in range(batchsize):
+                sliceindex = np.random.randint(0, h5data.shape[0])
+
+                patchindexr = np.random.randint(0, h5data.shape[1] - self.patchsize)
+                patchindexc = np.random.randint(h5data.shape[2] - self.patchsize)
+                # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+                btch[ix, :, :] = h5data[sliceindex,
+                                     patchindexr:patchindexr + self.patchsize,
+                                     patchindexc:patchindexc + self.patchsize]  # sli, x, y
+
+        # print("KCT-dbg: time for a batch: " + str(tm.time()-tms))
+
+        if self.noise == 0:
+            return btch
+        elif self.noise > 0:
+            return btch + np.random.normal(loc=0, scale=1 / self.noise, size=btch.shape)
+
+
     def get_patch(self, batchsize, test=False): # rixsb = np.sort(np.random.choice(self.nstrain*len(self.useSlice), batchsize, replace=False))
         btch = np.zeros([batchsize, self.patchsize, self.patchsize])
 
@@ -81,11 +127,10 @@ class MR_image_data:
                 with h5py.File(self.dirname + '/multicoil_train/h5_slices/' + subj_file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
-                sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
-                patchindexr = np.random.randint(0, h5data[sliceindex[0]].shape[0] - self.patchsize)
-                patchindexc = np.random.randint(h5data[sliceindex[0]].shape[1] - self.patchsize)
-                # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
-                btch[ix, :, :] = h5data[sliceindex[0],
+                    patchindexr = np.random.randint(0, h5data.shape[0] - self.patchsize)
+                    patchindexc = np.random.randint(h5data.shape[1] - self.patchsize)
+                    # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+                    btch[ix, :, :] = h5data[
                                      patchindexr:patchindexr + self.patchsize,
                                      patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
@@ -96,21 +141,20 @@ class MR_image_data:
                 with h5py.File(self.dirname + '/multicoil_val/h5_slices/' + subj_file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
-                sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
-                patchindexr = np.random.randint(0, h5data[sliceindex[0]].shape[0] - self.patchsize)
-                patchindexc = np.random.randint(h5data[sliceindex[0]].shape[1] - self.patchsize)
-                # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
-                btch[ix, :, :] = h5data[sliceindex[0],
+                    patchindexr = np.random.randint(0, h5data.shape[0] - self.patchsize)
+                    patchindexc = np.random.randint(h5data.shape[1] - self.patchsize)
+                    # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
+                    btch[ix, :, :] = h5data[
                                      patchindexr:patchindexr + self.patchsize,
                                      patchindexc:patchindexc + self.patchsize]  # sli, x, y
 
         #print("KCT-dbg: time for a batch: " + str(tm.time()-tms))
-        
+
         if self.noise ==0:
              return btch
         elif self.noise > 0:
              return btch + np.random.normal(loc=0, scale=1/self.noise, size=btch.shape)
-        
+
 
     def get_image(self, subj, slice):
 
@@ -174,7 +218,7 @@ class MR_kspace_data:
         with h5py.File(self.dirname + 'multicoil_val/' + subj_name, 'r') as fdset:
             kspace_img = fdset['kspace'][:]  # The shape of kspace tensor is (number of slices, number of coils, height, width)
 
-        return kspace_img
+        return np.array(kspace_img)
 
     def get_gt(self, subj_name):
         with h5py.File(self.dirname + 'multicoil_val/' + subj_name, 'r') as fdset:

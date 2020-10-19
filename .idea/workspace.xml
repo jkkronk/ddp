@@ -2,30 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/runrecon_res_conv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sub_train_vae_res_conv.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vae_models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vae_models/definevae_direct.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vaerecon_direct.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Patcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/Patcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/71982.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/93281.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/93826.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/94811.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/94812.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/95354.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/95355.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runrecon_res_conv.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/train_vae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_original.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_res_conv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_vae_res_conv.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/definevae_direct.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_direct.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vae_models/definevae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vae_models/vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/vae_res_conv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon_direct.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon_direct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="ddp" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -49,7 +49,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../direct_ddp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -86,7 +86,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SshConsoleOptionsProvider">
     <option name="myEncoding" value="UTF-8" />
   </component>
@@ -118,6 +118,9 @@
       <workItem from="1602492039464" duration="6000" />
       <workItem from="1602492061820" duration="2000000" />
       <workItem from="1602500454882" duration="13617000" />
+      <workItem from="1603094106189" duration="10336000" />
+      <workItem from="1603114240433" duration="596000" />
+      <workItem from="1603114927020" duration="1473000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,185 @@
+Modality:  FLAIR
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721
+>>> lat_dim value: 60
+>>> mode is: jonatank
+CAME HERE!! 1
+CAME HERE!! 11
+2020-10-19 13:17:22.923338: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-19 13:17:23.279216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:05:00.0
+totalMemory: 10.92GiB freeMemory: 10.77GiB
+2020-10-19 13:17:23.279257: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-19 13:17:24.003222: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-19 13:17:24.003273: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-19 13:17:24.003281: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-19 13:17:24.004724: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10419 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:05:00.0, compute capability: 6.1)
+CAME HERE!! 12
+CAME HERE!! 2
+CAME HERE!! 3
+CAME HERE!! 31
+CAME HERE!! 32
+Initialized parameters
+CAME HERE!! 33
+CAME HERE!! 4
+TIME TO TRAIN START:  6.43353486061
+Step 0 | L2 Loss: -114.942 | KLD Loss: 0.004 | L2 Loss_1: 256.919 | L2 Loss_2: 371.861 | loss_tot: -58.096 | L2 Loss test: 147.077
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step0.ckpt
+Step 500 | L2 Loss: -5391.211 | KLD Loss: 0.005 | L2 Loss_1: 13.273 | L2 Loss_2: 5404.484 | loss_tot: -2695.500 | L2 Loss test: 0.129
+Step 1000 | L2 Loss: -3191.151 | KLD Loss: 0.005 | L2 Loss_1: 479.411 | L2 Loss_2: 3670.562 | loss_tot: -1595.648 | L2 Loss test: 3.542
+Step 1500 | L2 Loss: -7792.714 | KLD Loss: 0.007 | L2 Loss_1: 67.611 | L2 Loss_2: 7860.325 | loss_tot: -3896.888 | L2 Loss test: 0.134
+Step 2000 | L2 Loss: -4972.374 | KLD Loss: 0.008 | L2 Loss_1: 42.560 | L2 Loss_2: 5014.934 | loss_tot: -2486.396 | L2 Loss test: 0.111
+Step 2500 | L2 Loss: -7658.979 | KLD Loss: 0.011 | L2 Loss_1: 55.069 | L2 Loss_2: 7714.049 | loss_tot: -3829.456 | L2 Loss test: 0.139
+Step 3000 | L2 Loss: -5728.402 | KLD Loss: 0.011 | L2 Loss_1: 7.977 | L2 Loss_2: 5736.379 | loss_tot: -2864.475 | L2 Loss test: 0.086
+Step 3500 | L2 Loss: -4010.509 | KLD Loss: 0.019 | L2 Loss_1: 157.687 | L2 Loss_2: 4168.196 | loss_tot: -2005.271 | L2 Loss test: 0.597
+Step 4000 | L2 Loss: -4934.341 | KLD Loss: 0.020 | L2 Loss_1: 17.591 | L2 Loss_2: 4951.932 | loss_tot: -2467.309 | L2 Loss test: 0.040
+Step 4500 | L2 Loss: -7201.288 | KLD Loss: 0.017 | L2 Loss_1: 4.341 | L2 Loss_2: 7205.628 | loss_tot: -3600.149 | L2 Loss test: 0.024
+Step 5000 | L2 Loss: -5606.900 | KLD Loss: 0.054 | L2 Loss_1: 12.795 | L2 Loss_2: 5619.695 | loss_tot: -2804.375 | L2 Loss test: 0.031
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step5000.ckpt
+Step 5500 | L2 Loss: -6981.590 | KLD Loss: 0.130 | L2 Loss_1: 4.545 | L2 Loss_2: 6986.134 | loss_tot: -3490.486 | L2 Loss test: 0.030
+Step 6000 | L2 Loss: -7313.330 | KLD Loss: 0.118 | L2 Loss_1: 5.747 | L2 Loss_2: 7319.077 | loss_tot: -3656.737 | L2 Loss test: 0.027
+Step 6500 | L2 Loss: -8219.586 | KLD Loss: 0.120 | L2 Loss_1: 12.301 | L2 Loss_2: 8231.887 | loss_tot: -4109.704 | L2 Loss test: 0.029
+Step 7000 | L2 Loss: -7200.783 | KLD Loss: 0.109 | L2 Loss_1: 3.261 | L2 Loss_2: 7204.044 | loss_tot: -3600.188 | L2 Loss test: 0.013
+Step 7500 | L2 Loss: -5885.565 | KLD Loss: 0.119 | L2 Loss_1: 57.657 | L2 Loss_2: 5943.222 | loss_tot: -2942.740 | L2 Loss test: 0.028
+Step 8000 | L2 Loss: -5412.305 | KLD Loss: 0.123 | L2 Loss_1: 0.820 | L2 Loss_2: 5413.125 | loss_tot: -2706.060 | L2 Loss test: 0.009
+Step 8500 | L2 Loss: -4032.118 | KLD Loss: 0.330 | L2 Loss_1: 2845.210 | L2 Loss_2: 6877.328 | loss_tot: -2016.048 | L2 Loss test: 0.279
+Step 9000 | L2 Loss: -5997.543 | KLD Loss: 0.327 | L2 Loss_1: 1.096 | L2 Loss_2: 5998.639 | loss_tot: -2998.423 | L2 Loss test: 0.008
+Step 9500 | L2 Loss: -6177.583 | KLD Loss: 0.311 | L2 Loss_1: 2135.361 | L2 Loss_2: 8312.944 | loss_tot: -3088.682 | L2 Loss test: 0.136
+Step 10000 | L2 Loss: -4675.848 | KLD Loss: 0.308 | L2 Loss_1: 222.423 | L2 Loss_2: 4898.271 | loss_tot: -2337.614 | L2 Loss test: 0.321
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step10000.ckpt
+Step 10500 | L2 Loss: -5743.437 | KLD Loss: 0.287 | L2 Loss_1: 413.168 | L2 Loss_2: 6156.604 | loss_tot: -2871.329 | L2 Loss test: 0.108
+Step 11000 | L2 Loss: -8933.730 | KLD Loss: 0.285 | L2 Loss_1: 370.490 | L2 Loss_2: 9304.221 | loss_tot: -4466.475 | L2 Loss test: 0.024
+Step 11500 | L2 Loss: -9791.582 | KLD Loss: 0.241 | L2 Loss_1: 432.923 | L2 Loss_2: 10224.506 | loss_tot: -4894.743 | L2 Loss test: 0.009
+Step 12000 | L2 Loss: -6701.629 | KLD Loss: 0.257 | L2 Loss_1: 2.940 | L2 Loss_2: 6704.569 | loss_tot: -3350.529 | L2 Loss test: 0.003
+Step 12500 | L2 Loss: -5986.578 | KLD Loss: 0.263 | L2 Loss_1: 1.881 | L2 Loss_2: 5988.459 | loss_tot: -2992.995 | L2 Loss test: 0.005
+Step 13000 | L2 Loss: -8673.430 | KLD Loss: 0.250 | L2 Loss_1: 8.459 | L2 Loss_2: 8681.891 | loss_tot: -4336.246 | L2 Loss test: 0.005
+Step 13500 | L2 Loss: -9214.493 | KLD Loss: 0.249 | L2 Loss_1: 1252.393 | L2 Loss_2: 10466.885 | loss_tot: -4607.030 | L2 Loss test: 0.004
+Step 14000 | L2 Loss: -7718.862 | KLD Loss: 0.698 | L2 Loss_1: 6.340 | L2 Loss_2: 7725.203 | loss_tot: -3858.737 | L2 Loss test: 0.004
+Step 14500 | L2 Loss: -9621.560 | KLD Loss: 0.695 | L2 Loss_1: 77.762 | L2 Loss_2: 9699.321 | loss_tot: -4810.004 | L2 Loss test: 0.011
+Step 15000 | L2 Loss: -9209.708 | KLD Loss: 0.731 | L2 Loss_1: 16.802 | L2 Loss_2: 9226.510 | loss_tot: -4604.067 | L2 Loss test: 0.005
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step15000.ckpt
+Step 15500 | L2 Loss: -7081.325 | KLD Loss: 0.720 | L2 Loss_1: 724.762 | L2 Loss_2: 7806.087 | loss_tot: -3539.805 | L2 Loss test: 0.024
+Step 16000 | L2 Loss: -8371.225 | KLD Loss: 0.713 | L2 Loss_1: 552.739 | L2 Loss_2: 8923.965 | loss_tot: -4191.152 | L2 Loss test: 0.005
+Step 16500 | L2 Loss: -7465.341 | KLD Loss: 0.878 | L2 Loss_1: 4.374 | L2 Loss_2: 7469.715 | loss_tot: -3731.891 | L2 Loss test: 0.004
+Step 17000 | L2 Loss: -8710.777 | KLD Loss: 0.810 | L2 Loss_1: 5.864 | L2 Loss_2: 8716.642 | loss_tot: -4354.601 | L2 Loss test: 0.002
+Step 17500 | L2 Loss: -7611.939 | KLD Loss: 1.243 | L2 Loss_1: 76.082 | L2 Loss_2: 7688.021 | loss_tot: -3804.707 | L2 Loss test: 0.010
+Step 18000 | L2 Loss: -8069.404 | KLD Loss: 1.210 | L2 Loss_1: 4.247 | L2 Loss_2: 8073.650 | loss_tot: -4033.510 | L2 Loss test: 0.002
+Step 18500 | L2 Loss: -8839.586 | KLD Loss: 1.160 | L2 Loss_1: 30.727 | L2 Loss_2: 8870.312 | loss_tot: -4418.396 | L2 Loss test: 0.001
+Step 19000 | L2 Loss: -6844.008 | KLD Loss: 1.280 | L2 Loss_1: 6.433 | L2 Loss_2: 6850.441 | loss_tot: -3420.760 | L2 Loss test: 0.008
+Step 19500 | L2 Loss: -10089.718 | KLD Loss: 1.198 | L2 Loss_1: 96.902 | L2 Loss_2: 10186.619 | loss_tot: -5043.718 | L2 Loss test: 0.003
+Step 20000 | L2 Loss: -9100.509 | KLD Loss: 1.123 | L2 Loss_1: 71.270 | L2 Loss_2: 9171.778 | loss_tot: -4549.058 | L2 Loss test: 0.004
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step20000.ckpt
+Step 20500 | L2 Loss: -8863.115 | KLD Loss: 1.023 | L2 Loss_1: 9.472 | L2 Loss_2: 8872.587 | loss_tot: -4430.572 | L2 Loss test: 0.002
+Step 21000 | L2 Loss: -10939.990 | KLD Loss: 0.879 | L2 Loss_1: 18.219 | L2 Loss_2: 10958.209 | loss_tot: -5469.260 | L2 Loss test: 0.001
+Step 21500 | L2 Loss: -9791.328 | KLD Loss: 0.783 | L2 Loss_1: 12.681 | L2 Loss_2: 9804.009 | loss_tot: -4895.051 | L2 Loss test: 0.002
+Step 22000 | L2 Loss: -6945.506 | KLD Loss: 1.021 | L2 Loss_1: 7.973 | L2 Loss_2: 6953.479 | loss_tot: -3471.595 | L2 Loss test: 0.009
+Step 22500 | L2 Loss: -7880.176 | KLD Loss: 2.871 | L2 Loss_1: 448.008 | L2 Loss_2: 8328.184 | loss_tot: -3935.398 | L2 Loss test: 0.007
+Step 23000 | L2 Loss: -8880.801 | KLD Loss: 3.507 | L2 Loss_1: 19.084 | L2 Loss_2: 8899.885 | loss_tot: -4436.972 | L2 Loss test: 0.005
+Step 23500 | L2 Loss: -11200.049 | KLD Loss: 3.501 | L2 Loss_1: 61.388 | L2 Loss_2: 11261.438 | loss_tot: -5596.650 | L2 Loss test: 0.003
+Step 24000 | L2 Loss: -6657.898 | KLD Loss: 3.491 | L2 Loss_1: 3893.148 | L2 Loss_2: 10551.047 | loss_tot: -3325.618 | L2 Loss test: 0.004
+Step 24500 | L2 Loss: -10912.675 | KLD Loss: 3.489 | L2 Loss_1: 24.831 | L2 Loss_2: 10937.506 | loss_tot: -5452.622 | L2 Loss test: 0.001
+Step 25000 | L2 Loss: -9282.521 | KLD Loss: 3.473 | L2 Loss_1: 444.954 | L2 Loss_2: 9727.475 | loss_tot: -4637.815 | L2 Loss test: 0.002
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step25000.ckpt
+Step 25500 | L2 Loss: -9094.838 | KLD Loss: 3.449 | L2 Loss_1: 7.377 | L2 Loss_2: 9102.216 | loss_tot: -4543.926 | L2 Loss test: 0.001
+Step 26000 | L2 Loss: -10159.562 | KLD Loss: 3.418 | L2 Loss_1: 190.943 | L2 Loss_2: 10350.504 | loss_tot: -5077.027 | L2 Loss test: 0.006
+Step 26500 | L2 Loss: -10826.570 | KLD Loss: 3.384 | L2 Loss_1: 26.829 | L2 Loss_2: 10853.398 | loss_tot: -5409.930 | L2 Loss test: 0.001
+Step 27000 | L2 Loss: -10213.120 | KLD Loss: 4.039 | L2 Loss_1: 536.049 | L2 Loss_2: 10749.170 | loss_tot: -5115.111 | L2 Loss test: 0.002
+Step 27500 | L2 Loss: -9176.681 | KLD Loss: 4.196 | L2 Loss_1: 441.711 | L2 Loss_2: 9618.392 | loss_tot: -4584.311 | L2 Loss test: 0.003
+Step 28000 | L2 Loss: -9745.285 | KLD Loss: 4.171 | L2 Loss_1: 58.641 | L2 Loss_2: 9803.926 | loss_tot: -4868.549 | L2 Loss test: 0.002
+Step 28500 | L2 Loss: -9267.094 | KLD Loss: 4.140 | L2 Loss_1: 11.916 | L2 Loss_2: 9279.011 | loss_tot: -4629.328 | L2 Loss test: 0.002
+Step 29000 | L2 Loss: -11105.362 | KLD Loss: 4.110 | L2 Loss_1: 32.647 | L2 Loss_2: 11138.010 | loss_tot: -5548.229 | L2 Loss test: 0.001
+Step 29500 | L2 Loss: -8163.811 | KLD Loss: 4.058 | L2 Loss_1: 806.311 | L2 Loss_2: 8970.121 | loss_tot: -4078.252 | L2 Loss test: 0.008
+Step 30000 | L2 Loss: -9684.502 | KLD Loss: 4.009 | L2 Loss_1: 11.194 | L2 Loss_2: 9695.695 | loss_tot: -4838.347 | L2 Loss test: 0.001
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step30000.ckpt
+Step 30500 | L2 Loss: -8691.513 | KLD Loss: 3.933 | L2 Loss_1: 65.223 | L2 Loss_2: 8756.736 | loss_tot: -4341.123 | L2 Loss test: 0.011
+Step 31000 | L2 Loss: -10133.341 | KLD Loss: 3.873 | L2 Loss_1: 59.359 | L2 Loss_2: 10192.699 | loss_tot: -5062.910 | L2 Loss test: 0.006
+Step 31500 | L2 Loss: -10646.912 | KLD Loss: 3.791 | L2 Loss_1: 80.176 | L2 Loss_2: 10727.088 | loss_tot: -5319.706 | L2 Loss test: 0.003
+Step 32000 | L2 Loss: -9220.258 | KLD Loss: 3.685 | L2 Loss_1: 9.468 | L2 Loss_2: 9229.726 | loss_tot: -4606.492 | L2 Loss test: 0.002
+Step 32500 | L2 Loss: -10163.566 | KLD Loss: 3.553 | L2 Loss_1: 14.006 | L2 Loss_2: 10177.572 | loss_tot: -5078.888 | L2 Loss test: 0.001
+Step 33000 | L2 Loss: -10927.277 | KLD Loss: 3.416 | L2 Loss_1: 226.430 | L2 Loss_2: 11153.707 | loss_tot: -5460.285 | L2 Loss test: 0.001
+Step 33500 | L2 Loss: -11227.785 | KLD Loss: 3.238 | L2 Loss_1: 34.666 | L2 Loss_2: 11262.451 | loss_tot: -5610.119 | L2 Loss test: 0.001
+Step 34000 | L2 Loss: -11243.056 | KLD Loss: 3.040 | L2 Loss_1: 66.733 | L2 Loss_2: 11309.789 | loss_tot: -5617.487 | L2 Loss test: 0.000
+Step 34500 | L2 Loss: -10970.779 | KLD Loss: 2.831 | L2 Loss_1: 12.070 | L2 Loss_2: 10982.850 | loss_tot: -5482.622 | L2 Loss test: 0.000
+Step 35000 | L2 Loss: -10756.640 | KLD Loss: 2.606 | L2 Loss_1: 64.483 | L2 Loss_2: 10821.123 | loss_tot: -5375.716 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step35000.ckpt
+Step 35500 | L2 Loss: -9343.295 | KLD Loss: 2.421 | L2 Loss_1: 13.376 | L2 Loss_2: 9356.672 | loss_tot: -4668.839 | L2 Loss test: 0.001
+Step 36000 | L2 Loss: -10102.104 | KLD Loss: 2.252 | L2 Loss_1: 16.114 | L2 Loss_2: 10118.217 | loss_tot: -5048.170 | L2 Loss test: 0.001
+Step 36500 | L2 Loss: -9725.605 | KLD Loss: 2.064 | L2 Loss_1: 4.654 | L2 Loss_2: 9730.260 | loss_tot: -4860.639 | L2 Loss test: 0.001
+Step 37000 | L2 Loss: -9364.291 | KLD Loss: 1.924 | L2 Loss_1: 4.532 | L2 Loss_2: 9368.822 | loss_tot: -4680.535 | L2 Loss test: 0.001
+Step 37500 | L2 Loss: -10190.009 | KLD Loss: 1.712 | L2 Loss_1: 1289.606 | L2 Loss_2: 11479.615 | loss_tot: -5094.589 | L2 Loss test: 0.000
+Step 38000 | L2 Loss: -10784.453 | KLD Loss: 1.569 | L2 Loss_1: 50.166 | L2 Loss_2: 10834.620 | loss_tot: -5390.421 | L2 Loss test: 0.000
+Step 38500 | L2 Loss: -10910.902 | KLD Loss: 1.315 | L2 Loss_1: 591.504 | L2 Loss_2: 11502.405 | loss_tot: -5454.615 | L2 Loss test: 0.000
+Step 39000 | L2 Loss: -10415.162 | KLD Loss: 1.358 | L2 Loss_1: 24.193 | L2 Loss_2: 10439.356 | loss_tot: -5207.178 | L2 Loss test: 0.000
+Step 39500 | L2 Loss: -9973.523 | KLD Loss: 1.272 | L2 Loss_1: 8.619 | L2 Loss_2: 9982.143 | loss_tot: -4985.190 | L2 Loss test: 0.000
+Step 40000 | L2 Loss: -10996.858 | KLD Loss: 1.274 | L2 Loss_1: 56.157 | L2 Loss_2: 11053.016 | loss_tot: -5497.315 | L2 Loss test: 0.001
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step40000.ckpt
+Step 40500 | L2 Loss: -11440.909 | KLD Loss: 1.091 | L2 Loss_1: 39.810 | L2 Loss_2: 11480.721 | loss_tot: -5718.535 | L2 Loss test: 0.000
+Step 41000 | L2 Loss: -9812.803 | KLD Loss: 1.000 | L2 Loss_1: 1301.893 | L2 Loss_2: 11114.695 | loss_tot: -4905.576 | L2 Loss test: 0.001
+Step 41500 | L2 Loss: -8821.510 | KLD Loss: 0.932 | L2 Loss_1: 3.685 | L2 Loss_2: 8825.194 | loss_tot: -4410.185 | L2 Loss test: 0.000
+Step 42000 | L2 Loss: -10133.273 | KLD Loss: 0.856 | L2 Loss_1: 174.948 | L2 Loss_2: 10308.222 | loss_tot: -5065.910 | L2 Loss test: 0.001
+Step 42500 | L2 Loss: -10034.801 | KLD Loss: 0.823 | L2 Loss_1: 6.894 | L2 Loss_2: 10041.693 | loss_tot: -5016.678 | L2 Loss test: 0.000
+Step 43000 | L2 Loss: -10234.588 | KLD Loss: 0.769 | L2 Loss_1: 3.690 | L2 Loss_2: 10238.279 | loss_tot: -5116.749 | L2 Loss test: 0.000
+Step 43500 | L2 Loss: -10272.436 | KLD Loss: 0.670 | L2 Loss_1: 4.702 | L2 Loss_2: 10277.139 | loss_tot: -5136.136 | L2 Loss test: 0.000
+Step 44000 | L2 Loss: -2839.308 | KLD Loss: 0.560 | L2 Loss_1: 8098.522 | L2 Loss_2: 10937.830 | loss_tot: -1418.041 | L2 Loss test: 0.005
+Step 44500 | L2 Loss: -9932.390 | KLD Loss: 0.585 | L2 Loss_1: 4.497 | L2 Loss_2: 9936.888 | loss_tot: -4965.591 | L2 Loss test: 0.000
+Step 45000 | L2 Loss: -11406.451 | KLD Loss: 0.489 | L2 Loss_1: 177.704 | L2 Loss_2: 11584.156 | loss_tot: -5702.610 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step45000.ckpt
+Step 45500 | L2 Loss: -10042.123 | KLD Loss: 0.540 | L2 Loss_1: 20.163 | L2 Loss_2: 10062.285 | loss_tot: -5020.217 | L2 Loss test: 0.000
+Step 46000 | L2 Loss: -11652.270 | KLD Loss: 0.529 | L2 Loss_1: 124.540 | L2 Loss_2: 11776.809 | loss_tot: -5825.284 | L2 Loss test: 0.000
+Step 46500 | L2 Loss: -10010.238 | KLD Loss: 0.619 | L2 Loss_1: 6.448 | L2 Loss_2: 10016.686 | loss_tot: -5004.222 | L2 Loss test: 0.000
+Step 47000 | L2 Loss: -11021.373 | KLD Loss: 0.680 | L2 Loss_1: 10.943 | L2 Loss_2: 11032.316 | loss_tot: -5510.479 | L2 Loss test: 0.000
+Step 47500 | L2 Loss: -5985.174 | KLD Loss: 0.623 | L2 Loss_1: 5866.952 | L2 Loss_2: 11852.127 | loss_tot: -2990.470 | L2 Loss test: 0.001
+Step 48000 | L2 Loss: -9765.867 | KLD Loss: 0.582 | L2 Loss_1: 8.479 | L2 Loss_2: 9774.345 | loss_tot: -4882.669 | L2 Loss test: 0.000
+Step 48500 | L2 Loss: -11133.232 | KLD Loss: 0.561 | L2 Loss_1: 18.288 | L2 Loss_2: 11151.521 | loss_tot: -5565.487 | L2 Loss test: 0.000
+Step 49000 | L2 Loss: 2198.258 | KLD Loss: 0.464 | L2 Loss_1: 13232.041 | L2 Loss_2: 11033.782 | loss_tot: 1100.189 | L2 Loss test: 0.007
+Step 49500 | L2 Loss: -11522.799 | KLD Loss: 0.670 | L2 Loss_1: 30.802 | L2 Loss_2: 11553.601 | loss_tot: -5761.105 | L2 Loss test: 0.000
+Step 50000 | L2 Loss: -10706.813 | KLD Loss: 0.430 | L2 Loss_1: 8.640 | L2 Loss_2: 10715.453 | loss_tot: -5353.012 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step50000.ckpt
+Step 50500 | L2 Loss: -11652.662 | KLD Loss: 0.300 | L2 Loss_1: 47.970 | L2 Loss_2: 11700.633 | loss_tot: -5826.088 | L2 Loss test: 0.000
+Step 51000 | L2 Loss: -10815.895 | KLD Loss: 0.361 | L2 Loss_1: 425.104 | L2 Loss_2: 11240.998 | loss_tot: -5407.776 | L2 Loss test: 0.000
+Step 51500 | L2 Loss: -11535.449 | KLD Loss: 0.270 | L2 Loss_1: 108.499 | L2 Loss_2: 11643.949 | loss_tot: -5767.242 | L2 Loss test: 0.000
+Step 52000 | L2 Loss: -11360.789 | KLD Loss: 0.219 | L2 Loss_1: 22.297 | L2 Loss_2: 11383.086 | loss_tot: -5680.197 | L2 Loss test: 0.000
+Step 52500 | L2 Loss: -11200.670 | KLD Loss: 0.175 | L2 Loss_1: 7.780 | L2 Loss_2: 11208.451 | loss_tot: -5600.232 | L2 Loss test: 0.000
+Step 53000 | L2 Loss: -11073.789 | KLD Loss: 0.149 | L2 Loss_1: 57.375 | L2 Loss_2: 11131.165 | loss_tot: -5536.840 | L2 Loss test: 0.000
+Step 53500 | L2 Loss: -11829.292 | KLD Loss: 0.121 | L2 Loss_1: 23.201 | L2 Loss_2: 11852.493 | loss_tot: -5914.268 | L2 Loss test: 0.000
+Step 54000 | L2 Loss: -11288.562 | KLD Loss: 0.164 | L2 Loss_1: 28.075 | L2 Loss_2: 11316.637 | loss_tot: -5644.294 | L2 Loss test: 0.000
+Step 54500 | L2 Loss: -11786.640 | KLD Loss: 0.098 | L2 Loss_1: 16.454 | L2 Loss_2: 11803.093 | loss_tot: -5892.678 | L2 Loss test: 0.000
+Step 55000 | L2 Loss: -11734.893 | KLD Loss: 0.212 | L2 Loss_1: 29.849 | L2 Loss_2: 11764.742 | loss_tot: -5868.412 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step55000.ckpt
+Step 55500 | L2 Loss: -11924.592 | KLD Loss: 0.143 | L2 Loss_1: 22.254 | L2 Loss_2: 11946.845 | loss_tot: -5963.423 | L2 Loss test: 0.000
+Step 56000 | L2 Loss: -11948.629 | KLD Loss: 0.156 | L2 Loss_1: 83.553 | L2 Loss_2: 12032.182 | loss_tot: -5974.127 | L2 Loss test: 0.000
+Step 56500 | L2 Loss: -11730.951 | KLD Loss: 0.173 | L2 Loss_1: 219.437 | L2 Loss_2: 11950.389 | loss_tot: -5864.658 | L2 Loss test: 0.000
+Step 57000 | L2 Loss: -10444.847 | KLD Loss: 0.174 | L2 Loss_1: 10.348 | L2 Loss_2: 10455.195 | loss_tot: -5222.750 | L2 Loss test: 0.000
+Step 57500 | L2 Loss: -10895.976 | KLD Loss: 0.191 | L2 Loss_1: 506.431 | L2 Loss_2: 11402.406 | loss_tot: -5447.627 | L2 Loss test: 0.000
+Step 58000 | L2 Loss: -11484.126 | KLD Loss: 0.166 | L2 Loss_1: 442.959 | L2 Loss_2: 11927.085 | loss_tot: -5742.197 | L2 Loss test: 0.000
+Step 58500 | L2 Loss: -12007.427 | KLD Loss: 0.140 | L2 Loss_1: 49.607 | L2 Loss_2: 12057.033 | loss_tot: -6003.377 | L2 Loss test: 0.000
+Step 59000 | L2 Loss: -11930.979 | KLD Loss: 0.171 | L2 Loss_1: 29.661 | L2 Loss_2: 11960.639 | loss_tot: -5964.121 | L2 Loss test: 0.000
+Step 59500 | L2 Loss: -11889.373 | KLD Loss: 0.203 | L2 Loss_1: 44.757 | L2 Loss_2: 11934.130 | loss_tot: -5944.465 | L2 Loss test: 0.000
+Step 60000 | L2 Loss: -11883.199 | KLD Loss: 0.155 | L2 Loss_1: 61.666 | L2 Loss_2: 11944.865 | loss_tot: -5941.396 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step60000.ckpt
+Step 60500 | L2 Loss: -11122.858 | KLD Loss: 0.181 | L2 Loss_1: 7.374 | L2 Loss_2: 11130.232 | loss_tot: -5560.698 | L2 Loss test: 0.000
+Step 61000 | L2 Loss: -11834.135 | KLD Loss: 0.149 | L2 Loss_1: 18.924 | L2 Loss_2: 11853.059 | loss_tot: -5916.818 | L2 Loss test: 0.000
+Step 61500 | L2 Loss: -10987.541 | KLD Loss: 0.161 | L2 Loss_1: 13.984 | L2 Loss_2: 11001.525 | loss_tot: -5493.335 | L2 Loss test: 0.000
+Step 62000 | L2 Loss: -12077.250 | KLD Loss: 0.132 | L2 Loss_1: 38.219 | L2 Loss_2: 12115.469 | loss_tot: -6038.498 | L2 Loss test: 0.000
+Step 62500 | L2 Loss: -12058.021 | KLD Loss: 0.182 | L2 Loss_1: 115.206 | L2 Loss_2: 12173.227 | loss_tot: -6028.892 | L2 Loss test: 0.000
+Step 63000 | L2 Loss: -11138.635 | KLD Loss: 0.120 | L2 Loss_1: 8.728 | L2 Loss_2: 11147.363 | loss_tot: -5568.972 | L2 Loss test: 0.000
+Step 63500 | L2 Loss: -11299.346 | KLD Loss: 0.094 | L2 Loss_1: 8.753 | L2 Loss_2: 11308.099 | loss_tot: -5649.545 | L2 Loss test: 0.000
+Step 64000 | L2 Loss: -11193.379 | KLD Loss: 0.075 | L2 Loss_1: 320.847 | L2 Loss_2: 11514.228 | loss_tot: -5596.186 | L2 Loss test: 0.000
+Step 64500 | L2 Loss: -11829.912 | KLD Loss: 0.110 | L2 Loss_1: 171.798 | L2 Loss_2: 12001.710 | loss_tot: -5914.946 | L2 Loss test: 0.000
+Step 65000 | L2 Loss: -10712.713 | KLD Loss: 0.102 | L2 Loss_1: 69.601 | L2 Loss_2: 10782.313 | loss_tot: -5356.272 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step65000.ckpt
+Step 65500 | L2 Loss: -11725.245 | KLD Loss: 0.078 | L2 Loss_1: 139.007 | L2 Loss_2: 11864.253 | loss_tot: -5862.527 | L2 Loss test: 0.000
+Step 66000 | L2 Loss: -9853.681 | KLD Loss: 0.090 | L2 Loss_1: 307.304 | L2 Loss_2: 10160.984 | loss_tot: -4926.524 | L2 Loss test: 0.001
+Step 66500 | L2 Loss: -11053.722 | KLD Loss: 0.081 | L2 Loss_1: 103.991 | L2 Loss_2: 11157.713 | loss_tot: -5527.009 | L2 Loss test: 0.000
+Step 67000 | L2 Loss: -10808.133 | KLD Loss: 0.083 | L2 Loss_1: 11.072 | L2 Loss_2: 10819.204 | loss_tot: -5404.232 | L2 Loss test: 0.000
+Step 67500 | L2 Loss: -11029.474 | KLD Loss: 0.101 | L2 Loss_1: 9.397 | L2 Loss_2: 11038.870 | loss_tot: -5514.956 | L2 Loss test: 0.000
+Step 68000 | L2 Loss: -9812.763 | KLD Loss: 0.087 | L2 Loss_1: 2482.370 | L2 Loss_2: 12295.131 | loss_tot: -4906.289 | L2 Loss test: 0.000
+Step 68500 | L2 Loss: -12211.623 | KLD Loss: 0.085 | L2 Loss_1: 61.730 | L2 Loss_2: 12273.352 | loss_tot: -6105.745 | L2 Loss test: 0.000
+Step 69000 | L2 Loss: -10697.344 | KLD Loss: 0.053 | L2 Loss_1: 312.528 | L2 Loss_2: 11009.871 | loss_tot: -5348.372 | L2 Loss test: 0.000
+Step 69500 | L2 Loss: -10513.279 | KLD Loss: 0.054 | L2 Loss_1: 14.897 | L2 Loss_2: 10528.176 | loss_tot: -5256.469 | L2 Loss test: 0.000
+Step 70000 | L2 Loss: -11906.133 | KLD Loss: 0.065 | L2 Loss_1: 88.842 | L2 Loss_2: 11994.975 | loss_tot: -5953.021 | L2 Loss test: 0.000
+/scratch_net/bmicdl03/jonatank/logs/ddp/vae/FLAIR20201019-131721/jonatank_lat60_ns50_ps28_modalityFLAIR_step70000.ckpt
+Step 70500 | L2 Loss: -9089.926 | KLD Loss: 0.124 | L2 Loss_1: 25.160 | L2 Loss_2: 9115.086 | loss_tot: -4545.002 | L2 Loss test: 0.002
+Step 71000 | L2 Loss: -11653.379 | KLD Loss: 0.135 | L2 Loss_1: 17.202 | L2 Loss_2: 11670.580 | loss_tot: -5826.165 | L2 Loss test: 0.000
+Step 71500 | L2 Loss: -12152.635 | KLD Loss: 0.108 | L2 Loss_1: 32.581 | L2 Loss_2: 12185.216 | loss_tot: -6076.133 | L2 Loss test: 0.000
+slurmstepd: error: *** JOB 102819 ON biwirender17 CANCELLED AT 2020-10-19T15:49:05 ***
