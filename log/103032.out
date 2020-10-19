@@ -1,0 +1,34 @@
+('Under sample factor: ', 4)
+FLAIR20201016-113444/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing u.s. pattern file
+Read from existing sensmap pattern file
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-19 18:41:32.296851: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:86:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-19 18:41:32.301621: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-19 18:41:43.339394: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-19 18:41:43.339916: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-19 18:41:43.339930: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-19 18:41:43.340132: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11436 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:86:00.0, compute capability: 5.2)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+KCT-INFO: there will be in total 1035 patches.
+it no: 0 f_tot= -1931.4157417850895 f_lik= -3450.3292022414435 f_dc (1e6)= 0.001518913460456354 |g_lik|= 94346.44040752506 |g_dc|= 77.94648062501238
+f_dc (1e6): 0.0015295764389043158  perc: 182.06334150391197
+it no: 2 f_tot= -1841.8991381976186 f_lik= -3371.4755771019345 f_dc (1e6)= 0.0015295764389043158 |g_lik|= 91489.97359636745 |g_dc|= 78.21959956185702
+f_dc (1e6): 0.0015265897719512155  perc: 181.70784271901286
+it no: 4 f_tot= -1869.818584401091 f_lik= -3396.4083563523063 f_dc (1e6)= 0.0015265897719512155 |g_lik|= 92584.64646654327 |g_dc|= 78.14319604293682
+f_dc (1e6): 0.001528447288494805  perc: 181.92894031193015
+it no: 6 f_tot= -1831.0777475450018 f_lik= -3359.5250360398068 f_dc (1e6)= 0.001528447288494805 |g_lik|= 90234.61395733895 |g_dc|= 78.19072294063554
+f_dc (1e6): 0.0015263489474348364  perc: 181.67917771407892
+it no: 8 f_tot= -1865.9510625633036 f_lik= -3392.30000999814 f_dc (1e6)= 0.0015263489474348364 |g_lik|= 92983.49876306484 |g_dc|= 78.13703212779048
+f_dc (1e6): 0.0015285926413189327  perc: 181.94624145503394
+('<<RECONSTRUCTION DONE>>', '     Subject: ', 'file_brain_AXFLAIR_200_6002462.h5', '     MSE = ', (6.255040680687412e-05+0j), '     SSIM = ', -1)

@@ -3,24 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Patcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/Patcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/93281.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/93826.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/94811.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/94812.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/95354.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/95355.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/102894.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runrecon_res_conv.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_vae_original.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train_vae_res_conv.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vae_models/definevae_direct.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_direct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub_runrecon.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_runrecon.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sub_train_vae_res_conv.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/definevae_direct.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vae_models/definevae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon_direct.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon_direct.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon_vae_res_conv.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaerecon_direct.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +111,8 @@
       <workItem from="1602500454882" duration="13617000" />
       <workItem from="1603094106189" duration="10336000" />
       <workItem from="1603114240433" duration="596000" />
-      <workItem from="1603114927020" duration="1473000" />
+      <workItem from="1603114927020" duration="2934000" />
+      <workItem from="1603118574736" duration="10996000" />
     </task>
     <servers />
   </component>

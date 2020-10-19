@@ -22,7 +22,7 @@ from vae_models.definevae_original import definevae
 from utils import UFT, tUFT, tFT, normalize_tensor
 import time
 
-def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0, regtype='TV', usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model='', logdir=''):
+def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parfact=10, num_iter=302, regiter=15, reglmb=0, regtype='TV', directapprox=0, usemeth=1, stepsize=1e-4, mode=[], z_multip=1.0, vae_model='', logdir=''):
      # set parameters
      #==============================================================================
      np.random.seed(seed=1)
@@ -34,7 +34,11 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      # make a network and a patcher to use later
      #==============================================================================
 
-     x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=parfact*nsampl)
+     x_rec, x_inp, funop, grd0, grd_dir, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=parfact*nsampl)
+
+     if directapprox:
+          grd0 = grd_dir
+
      Ptchr=Patcher(imsize=[imsizer,imrizec],patchsize=patchsize,step=int(patchsize/2), nopartials=True, contatedges=True)
 
      nopatches=len(Ptchr.genpatchsizes)
@@ -72,15 +76,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           usc=us.copy()
           usabs=np.abs(us)
 
-          #pickle.dump(usabs, open("/scratch_net/bmicdl03/jonatank/tmp/usabs.p", "wb"))
-          pickle.dump(usabs, open('/scratch_net/bmicdl03/jonatank/tmp/ptchs_usabs.p', 'wb'))
-
           grd0eval = grd0.eval(feed_dict={x_rec: np.tile(usabs,(nsampl,1)), z_std_multip: z_multip }) # ,x_inp: np.tile(usabs,(nsampl,1))
-
-          pickle.dump(grd0eval, open('/scratch_net/bmicdl03/jonatank/tmp/ptchs_usabs_grad.p', 'wb'))
-
-          #pickle.dump(grd0eval, open("/scratch_net/bmicdl03/jonatank/tmp/usabs_grad.p", "wb"))
-          #exit()
 
           #grd0eval: [500x784]
           grd0eval=np.array(np.split(grd0eval,nsampl,axis=0))# [nsampl x parfact x 784]
@@ -174,7 +170,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           grd_lik = (-1) * Ptchr.patches2im(grd_lik)
 
           tmp_img = np.repeat(img_tmp[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
-          tmp_img_sens = sensmaps * tmp_img
+          tmp_img_sens = np.fft.ifftshift(sensmaps) * tmp_img
 
           grd_dconst = dconst_grad(tmp_img_sens)
 
@@ -189,7 +185,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           tmpimg = np.reshape(image, [imsizer,imrizec])
           recs_copy = np.repeat(tmpimg[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
-          dc = dconst(sensmaps * recs_copy)
+          dc = dconst(np.fft.ifftshift(sensmaps) * recs_copy)
 
           ptchs = Ptchr.im2patches(tmpimg)
           ptchs = np.array(ptchs)
@@ -291,7 +287,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
           phim=phim.reshape([imsizer,imrizec])
           magim=magim.reshape([imsizer,imrizec])
 
-          bfestim_re = sensmaps * np.repeat((np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          bfestim_re = np.fft.ifftshift(sensmaps) * np.repeat((np.exp(1j*phim)*magim)[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
           UFT_bfestim = UFT(bfestim_re, uspat) / np.sqrt(imsizer * imrizec)
 
           tUFT_bfestim = tUFT(UFT_bfestim - us_ksp, uspat) * np.sqrt(imsizer * imrizec)
@@ -335,7 +331,7 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
      # alphas=np.ones_like(np.logspace(-4,-4,numiter))*5e-3
 
      # initialize data
-     recs = np.zeros((imsizer*imrizec, num_iter*2), dtype=complex)
+     recs = np.zeros((imsizer*imrizec, num_iter+1), dtype=complex)
 
      m0 = tUFT(us_ksp, uspat) * np.sqrt(imsizer * imrizec)
 
@@ -430,19 +426,19 @@ def vaerecon(us_ksp, sensmaps, uspat, lat_dim=60, patchsize=28, contRec='', parf
 
 
           recs_itr = np.reshape(recs[:, it+1], [imsizer, imrizec])
-          recs_sens = sensmaps * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
+          recs_sens = np.fft.ifftshift(sensmaps) * np.repeat(recs_itr[:, :, np.newaxis], sensmaps.shape[-1], axis=2)
 
           tmp1 = UFT(recs_sens, (1 - uspat)) / np.sqrt(imsizer * imrizec)
           tmp2 = UFT(recs_sens, uspat) / np.sqrt(imsizer * imrizec)
 
           #tmp1 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (1-uspat)  )
           #tmp2 = UFT(np.reshape(recs[:,it+n+2],[imsizer,imrizec]), (uspat)  )
-          tmp3 = us_ksp*uspat
+          tmp3 = us_ksp * uspat
                
           tmp = tmp1 + multip*tmp2 + (1-multip)*tmp3
 
           #recs[:,it+n+3] = tFT(tmp).flatten()
-          recs[:, it+2] = np.sqrt(np.sum(np.square(np.abs(tFT(tmp))), axis=-1)).flatten().copy()
+          recs[:, it+2] = np.sqrt(np.sum(np.square(np.abs(tFT(tmp))), axis=-1)).flatten().copy() * np.sqrt(imsizer * imrizec)
 
           ftot, f_lik, f_dc = feval(recs[:,it+2])
 

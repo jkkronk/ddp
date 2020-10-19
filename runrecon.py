@@ -32,7 +32,7 @@ subj=args.subj
 sli=args.sli
 usfact = args.usfact
 contrun = args.contrun
-direct_approx = args.direct_approx
+direct_approx = args.directapprox
 
 vae_model = 'FLAIR20201016-113444/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt'
 datapath = '/scratch_net/bmicdl03/jonatank/data/'#'/srv/beegfs02/scratch/fastmri_challenge/data/brain/'
@@ -52,9 +52,9 @@ print('Under sample factor: ', usfact)
 R=4
 
 if R<=3:
-     num_iter = 300 # 302
+     num_iter = 10 # 302
 else:
-     num_iter = 400 # 602
+     num_iter = 10 # 602
 
 if contrun == 0:
      contRec = ''
@@ -69,18 +69,33 @@ MRi = MR_kspace_data(dirname=datapath)
 
 ksp_subj = MRi.get_subj(subj)
 print(vae_model)
-ksp = ksp_subj[sli] * 1000
-ksp = np.moveaxis(ksp, 0, -1) # [w,h,coils]
 
-img_sizex = ksp.shape[0]
-img_sizey = ksp.shape[1]
+GT_img = MRi.get_gt(subj)[sli]
+
+
+ksp_subj = np.moveaxis(ksp_subj, 1, -1) # [sli,coils,w,h] --> [sli,w,h,coils]
+
+img_sizex = ksp_subj.shape[1]
+img_sizey = ksp_subj.shape[2]
+
+normalize = False
+if normalize:
+     subj = tFT(ksp_subj) * np.sqrt(img_sizex * img_sizey)
+     subj_rss = np.sqrt(np.sum(np.square(np.abs(subj)), axis=-1)).flatten().copy()  # root-sum-squared
+     maxNorm_rat = 1/subj.max()
+     ksp = ksp_subj[sli] * maxNorm_rat
+     GT_img = GT_img * maxNorm_rat
+else:
+     ksp = ksp_subj[sli] * 1000
+     GT_img = GT_img * 1000
+
 
 try:
      uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
      print("Read from existing u.s. pattern file")
 except:
      USp=US_pattern()
-     uspat = USp.generate_opt_US_pattern_1D(ksp.shape[1:], R=R, max_iter=100, no_of_training_profs=15)
+     uspat = USp.generate_opt_US_pattern_1D(ksp_subj.shape[1:2], R=R, max_iter=100, no_of_training_profs=15)
      np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli), uspat)
      print('Creating new undersampling file')
 
@@ -110,14 +125,14 @@ except:
 
 if not args.skiprecon:
      if direct_approx:
+          print('__DIREKT APPROX__')
           rec_vae, phaseregvals = vaerecon_direct.vaerecon_direct(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz,
                                                     contRec=contRec, parfact=25, num_iter=num_iter, regiter=10,
                                                     reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model,
                                                     logdir=logdir)
      else:
-          rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model, logdir=logdir)
-
-     GT_img = MRi.get_gt(subj)[sli]
+          print('__CLASSIC DDP APPROX__')
+          rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, directapprox=direct_approx, mode=mode, vae_model=vae_model, logdir=logdir)
 
      #lastiter = int((np.floor(rec_vae.shape[-1]/13)-2)*13)
      maprecon = rec_vae[:, -1].reshape((img_sizex, img_sizey)) # this is the final reconstructed image
@@ -129,7 +144,7 @@ if not args.skiprecon:
 
      print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     MSE = ', mse_rec, '     SSIM = ', ssim_rec)
 
-     pickle.dump(rec_vae, open(basefolder+'rec/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter) ,'wb'))
+     pickle.dump(rec_vae, open(basefolder+'rec/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_directapprox_'+str(direct_approx)+'_dcprojiter_'+str(dcprojiter) ,'wb'))
 
 
 
