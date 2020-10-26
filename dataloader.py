@@ -44,7 +44,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_train, 1, replace=False))
                 file = self.datafiles_train[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_train/h5_slices/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_train/slices/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
                 sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
@@ -56,7 +56,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 file = self.datafiles_test[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_val/h5_slices/' + file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_val/slices/' + file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
                 sliceindex = np.sort(np.random.choice(h5data.shape[0], 1, replace=False))
@@ -83,6 +83,11 @@ class MR_image_data:
             for ix in range(batchsize):
                 sliceindex = np.random.randint(0, h5data.shape[0])
 
+                norm_fac = 1 / np.percentile(
+                    np.abs(h5data[sliceindex]).flatten(), 99)
+
+                h5data[sliceindex] = h5data[sliceindex] * norm_fac
+
                 patchindexr = np.random.randint(0, h5data.shape[1] - self.patchsize)
                 patchindexc = np.random.randint(h5data.shape[2] - self.patchsize)
                 # print("KCT-dbg: vol index: "+str(volindex[0])+" sliceindex: "+str(sliceindex[0]))
@@ -98,6 +103,11 @@ class MR_image_data:
 
             for ix in range(batchsize):
                 sliceindex = np.random.randint(0, h5data.shape[0])
+
+                norm_fac = 1 / np.percentile(
+                    np.abs(h5data[sliceindex]).flatten(), 99)
+
+                h5data[sliceindex] = h5data[sliceindex] * norm_fac
 
                 patchindexr = np.random.randint(0, h5data.shape[1] - self.patchsize)
                 patchindexc = np.random.randint(h5data.shape[2] - self.patchsize)
@@ -124,7 +134,7 @@ class MR_image_data:
                 volindex = np.sort(np.random.choice(self.data_size_train, 1, replace=False))
                 subj_file = self.datafiles_train[volindex[0]]
 
-                with h5py.File(self.dirname + '/multicoil_train/h5_slices/' + subj_file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_train/slices/' + subj_file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
                     patchindexr = np.random.randint(0, h5data.shape[0] - self.patchsize)
@@ -138,7 +148,7 @@ class MR_image_data:
             for ix in range(batchsize):
                 volindex = np.sort(np.random.choice(self.data_size_test, 1, replace=False))
                 subj_file = self.datafiles_test[volindex[0]]
-                with h5py.File(self.dirname + '/multicoil_val/h5_slices/' + subj_file, 'r') as fdset:
+                with h5py.File(self.dirname + '/multicoil_val/slices/' + subj_file, 'r') as fdset:
                     h5data = fdset['reconstruction_rss'][:]
 
                     patchindexr = np.random.randint(0, h5data.shape[0] - self.patchsize)

@@ -4,18 +4,18 @@ def FT(x, normalize=False):
     # inp: [nx, ny]
     # out: [nx, ny]
     if normalize:
-        return np.fft.fftshift(np.fft.fft2(x, axes=(0, 1)), axes=(0, 1)) / np.sqrt(252 * 308)
+        return np.fft.fft2(np.fft.fftshift(x, axes=(0, 1)), axes=(0, 1)) / np.sqrt(252 * 308)
     else:
-        return np.fft.fftshift(np.fft.fft2(x, axes=(0, 1)), axes=(0, 1))
+        return np.fft.fft2(np.fft.fftshift(x, axes=(0, 1)), axes=(0, 1))
 
 
 def tFT(x, normalize=False):
     # inp: [nx, ny]
     # out: [nx, ny]
     if normalize:
-        return np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1)) * np.sqrt(252 * 308)
+        return np.fft.ifftshift(np.fft.ifft2(x, axes=(0, 1)), axes=(0, 1)) * np.sqrt(252 * 308)
     else:
-        return np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1))
+        return np.fft.ifftshift(np.fft.ifft2(x, axes=(0, 1)), axes=(0, 1))
 
 def UFT(x, uspat, normalize=False):
     # inp: [nx, ny, coils], [nx, ny]

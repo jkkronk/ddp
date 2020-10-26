@@ -3,15 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/102894.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/US_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/US_pattern.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/102817.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/102819.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/102882.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/103032.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/103038.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/103047.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/98593.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_runrecon.sh" beforeDir="false" afterPath="$PROJECT_DIR$/sub_runrecon.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sub_train_vae_res_conv.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vae_models/definevae_direct.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vae_models/definevae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vae_models/definevae_res_conv.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaerecon_direct.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +116,20 @@
       <workItem from="1603094106189" duration="10336000" />
       <workItem from="1603114240433" duration="596000" />
       <workItem from="1603114927020" duration="2934000" />
-      <workItem from="1603118574736" duration="10996000" />
+      <workItem from="1603118574736" duration="12642000" />
+      <workItem from="1603178335034" duration="19190000" />
+      <workItem from="1603214105785" duration="9007000" />
+      <workItem from="1603264444805" duration="2127000" />
+      <workItem from="1603267324356" duration="1801000" />
+      <workItem from="1603270492064" duration="28802000" />
+      <workItem from="1603350573228" duration="7050000" />
+      <workItem from="1603368675871" duration="8030000" />
+      <workItem from="1603436112613" duration="8448000" />
+      <workItem from="1603452851731" duration="1739000" />
+      <workItem from="1603454934702" duration="5727000" />
+      <workItem from="1603465064492" duration="2488000" />
+      <workItem from="1603708882093" duration="2065000" />
+      <workItem from="1603712135569" duration="6210000" />
     </task>
     <servers />
   </component>
@@ -154,9 +171,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="221" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1601883213307" />
-    <state x="623" y="289" width="672" height="678" key="search.everywhere.popup" timestamp="1601968906847">
-      <screen x="0" y="27" width="1920" height="1173" />
+    <state x="-1297" y="-14" width="672" height="681" key="search.everywhere.popup" timestamp="1603275592417">
+      <screen x="-1920" y="-277" width="1920" height="1177" />
     </state>
+    <state x="-1297" y="-14" width="672" height="681" key="search.everywhere.popup/-1920.-277.1920.1177/0.23.1440.877@-1920.-277.1920.1177" timestamp="1603275592417" />
     <state x="623" y="289" width="672" height="678" key="search.everywhere.popup/0.27.1920.1173/1920.0.1920.1200@0.27.1920.1173" timestamp="1601968906847" />
   </component>
 </project>

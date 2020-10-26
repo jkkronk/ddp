@@ -12,12 +12,12 @@ from datetime import datetime
 import tensorflow as tf
 import h5py
 import argparse
+from skimage.measure import compare_ssim
 
 from US_pattern import US_pattern
 from dataloader import MR_image_data, MR_kspace_data
 import vaerecon
-import vaerecon_direct
-from utils import tFT
+from utils import tFT, FT
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
@@ -34,7 +34,7 @@ usfact = args.usfact
 contrun = args.contrun
 direct_approx = args.directapprox
 
-vae_model = 'FLAIR20201016-113444/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt'
+vae_model = 'FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt'
 datapath = '/scratch_net/bmicdl03/jonatank/data/'#'/srv/beegfs02/scratch/fastmri_challenge/data/brain/'
 sensmap_path = '/scratch_net/bmicdl03/jonatank/data/est_coilmaps_cal/' #'/srv/beegfs02/scratch/fastmri_challenge/data/brain_sensmap_espirit/multicoil_val'
 basefolder = '/scratch_net/bmicdl03/jonatank/logs/ddp/'
@@ -44,17 +44,17 @@ lat_dim=60
 mode = 'MRIunproc'#'Melanie_BFC'
 noise=0
 rmses=np.zeros((1, 1, 4))
-regtype='reg2_proj'
+regtype='reg2_dc'
 reg=0
 dcprojiter=1
 
 print('Under sample factor: ', usfact)
 R=4
-
+n=10
 if R<=3:
-     num_iter = 10 # 302
+     num_iter = 302 # 302
 else:
-     num_iter = 10 # 602
+     num_iter = 102 # 602
 
 if contrun == 0:
      contRec = ''
@@ -62,45 +62,30 @@ else:
      contRec = basefolder+'MAPestimation/rec_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_regtype_'+regtype+'_dcprojiter_'+str(dcprojiter)
      numiter = 302
 
+print(vae_model)
+
 ## CREATE DATA
 
 USp = US_pattern()
 MRi = MR_kspace_data(dirname=datapath)
 
 ksp_subj = MRi.get_subj(subj)
-print(vae_model)
-
-GT_img = MRi.get_gt(subj)[sli]
-
-
+GT_img = MRi.get_gt(subj)
 ksp_subj = np.moveaxis(ksp_subj, 1, -1) # [sli,coils,w,h] --> [sli,w,h,coils]
 
 img_sizex = ksp_subj.shape[1]
 img_sizey = ksp_subj.shape[2]
 
-normalize = False
+normalize = True
 if normalize:
-     subj = tFT(ksp_subj) * np.sqrt(img_sizex * img_sizey)
-     subj_rss = np.sqrt(np.sum(np.square(np.abs(subj)), axis=-1)).flatten().copy()  # root-sum-squared
-     maxNorm_rat = 1/subj.max()
-     ksp = ksp_subj[sli] * maxNorm_rat
-     GT_img = GT_img * maxNorm_rat
+     img_ch = np.abs(np.fft.ifftshift(np.fft.ifft2(ksp_subj[sli], axes=(0, 1)), axes=(0, 1)))
+     norm_fac = 1 / np.percentile(
+          np.sqrt(np.sum(np.square(img_ch), axis=-1)) * np.sqrt(ksp_subj[sli].shape[0] * ksp_subj[sli].shape[1]), 99)
+     ksp = ksp_subj[sli] * norm_fac * np.sqrt(img_sizex * img_sizey)
+     GT_img = GT_img[sli] * norm_fac
 else:
      ksp = ksp_subj[sli] * 1000
-     GT_img = GT_img * 1000
-
-
-try:
-     uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
-     print("Read from existing u.s. pattern file")
-except:
-     USp=US_pattern()
-     uspat = USp.generate_opt_US_pattern_1D(ksp_subj.shape[1:2], R=R, max_iter=100, no_of_training_profs=15)
-     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli), uspat)
-     print('Creating new undersampling file')
-
-uspat_allcoils = np.repeat(uspat[:, :, np.newaxis], ksp.shape[-1], axis=2)
-usksp = uspat_allcoils * ksp
+     GT_img = GT_img[sli] * 1000
 
 try:
      with h5py.File(sensmap_path + 'coilmap_r_' + subj, 'r') as fdset:
@@ -113,38 +98,82 @@ try:
 
      print("Read from existing sensmap pattern file")
 except:
-     sensmap = np.ones_like(usksp)
+     sensmap = np.ones_like(ksp)
      print('Warning sensmaps is not found. Continues with zero sensitivitly maps.')
+
+try:
+     uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
+     print("Read from existing u.s. pattern file")
+except:
+     USp=US_pattern()
+     uspat = USp.generate_opt_US_pattern_1D(ksp.shape[:2], R=R, max_iter=100, no_of_training_profs=15)
+     np.save(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli), uspat)
+     print('Creating new undersampling file')
+
+uspat_allcoils = np.repeat(uspat[:, :, np.newaxis], ksp.shape[-1], axis=2)
+usksp = uspat_allcoils * ksp
 
 #import matplotlib.image as mpimg
 #mpimg.imsave("tmp/ksp.png", 20*np.log(np.abs(ksp[-1])))
+
+sensmaps = np.fft.fftshift(sensmap, axes=(0,1))
+
+# def FT_r(x):
+#      # inp: [nx, ny]
+#      # out: [nx, ny, ns]
+#      return np.fft.fftshift(np.fft.fft2(sensmaps * np.tile(x[:, :, np.newaxis], [1, 1, sensmaps.shape[2]]),
+#                                         axes=(0, 1)), axes=(0, 1))
+#
+#
+# def tFT_r(x):
+#      # inp: [nx, ny, ns]
+#      # out: [nx, ny]
+#      tft_x = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
+#
+#      rss = np.sqrt(np.sum(np.square(np.abs(tft_x)), axis=-1))
+#
+#      rss = rss / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+#
+#      return rss
+#
+# usksp = uspat_allcoils * FT_r(tFT_r(usksp))
 
 ###################
 ###### RECON ######
 ###################
 
 if not args.skiprecon:
-     if direct_approx:
-          print('__DIREKT APPROX__')
-          rec_vae, phaseregvals = vaerecon_direct.vaerecon_direct(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz,
-                                                    contRec=contRec, parfact=25, num_iter=num_iter, regiter=10,
-                                                    reglmb=reg, regtype=regtype, mode=mode, vae_model=vae_model,
-                                                    logdir=logdir)
-     else:
-          print('__CLASSIC DDP APPROX__')
-          rec_vae, phaseregvals = vaerecon.vaerecon(usksp, sensmap, uspat_allcoils, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=reg, regtype=regtype, directapprox=direct_approx, mode=mode, vae_model=vae_model, logdir=logdir)
+     rec_vae, __, __, __ = vaerecon.vaerecon(usksp, sensmaps, n, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=0.0, regtype=regtype, mode=mode, directapprox=direct_approx, vae_model=vae_model, logdir=logdir, directapp=direct_approx)
 
-     #lastiter = int((np.floor(rec_vae.shape[-1]/13)-2)*13)
-     maprecon = rec_vae[:, -1].reshape((img_sizex, img_sizey)) # this is the final reconstructed image
+     gt_pad = np.zeros((img_sizex, img_sizey))
+     gt_pad[160:-160] = GT_img
+     rec_vae[:,-1] = gt_pad.flatten()
 
-     mse_rec = ((maprecon[(img_sizey/2):(-img_sizey/2),:] - GT_img) ** 2).mean()
+     lastiter = int((np.floor(rec_vae.shape[1]/13.)-2)*13)
 
-     ssim_rec = -1
-     #ssim_rec = ssim(maprecon, GT_img, data_range=maprecon.max() - maprecon.min())
+     recon_sli = rec_vae[:, lastiter]
+     fft_recon_sli = np.fft.fftshift(np.fft.fft2(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]]),
+                                 axes=(0, 1)), axes=(0, 1))
+
+     tft_x = np.fft.ifft2(np.fft.ifftshift(fft_recon_sli, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
+     rss = np.sqrt(np.sum(np.square(np.abs(tft_x)), axis=-1)) / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+
+     rec_vae[:, -2] = rss
+
+     pickle.dump(rec_vae, open(
+          basefolder + 'rec/rec' + str(args.contrun) + '_us' + str(R) + '_vol' + subj + '_sli' + str(
+               sli) + '_directapprox_' + str(direct_approx) + '_dcprojiter_' + str(dcprojiter) + '_prioriter_' + str(n),
+          'wb'))
+
+     rec_gt = abs(np.reshape(rec_vae[:,-1], (640, 320)))[160:-160, :]
+     rec_last = abs(np.fft.fftshift(np.reshape(rec_vae[:,-2], (640, 320))))[160:-160, :]
+
+     mse_rec = ((rec_gt - rec_last) ** 2).mean()
+
+     (ssim_rec, diff) = compare_ssim(rec_gt, rec_last, full=True)
 
      print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     MSE = ', mse_rec, '     SSIM = ', ssim_rec)
 
-     pickle.dump(rec_vae, open(basefolder+'rec/rec'+str(args.contrun)+'_us'+str(R)+'_vol'+subj+'_sli'+str(sli)+'_directapprox_'+str(direct_approx)+'_dcprojiter_'+str(dcprojiter) ,'wb'))
 
 
 

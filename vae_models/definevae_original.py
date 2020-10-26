@@ -115,7 +115,6 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      epsilon = tf.random_normal(tf.shape(logVar), name='epsilon')
      z = mu + tf.multiply(std, epsilon)
 
-
      if useMixtureScale:
           # d. build the decoder layers from z1 for mu(z)
           dec_L1 = fact(tf.matmul(z, dec_fc1_weights) + dec_fc1_biases)
