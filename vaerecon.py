@@ -15,34 +15,31 @@ import time
 import os
 import subprocess
 import sys
-import pickle
 from datetime import datetime
 
 from Patcher import Patcher
 from vae_models.definevae_original import definevae
-# from utils import UFT, tUFT, tFT, normalize_tensor
-import time
-
 
 def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, contRec='', parfact=10,
              num_iter=302, rescaled=False, half=False, regiter=15, reglmb=0.1, regtype='reg2_dc', usemeth=1, stepsize=1e-4,
-             optScale=False, mode=[], chunks40=False, Melmodels='', N4BFcorr=False, z_multip=1.0, directapprox=0, vae_model='', logdir='', directapp=0):
+             optScale=False, mode=[], chunks40=False, Melmodels='', N4BFcorr=False, z_multip=1.0, directapprox=0, vae_model='',
+             logdir='', directapp=0, gt=None):
      print('xxxxxxxxxxxxxxxxxxx contRec is ' + contRec)
      print('xxxxxxxxxxxxxxxxxxx parfact is ' + str(parfact))
+     import pickle
 
      # set parameters
      # ==============================================================================
      np.random.seed(seed=1)
 
-     imsizer = us_ksp_r2.shape[0]  # 252#256#252
-     imrizec = us_ksp_r2.shape[1]  # 308#256#308
+     imsizer = us_ksp_r2.shape[0]
+     imrizec = us_ksp_r2.shape[1]
 
      nsampl = 50  # 0
 
      # make a network and a patcher to use later
      # ==============================================================================
 
-     #     x_rec, x_inp, funop, grd0, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip = definevae2(lat_dim=lat_dim, patchsize=patchsize, batchsize=parfact*nsampl, rescaled=rescaled, half=half)
      x_rec, x_inp, funop, grd0, grd_dir, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z = definevae(lat_dim=lat_dim, patchsize=patchsize, mode=mode, vae_model=vae_model, batchsize=parfact*nsampl)
 
      if directapp:
@@ -65,22 +62,22 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
                                              axes=(0, 1)), axes=(0, 1))
 
      # def tFT(x):
-     #       # inp: [nx, ny, ns]
-     #       # out: [nx, ny]
-     #       tft_x = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
+     #        # inp: [nx, ny, ns]
+     #        # out: [nx, ny]
+     #        tft_x = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
      #
-     #       rss = np.sqrt(np.sum(np.square(np.abs(tft_x)), axis=-1))
+     #        rss = np.sqrt(np.sum(np.square(tft_x), axis=2))
      #
-     #       rss = rss / (np.abs(np.sqrt(np.sum(np.square(sensmaps*np.conjugate(sensmaps)),axis=-1))) + 0.00000001)
+     #        rss = rss / (np.sqrt(np.sum(np.square(sensmaps*np.conjugate(sensmaps)),axis=2)) + 0.00000001)
      #
-     #       return rss # root-sum-squared
+     #        return rss # root-sum-squared
 
      def tFT(x):
-          # inp: [nx, ny, ns]
-          # out: [nx, ny]
+           # inp: [nx, ny, ns]
+           # out: [nx, ny]
 
-          temp = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1))
-          return np.sum(temp * np.conjugate(sensmaps), axis=2) / (np.sum(sensmaps * np.conjugate(sensmaps), axis=2)+ 0.00000001)
+           temp = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1))
+           return np.sum(temp * np.conjugate(sensmaps), axis=2) / (np.sum(sensmaps * np.conjugate(sensmaps), axis=2) + 0.00000001)
 
      def UFT(x, uspat):
           # inp: [nx, ny], [nx, ny]
@@ -452,7 +449,6 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
      trpat[:, 120:136] = 1
 
 
-     import pickle
      #     lrphase = np.angle( tUFT(data*trpat[:,:,np.newaxis],uspat) )
      #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lowresphase','rb'))
      #     truephase = pickle.load(open('/home/ktezcan/unnecessary_stuff/truephase','rb'))
@@ -511,8 +507,7 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
      recsarr = []
 
-     for it in range(0, numiter - 1, 13):
-
+     for it in range(0, numiter - 2, 2):
           alpha = alphas[it]
 
           # first do N times magnitude prior iterations
@@ -521,103 +516,46 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           recstmp = recs[:, it].copy()
 
-          for ix in range(n):
-               ftot, f_lik, f_dc = feval(recstmp)
+          ftot, f_lik, f_dc = 0,0,0#feval(recstmp)
 
-               gtot, g_lik, g_dc = geval(recstmp)
+          gtot, g_lik, g_dc = geval(recstmp)
 
-               print("it no: " + str(it + ix) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " +
+          print("it no: " + str(it ) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " +
                      str(f_dc / 1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(
                          np.linalg.norm(g_dc)))
 
-               recstmp = recstmp - alpha * g_lik
-               recs[:, it + ix + 1] = recstmp.copy()
+          recstmp = recstmp - alpha * g_lik
+          recs[:, it + 1] = recstmp.copy()
 
-               if ix == 1:
-                    pickle.dump(g_lik, open(logdir + '_rec_likgrad', 'wb'))
-                    pickle.dump(g_dc, open(logdir + '_rec_dcgrad', 'wb'))
-
-          #pickle.dump(g_lik, open('/scratch_net/bmicdl03/jonatank/logs/ddp/' + 'HPC_rec', 'wb'))
-
-          #          #Now do a  DC projection
-          recs[:, it + 11] = recs[:, it + ix + 1]  # skip the DC projection
-
-          #          #===============================================
-          #          #===============================================
-          #           if not N4BFcorr:
-          #               pass
-          #
-          #           elif N4BFcorr:
-          #
-          #               n4bf_prev = n4bf.copy()
-          #               imgtmp = np.reshape(recs[:,it+10],[imsizer,imrizec]) # biasfree
-          #               imgtmp_bf = imgtmp*n4bf_prev # img with bf
-          #
-          #               n4bf, N4bf_image = N4corrf( imgtmp_bf ) # correct the bf, this correction is supposed to be better now.
-          #
-          #               imgtmp_new = imgtmp*n4bf
-          #
-          #               n4biasfields.append(n4bf)
-          #
-          #               tmp1 = UFT(imgtmp_new, (1-uspat)  )
-          #
-          #               tmp3= data*uspat[:,:,np.newaxis]
-          #
-          #               tmp=tmp1 +  (1-multip)*tmp3 # multip=0 by default
-          #               recs[:,it+11] = (tFT(tmp)/n4bf).flatten()
-          #
-          #               ftot, f_lik, f_dc = feval(recs[:,it+11])
-          #               if N4BFcorr:
-          #                     f_dc = dconst(recs[:,it+11].reshape([imsizer,imrizec])*n4bf)
-          #               print('f_dc (1e6): ' + str(f_dc/1e6) + '  perc: ' + str(100*f_dc/np.linalg.norm(data)**2))
-
-          # now do a phase projection
-          # ===============================================
-          # ===============================================
-          tmpa = np.abs(np.reshape(recs[:, it + 11], [imsizer, imrizec]))
-          tmpp = np.angle(np.reshape(recs[:, it + 11], [imsizer, imrizec]))
-
-          if reglmb == 0:
-                print("skipping phase proj")
-                tmpptv = tmpp.copy().flatten()
-          else:
-               if regtype == 'TV':
-                    tmpptv = tv_proj(tmpp, mu=0.125, lmb=reglmb, IT=regiter).flatten()  # 0.1, 15
-               elif regtype == 'reg2':
-                    tmpptv = reg2_proj(tmpp, alpha=reglmb, niter=100).flatten()  # 0.1, 15
-                    regval = reg2eval(tmpp)
-                    phaseregvals.append(regval)
-                    print("KCT-dbg: pahse reg value is " + str(regval))
-               elif regtype == 'reg2_dc':
-                    tmpptv = reg2_dcproj(tmpp, tmpa, n4bf, alpha_reg=reglmb, alpha_dc=reglmb, niter=100).flatten()
-                    # regval=reg2_dceval(tmpp, tmpa)
-                    # phaseregvals.append(regval)
-                    # print("KCT-dbg: reg2+DC pahse reg value is " + str(regval))
-               elif regtype == 'abs':
-                    tmpptv = np.zeros_like(tmpp).flatten()
-               elif regtype == 'reg2_ls':
-                    tmpptv = reg2_proj_ls(tmpp, niter=regiter).flatten()  # 0.1, 15
-                    regval = reg2eval(tmpp)
-                    phaseregvals.append(regval)
-                    print("KCT-dbg: pahse reg value is " + str(regval))
-               else:
-                    print("hey mistake!!!!!!!!!!")
-
-          recs[:, it + 12] = recs[:, it + 11] #tmpa.flatten() * np.exp(1j * tmpptv.flatten()) #  #
+          if it == 1:
+               pickle.dump(g_lik, open(logdir + '_rec_likgrad', 'wb'))
+               pickle.dump(g_dc, open(logdir + '_rec_dcgrad', 'wb'))
 
           # now do again a data consistency projection
           # ===============================================
           # ===============================================
-          if not N4BFcorr:
-               tmp1 = UFT(np.reshape(recs[:, it + 12], [imsizer, imrizec]), (1 - uspat))
-               tmp2 = UFT(np.reshape(recs[:, it + 12], [imsizer, imrizec]), (uspat))
-               tmp3 = data * uspat[:, :, np.newaxis]
 
-               tmp = tmp1 + multip * tmp2 + (1 - multip) * tmp3
-               recs[:, it + 13] = tFT(tmp).flatten()
+          tmp1 = UFT(np.reshape(recs[:, it + 1], [imsizer, imrizec]), (1 - uspat))
+          tmp2 = UFT(np.reshape(recs[:, it + 1], [imsizer, imrizec]), (uspat))
+          tmp3 = data * uspat[:, :, np.newaxis]
 
-               ftot, f_lik, f_dc = feval(recs[:, it + 1])
-               print('f_dc (1e6): ' + str(f_dc / 1e6) + '  perc: ' + str(100 * f_dc / np.linalg.norm(data) ** 2))
+          tmp = tmp1 + multip * tmp2 + (1 - multip) * tmp3
+          recs[:, it + 2] = tFT(tmp).flatten()
+
+          #ftot, f_lik, f_dc = feval(recs[:, it + 2])
+          #print('f_dc (1e6): ' + str(f_dc / 1e6) + '  perc: ' + str(100 * f_dc / np.linalg.norm(data) ** 2))
+
+          # MSE CHECK
+          recon_sli = np.reshape(recs[:, it + 2], (imsizer, imrizec))
+          gt = np.reshape(gt, (imsizer, imrizec))
+
+          rss = np.sqrt(
+               np.sum(np.square(np.abs(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]])
+                                       * np.conjugate(sensmaps))), axis=-1)) \
+                / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+
+          nmse = np.sqrt(((np.fft.fftshift(rss) - gt) ** 2).mean()) / np.sqrt(((gt) ** 2).mean())
+          print('NMSE: ', nmse)
 
      return recs, 0, phaseregvals, n4biasfields
 

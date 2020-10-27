@@ -108,7 +108,7 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      mu = tf.matmul(flat_relu3, mu_weights) + mu_biases
      mu = tf.tile(mu, (nzsamp, 1)) # replicate for number of z's you want to draw
      logVar = tf.matmul(flat_relu3, logVar_weights) + logVar_biases
-     logVar = tf.tile(logVar,  (nzsamp, 1))# replicate for number of z's you want to draw
+     logVar = tf.tile(logVar,  (nzsamp, 1)) # replicate for number of z's you want to draw
      std = tf.exp(0.5 * logVar)
 
      # c. draw an epsilon and get z
@@ -121,7 +121,7 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      else:
           pass
 
-     dec_L1_reshaped = tf.reshape(dec_L1 ,[batch_size,int(ndims),int(ndims),48])
+     dec_L1_reshaped = tf.reshape(dec_L1, [batch_size,int(ndims),int(ndims),48])
 
      dec_conv1 = tf.nn.conv2d(dec_L1_reshaped, dec_conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
      dec_relu1 = fact(tf.nn.bias_add(dec_conv1, dec_conv1_biases))
@@ -310,6 +310,13 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
 
      grd0 = grd[0]
      grd20 = grd2[0]
+
+     samples = 10
+     grd_dir_list = []
+     for i in range(samples):
+          grd_dir_list.append(tf.multiply((y_out - x_rec), y_out_prec))
+
+     grd_dir_ = sum(grd_dir_list) / float(len(grd_dir_list))
 
      grd_dir = tf.multiply((y_out - x_rec), y_out_prec)
 

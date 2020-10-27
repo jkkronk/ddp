@@ -21,10 +21,10 @@ from utils import tFT, FT
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
-parser.add_argument('--sli', type=int, default=1)
+parser.add_argument('--sli', type=int, default=2)
 parser.add_argument('--usfact', type=int, default=4)
-parser.add_argument('--contrun', type=int, default=0) 
-parser.add_argument('--skiprecon', type=int, default=1) 
+parser.add_argument('--contrun', type=int, default=0)
+parser.add_argument('--skiprecon', type=int, default=1)
 parser.add_argument('--directapprox', type=int, default=0)
 
 args=parser.parse_args()
@@ -52,9 +52,9 @@ print('Under sample factor: ', usfact)
 R=4
 n=10
 if R<=3:
-     num_iter = 302 # 302
+     num_iter = 100 # 302
 else:
-     num_iter = 102 # 602
+     num_iter = 100 # 602
 
 if contrun == 0:
      contRec = ''
@@ -87,6 +87,9 @@ else:
      ksp = ksp_subj[sli] * 1000
      GT_img = GT_img[sli] * 1000
 
+gt_pad = np.zeros((img_sizex, img_sizey))
+gt_pad[160:-160] = GT_img
+
 try:
      with h5py.File(sensmap_path + 'coilmap_r_' + subj, 'r') as fdset:
           coilmap_r = fdset['coilmaps'][sli]  # (number of slices, number of coils, height, width)
@@ -100,6 +103,8 @@ try:
 except:
      sensmap = np.ones_like(ksp)
      print('Warning sensmaps is not found. Continues with zero sensitivitly maps.')
+
+sensmaps = np.fft.fftshift(sensmap, axes=(0,1))
 
 try:
      uspat = np.load(basefolder+'uspats/uspat_us'+str(R)+'_vol'+subj+'_sli'+str(sli) + '.npy')
@@ -116,63 +121,45 @@ usksp = uspat_allcoils * ksp
 #import matplotlib.image as mpimg
 #mpimg.imsave("tmp/ksp.png", 20*np.log(np.abs(ksp[-1])))
 
-sensmaps = np.fft.fftshift(sensmap, axes=(0,1))
+tmp = np.fft.ifft2(np.fft.ifftshift(usksp, axes=(0, 1)), axes=(0, 1))
+rss = np.sqrt(np.sum(np.square(np.abs(tmp)), axis=2))
 
-# def FT_r(x):
-#      # inp: [nx, ny]
-#      # out: [nx, ny, ns]
-#      return np.fft.fftshift(np.fft.fft2(sensmaps * np.tile(x[:, :, np.newaxis], [1, 1, sensmaps.shape[2]]),
-#                                         axes=(0, 1)), axes=(0, 1))
-#
-#
-# def tFT_r(x):
-#      # inp: [nx, ny, ns]
-#      # out: [nx, ny]
-#      tft_x = np.fft.ifft2(np.fft.ifftshift(x, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
-#
-#      rss = np.sqrt(np.sum(np.square(np.abs(tft_x)), axis=-1))
-#
-#      rss = rss / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
-#
-#      return rss
-#
-# usksp = uspat_allcoils * FT_r(tFT_r(usksp))
+pickle.dump(rss, open(logdir + '_zerofilled', 'wb'))
 
 ###################
 ###### RECON ######
 ###################
 
 if not args.skiprecon:
-     rec_vae, __, __, __ = vaerecon.vaerecon(usksp, sensmaps, n, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=0.0, regtype=regtype, mode=mode, directapprox=direct_approx, vae_model=vae_model, logdir=logdir, directapp=direct_approx)
+     rec_vae, __, __, __ = vaerecon.vaerecon(usksp, sensmaps, n, lat_dim=lat_dim, patchsize=patch_sz, contRec=contRec, parfact=25, num_iter=num_iter, regiter=10, reglmb=0.0, regtype=regtype, mode=mode, directapprox=direct_approx, vae_model=vae_model, logdir=logdir, directapp=direct_approx, gt=gt_pad.flatten())
 
-     gt_pad = np.zeros((img_sizex, img_sizey))
-     gt_pad[160:-160] = GT_img
      rec_vae[:,-1] = gt_pad.flatten()
 
-     lastiter = int((np.floor(rec_vae.shape[1]/13.)-2)*13)
+     lastiter = int((np.floor(rec_vae.shape[1]/2.)-2)*2)
 
-     recon_sli = rec_vae[:, lastiter]
-     fft_recon_sli = np.fft.fftshift(np.fft.fft2(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]]),
-                                 axes=(0, 1)), axes=(0, 1))
+     recon_sli = np.reshape(rec_vae[:, lastiter], (img_sizex, img_sizey))
 
-     tft_x = np.fft.ifft2(np.fft.ifftshift(fft_recon_sli, axes=(0, 1)), axes=(0, 1)) * np.conjugate(sensmaps)
-     rss = np.sqrt(np.sum(np.square(np.abs(tft_x)), axis=-1)) / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+     rss = np.sqrt(np.sum(np.square(np.abs(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]])
+                                           * np.conjugate(sensmaps))), axis=-1)) \
+           / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
 
-     rec_vae[:, -2] = rss
+     rec_vae[:, -2] = np.reshape(rss, [-1])
 
      pickle.dump(rec_vae, open(
           basefolder + 'rec/rec' + str(args.contrun) + '_us' + str(R) + '_vol' + subj + '_sli' + str(
-               sli) + '_directapprox_' + str(direct_approx) + '_dcprojiter_' + str(dcprojiter) + '_prioriter_' + str(n),
+               sli) + '_directapprox_' + str(direct_approx) + '_602',
           'wb'))
 
-     rec_gt = abs(np.reshape(rec_vae[:,-1], (640, 320)))[160:-160, :]
-     rec_last = abs(np.fft.fftshift(np.reshape(rec_vae[:,-2], (640, 320))))[160:-160, :]
+     rec_gt = abs(np.reshape(rec_vae[:,-1], (img_sizex, img_sizey)))[img_sizey/2:-img_sizey/2, :]
+     rec_last = abs(np.fft.fftshift(np.reshape(rec_vae[:,-2], (img_sizex, img_sizey))))[img_sizey/2:-img_sizey/2, :]
 
-     mse_rec = ((rec_gt - rec_last) ** 2).mean()
+     nmse = np.sqrt(((rec_gt - rec_last) ** 2).mean()) / np.sqrt(((rec_gt) ** 2).mean())
+
+     rms = np.sqrt(((rec_gt - rec_last) ** 2).mean())
 
      (ssim_rec, diff) = compare_ssim(rec_gt, rec_last, full=True)
 
-     print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     MSE = ', mse_rec, '     SSIM = ', ssim_rec)
+     print('<<RECONSTRUCTION DONE>>', '     Subject: ', subj, '     NMSE = ', nmse, '      RMS = ', rms ,'     SSIM = ', ssim_rec)
 
 
 

@@ -3,17 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="8362c8a2-f606-42f8-af22-6b2ac4c9a3d0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/US_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/US_pattern.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/102817.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/102819.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/102882.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/103032.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/103038.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/103047.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/98593.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/103419.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/115453.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/115454.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/116227.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/116228.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/116231.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/119033.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/120710.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/120722.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/runrecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/runrecon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vae_models/definevae_original.py" beforeDir="false" afterPath="$PROJECT_DIR$/vae_models/definevae_original.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vaerecon.py" beforeDir="false" afterPath="$PROJECT_DIR$/vaerecon.py" afterDir="false" />
     </list>
@@ -129,7 +128,9 @@
       <workItem from="1603454934702" duration="5727000" />
       <workItem from="1603465064492" duration="2488000" />
       <workItem from="1603708882093" duration="2065000" />
-      <workItem from="1603712135569" duration="6210000" />
+      <workItem from="1603712135569" duration="7053000" />
+      <workItem from="1603719979081" duration="19212000" />
+      <workItem from="1603788773250" duration="18930000" />
     </task>
     <servers />
   </component>
