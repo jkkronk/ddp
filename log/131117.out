@@ -1,0 +1,3 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+slurmstepd: error: *** JOB 131117 ON biwirender12 CANCELLED AT 2020-10-29T17:53:13 ***

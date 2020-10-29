@@ -1,0 +1,51 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing sensmap pattern file
+Read from existing u.s. pattern file
+xxxxxxxxxxxxxxxxxxx contRec is 
+xxxxxxxxxxxxxxxxxxx parfact is 25
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-29 18:08:57.682517: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-29 18:08:57.880901: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:08:00.0
+totalMemory: 10.73GiB freeMemory: 10.57GiB
+2020-10-29 18:08:57.880964: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-29 18:08:58.302532: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-29 18:08:58.302576: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-29 18:08:58.302582: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-29 18:08:58.302825: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10203 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:08:00.0, compute capability: 7.5)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+KCT-INFO: there will be in total 1035 patches.
+contRec is 
+it no: 0 f_tot= 0 f_lik= 0 TV norm= 2867.049881487346 f_dc (1e6)= 0.0 |g_lik|= 28077.180531339913 |g_dc|= 13.189990624047814 |g_tv|= 356.7851359183738
+NMSE:  0.15669391372291522
+it no: 2 f_tot= 0 f_lik= 0 TV norm= 3258.586543058841 f_dc (1e6)= 0.0 |g_lik|= 16307.89091055916 |g_dc|= 6.83640825002481 |g_tv|= 376.5418705883362
+NMSE:  0.15162604674934094
+it no: 4 f_tot= 0 f_lik= 0 TV norm= 3460.4076612276126 f_dc (1e6)= 0.0 |g_lik|= 11880.297287753452 |g_dc|= 4.302058766725901 |g_tv|= 384.47999532820705
+NMSE:  0.14904434973776756
+it no: 6 f_tot= 0 f_lik= 0 TV norm= 3580.7447315759864 f_dc (1e6)= 0.0 |g_lik|= 10744.36455091283 |g_dc|= 3.0619606256563454 |g_tv|= 388.5241759163291
+NMSE:  0.14741722449909456
+it no: 8 f_tot= 0 f_lik= 0 TV norm= 3651.1919007832134 f_dc (1e6)= 0.0 |g_lik|= 9937.65170549161 |g_dc|= 2.3835520589341663 |g_tv|= 391.40332977347396
+NMSE:  0.14625920889491412
+it no: 10 f_tot= 0 f_lik= 0 TV norm= 3706.4668244444174 f_dc (1e6)= 0.0 |g_lik|= 9597.461769141131 |g_dc|= 1.973541827001865 |g_tv|= 392.64126324217773
+NMSE:  0.1453602360979282
+it no: 12 f_tot= 0 f_lik= 0 TV norm= 3739.3165976964533 f_dc (1e6)= 0.0 |g_lik|= 8858.181562247699 |g_dc|= 1.7055522468522677 |g_tv|= 393.6631726428508
+NMSE:  0.14461755714878935
+it no: 14 f_tot= 0 f_lik= 0 TV norm= 3768.407736198789 f_dc (1e6)= 0.0 |g_lik|= 8467.885588371664 |g_dc|= 1.51414632376569 |g_tv|= 394.7130364964957
+NMSE:  0.14402296659521852
+it no: 16 f_tot= 0 f_lik= 0 TV norm= 3791.3003699410783 f_dc (1e6)= 0.0 |g_lik|= 8290.41921859412 |g_dc|= 1.3759806210050336 |g_tv|= 395.2361611730625
+NMSE:  0.1434908422936459
+it no: 18 f_tot= 0 f_lik= 0 TV norm= 3811.0228117728366 f_dc (1e6)= 0.0 |g_lik|= 8223.415621186632 |g_dc|= 1.2688372978398972 |g_tv|= 395.6728041719778
+NMSE:  0.1430509976209774
+it no: 20 f_tot= 0 f_lik= 0 TV norm= 3830.990183034835 f_dc (1e6)= 0.0 |g_lik|= 8430.902325816563 |g_dc|= 1.1860308874192682 |g_tv|= 396.1910954342379
+NMSE:  0.1426548953142133
+it no: 22 f_tot= 0 f_lik= 0 TV norm= 3844.5400280618055 f_dc (1e6)= 0.0 |g_lik|= 8196.409398405958 |g_dc|= 1.1212355131958556 |g_tv|= 396.69283734084524
+NMSE:  0.1423066283914693

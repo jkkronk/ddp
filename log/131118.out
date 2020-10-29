@@ -1,0 +1,127 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing sensmap pattern file
+Read from existing u.s. pattern file
+xxxxxxxxxxxxxxxxxxx contRec is 
+xxxxxxxxxxxxxxxxxxx parfact is 25
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-29 17:53:55.865806: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-29 17:53:56.067579: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:08:00.0
+totalMemory: 10.73GiB freeMemory: 10.57GiB
+2020-10-29 17:53:56.067624: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-29 17:54:05.379180: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-29 17:54:05.379227: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-29 17:54:05.379237: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-29 17:54:05.379485: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10203 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:08:00.0, compute capability: 7.5)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+_____DIRECT APPROX_____
+KCT-INFO: there will be in total 1035 patches.
+contRec is 
+it no: 0 f_tot= 0 f_lik= 0 TV norm= 2743.989441293004 f_dc (1e6)= 0.0 |g_lik|= 16203.470646876121 |g_dc|= 13.189990624047814 |g_tv|= 356.6736181055336
+NMSE:  0.15680748040048245
+it no: 2 f_tot= 0 f_lik= 0 TV norm= 3143.5231307350273 f_dc (1e6)= 0.0 |g_lik|= 11144.955170554224 |g_dc|= 6.809400079279542 |g_tv|= 376.4866687657958
+NMSE:  0.15187407250668522
+it no: 4 f_tot= 0 f_lik= 0 TV norm= 3359.737775421 f_dc (1e6)= 0.0 |g_lik|= 9896.01169561395 |g_dc|= 4.267054524687283 |g_tv|= 385.20987011242903
+NMSE:  0.14936085174758265
+it no: 6 f_tot= 0 f_lik= 0 TV norm= 3478.5734829820217 f_dc (1e6)= 0.0 |g_lik|= 9097.7929010247 |g_dc|= 3.0354336844060374 |g_tv|= 389.2710389050394
+NMSE:  0.14781818327226665
+it no: 8 f_tot= 0 f_lik= 0 TV norm= 3555.1906798541995 f_dc (1e6)= 0.0 |g_lik|= 8453.298096174518 |g_dc|= 2.364976576930824 |g_tv|= 391.5715735744898
+NMSE:  0.14669687581752996
+it no: 10 f_tot= 0 f_lik= 0 TV norm= 3606.7967750813837 f_dc (1e6)= 0.0 |g_lik|= 8011.525266903841 |g_dc|= 1.961578758501394 |g_tv|= 392.8929645483278
+NMSE:  0.14584517211246403
+it no: 12 f_tot= 0 f_lik= 0 TV norm= 3645.604198412798 f_dc (1e6)= 0.0 |g_lik|= 7523.9219996751835 |g_dc|= 1.697095115291363 |g_tv|= 394.2656822527576
+NMSE:  0.14514470846841285
+it no: 14 f_tot= 0 f_lik= 0 TV norm= 3674.423782499661 f_dc (1e6)= 0.0 |g_lik|= 7418.126094791157 |g_dc|= 1.5099994457819899 |g_tv|= 395.09576509202486
+NMSE:  0.14456011220826
+it no: 16 f_tot= 0 f_lik= 0 TV norm= 3698.0577291423765 f_dc (1e6)= 0.0 |g_lik|= 7124.584728334776 |g_dc|= 1.3744297735172852 |g_tv|= 396.11687144308894
+NMSE:  0.1440507974786946
+it no: 18 f_tot= 0 f_lik= 0 TV norm= 3718.394019373518 f_dc (1e6)= 0.0 |g_lik|= 7050.978445377427 |g_dc|= 1.2687716440666295 |g_tv|= 396.5563109880258
+NMSE:  0.14362316508299655
+it no: 20 f_tot= 0 f_lik= 0 TV norm= 3736.244310378376 f_dc (1e6)= 0.0 |g_lik|= 6972.0169254481 |g_dc|= 1.187124106481154 |g_tv|= 397.25245106526853
+NMSE:  0.14324442271171609
+it no: 22 f_tot= 0 f_lik= 0 TV norm= 3750.9077752240105 f_dc (1e6)= 0.0 |g_lik|= 6865.426895657792 |g_dc|= 1.1216720687849218 |g_tv|= 397.7749813002826
+NMSE:  0.1429062525220499
+it no: 24 f_tot= 0 f_lik= 0 TV norm= 3764.593033797109 f_dc (1e6)= 0.0 |g_lik|= 6701.449417059996 |g_dc|= 1.067488258760099 |g_tv|= 398.16867572963156
+NMSE:  0.1426026932412156
+it no: 26 f_tot= 0 f_lik= 0 TV norm= 3776.0241752194875 f_dc (1e6)= 0.0 |g_lik|= 6570.504711412411 |g_dc|= 1.0216395845871107 |g_tv|= 398.2198966071226
+NMSE:  0.14232542041397955
+it no: 28 f_tot= 0 f_lik= 0 TV norm= 3786.040038008985 f_dc (1e6)= 0.0 |g_lik|= 6530.277971523593 |g_dc|= 0.983592458697149 |g_tv|= 398.62591446495213
+NMSE:  0.14207433596605887
+it no: 30 f_tot= 0 f_lik= 0 TV norm= 3794.6617408284637 f_dc (1e6)= 0.0 |g_lik|= 6561.815087839695 |g_dc|= 0.9497806966315925 |g_tv|= 398.7289535059566
+NMSE:  0.1418485384846606
+it no: 32 f_tot= 0 f_lik= 0 TV norm= 3803.188865865915 f_dc (1e6)= 0.0 |g_lik|= 6312.312946729801 |g_dc|= 0.9236200223614706 |g_tv|= 398.87269286376795
+NMSE:  0.14164005081435363
+it no: 34 f_tot= 0 f_lik= 0 TV norm= 3810.3907819768456 f_dc (1e6)= 0.0 |g_lik|= 6356.291105129228 |g_dc|= 0.8972264879712878 |g_tv|= 399.07074577448685
+NMSE:  0.14144786246848556
+it no: 36 f_tot= 0 f_lik= 0 TV norm= 3816.636164579575 f_dc (1e6)= 0.0 |g_lik|= 6260.529787230848 |g_dc|= 0.8756280759908034 |g_tv|= 399.0712217193546
+NMSE:  0.14126738807095715
+it no: 38 f_tot= 0 f_lik= 0 TV norm= 3823.130575614048 f_dc (1e6)= 0.0 |g_lik|= 6162.415682891224 |g_dc|= 0.8555809438612055 |g_tv|= 399.1840809232838
+NMSE:  0.1411034922431986
+it no: 40 f_tot= 0 f_lik= 0 TV norm= 3828.5792543633324 f_dc (1e6)= 0.0 |g_lik|= 6162.021941417629 |g_dc|= 0.8385536694222532 |g_tv|= 399.1600630546431
+NMSE:  0.14094598231187758
+it no: 42 f_tot= 0 f_lik= 0 TV norm= 3833.922326992673 f_dc (1e6)= 0.0 |g_lik|= 6210.424754928514 |g_dc|= 0.8221437356996633 |g_tv|= 399.36018888433244
+NMSE:  0.1408043361858697
+it no: 44 f_tot= 0 f_lik= 0 TV norm= 3838.691633694979 f_dc (1e6)= 0.0 |g_lik|= 6122.9667111624985 |g_dc|= 0.8086717126036405 |g_tv|= 399.2069919939205
+NMSE:  0.14067103716651233
+it no: 46 f_tot= 0 f_lik= 0 TV norm= 3843.7604170811264 f_dc (1e6)= 0.0 |g_lik|= 6131.599594151205 |g_dc|= 0.7953226775832871 |g_tv|= 399.43078803099553
+NMSE:  0.14055012291392643
+it no: 48 f_tot= 0 f_lik= 0 TV norm= 3847.243370083493 f_dc (1e6)= 0.0 |g_lik|= 5947.10852549627 |g_dc|= 0.7842651638563721 |g_tv|= 399.36935997027786
+NMSE:  0.14042650169314466
+it no: 50 f_tot= 0 f_lik= 0 TV norm= 3851.0581004455207 f_dc (1e6)= 0.0 |g_lik|= 5895.64166878991 |g_dc|= 0.7724516301073242 |g_tv|= 399.4750664807351
+NMSE:  0.14031466320612404
+it no: 52 f_tot= 0 f_lik= 0 TV norm= 3854.339796327737 f_dc (1e6)= 0.0 |g_lik|= 5867.426204733968 |g_dc|= 0.7619719726563112 |g_tv|= 399.3536033599998
+NMSE:  0.14020787330891682
+it no: 54 f_tot= 0 f_lik= 0 TV norm= 3857.5258464770177 f_dc (1e6)= 0.0 |g_lik|= 5904.279113047829 |g_dc|= 0.7527272646258543 |g_tv|= 399.5819312667218
+NMSE:  0.14011071124546837
+it no: 56 f_tot= 0 f_lik= 0 TV norm= 3860.006225920663 f_dc (1e6)= 0.0 |g_lik|= 5942.340024638784 |g_dc|= 0.7442491117181791 |g_tv|= 399.50306063484027
+NMSE:  0.14001396455194368
+it no: 58 f_tot= 0 f_lik= 0 TV norm= 3863.24230859319 f_dc (1e6)= 0.0 |g_lik|= 5789.302741987183 |g_dc|= 0.7373615591337489 |g_tv|= 399.5195022294099
+NMSE:  0.13992936392405858
+it no: 60 f_tot= 0 f_lik= 0 TV norm= 3866.044413273178 f_dc (1e6)= 0.0 |g_lik|= 5756.046382012399 |g_dc|= 0.7298009515230801 |g_tv|= 399.457503012403
+NMSE:  0.13984396783430458
+it no: 62 f_tot= 0 f_lik= 0 TV norm= 3868.7758121425986 f_dc (1e6)= 0.0 |g_lik|= 5724.732860703881 |g_dc|= 0.7226729616020935 |g_tv|= 399.5171757991648
+NMSE:  0.1397631773144757
+it no: 64 f_tot= 0 f_lik= 0 TV norm= 3871.467185844019 f_dc (1e6)= 0.0 |g_lik|= 5752.621710013933 |g_dc|= 0.7156248239781057 |g_tv|= 399.5128417751205
+NMSE:  0.13969084266579385
+it no: 66 f_tot= 0 f_lik= 0 TV norm= 3874.325698957596 f_dc (1e6)= 0.0 |g_lik|= 5677.870666103724 |g_dc|= 0.7103515108621594 |g_tv|= 399.5221098258472
+NMSE:  0.13962107948554064
+it no: 68 f_tot= 0 f_lik= 0 TV norm= 3876.9370721521404 f_dc (1e6)= 0.0 |g_lik|= 5734.564659530139 |g_dc|= 0.7042717696534131 |g_tv|= 399.55953263111815
+NMSE:  0.13955133099294556
+it no: 70 f_tot= 0 f_lik= 0 TV norm= 3879.202882586863 f_dc (1e6)= 0.0 |g_lik|= 5685.726582163861 |g_dc|= 0.699235207103601 |g_tv|= 399.62006064288204
+NMSE:  0.1394891034680319
+it no: 72 f_tot= 0 f_lik= 0 TV norm= 3881.727855954031 f_dc (1e6)= 0.0 |g_lik|= 5676.590854821717 |g_dc|= 0.6937181718378058 |g_tv|= 399.6082448767831
+NMSE:  0.13942641391209473
+it no: 74 f_tot= 0 f_lik= 0 TV norm= 3883.4777675805735 f_dc (1e6)= 0.0 |g_lik|= 5706.702363579784 |g_dc|= 0.6885990938464266 |g_tv|= 399.62414948294895
+NMSE:  0.13936526204861932
+it no: 76 f_tot= 0 f_lik= 0 TV norm= 3885.4827370867642 f_dc (1e6)= 0.0 |g_lik|= 5707.857569598046 |g_dc|= 0.6840751694241688 |g_tv|= 399.62164676860283
+NMSE:  0.13931100251934445
+it no: 78 f_tot= 0 f_lik= 0 TV norm= 3887.727357474576 f_dc (1e6)= 0.0 |g_lik|= 5573.513460657339 |g_dc|= 0.6809756186681974 |g_tv|= 399.70729209268075
+NMSE:  0.13925494129182672
+it no: 80 f_tot= 0 f_lik= 0 TV norm= 3889.771070814135 f_dc (1e6)= 0.0 |g_lik|= 5624.708377983738 |g_dc|= 0.6756121937862787 |g_tv|= 399.7773019141867
+NMSE:  0.13920725955669852
+it no: 82 f_tot= 0 f_lik= 0 TV norm= 3891.5941378368952 f_dc (1e6)= 0.0 |g_lik|= 5597.860378243406 |g_dc|= 0.6723326228208459 |g_tv|= 399.74184658816233
+NMSE:  0.13915701971985164
+it no: 84 f_tot= 0 f_lik= 0 TV norm= 3893.553474528226 f_dc (1e6)= 0.0 |g_lik|= 5603.194959695522 |g_dc|= 0.6679827255137786 |g_tv|= 399.77884033709546
+NMSE:  0.13911275086369634
+it no: 86 f_tot= 0 f_lik= 0 TV norm= 3895.2686291062587 f_dc (1e6)= 0.0 |g_lik|= 5621.696343415122 |g_dc|= 0.6646803349774971 |g_tv|= 399.79104489982063
+NMSE:  0.13906545874459275
+it no: 88 f_tot= 0 f_lik= 0 TV norm= 3896.6010015907054 f_dc (1e6)= 0.0 |g_lik|= 5606.320117310445 |g_dc|= 0.6612865052090192 |g_tv|= 399.7917973782217
+NMSE:  0.13902526821807534
+it no: 90 f_tot= 0 f_lik= 0 TV norm= 3898.1137383028135 f_dc (1e6)= 0.0 |g_lik|= 5577.1321194928905 |g_dc|= 0.6587016233662295 |g_tv|= 399.7550793441318
+NMSE:  0.13898339777175928
+it no: 92 f_tot= 0 f_lik= 0 TV norm= 3899.506712975236 f_dc (1e6)= 0.0 |g_lik|= 5598.03786933466 |g_dc|= 0.6552667285623658 |g_tv|= 399.7447066127595
+NMSE:  0.1389468795819887
+it no: 94 f_tot= 0 f_lik= 0 TV norm= 3901.046267177601 f_dc (1e6)= 0.0 |g_lik|= 5563.302763624417 |g_dc|= 0.6525926409435738 |g_tv|= 399.6917489449382
+NMSE:  0.13891112973687147
+it no: 96 f_tot= 0 f_lik= 0 TV norm= 3902.5228940516413 f_dc (1e6)= 0.0 |g_lik|= 5533.187347575432 |g_dc|= 0.6497846521507131 |g_tv|= 399.6861948770817
+NMSE:  0.13887772542261567
+('<<RECONSTRUCTION DONE>>', '     Subject: ', 'file_brain_AXFLAIR_200_6002462.h5', '     NMSE = ', 0.13857225804397721, '      RMS = ', 0.06684576207846381, '     SSIM = ', 0.5718300256493385)

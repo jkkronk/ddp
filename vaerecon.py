@@ -16,6 +16,7 @@ import os
 import subprocess
 import sys
 from datetime import datetime
+import tensorflow as tf
 
 from Patcher import Patcher
 from vae_models.definevae_original import definevae
@@ -125,6 +126,8 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           # grd0eval: [500x784]
           grd0eval = np.array(np.split(grd0eval, nsampl, axis=0))  # [nsampl x parfact x 784]
+
+          grd0_var = np.std(grd0eval, axis=0)
           grd0m = np.mean(grd0eval, axis=0)  # [parfact,784]
 
           #grd0m = usc / np.abs(usc) * grd0m
@@ -132,7 +135,7 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
           div = usc
           div[where_not_0] = usc[where_not_0] / np.abs(usc)[where_not_0].astype('float')
           grd0m = div * grd0m
-          return grd0m  # .astype(np.float64)
+          return grd0m, grd0_var  # .astype(np.float64)
 
      def likelihood_grad_meth3(us):
           # inp: [parfact, ps*ps]
@@ -192,22 +195,23 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
           grds = np.zeros([int(np.ceil(ptchs.shape[0] / parfact) * parfact), np.prod(ptchs.shape[1:])],
                           dtype=np.complex64)
 
+          grds_vars = grds.copy()
+
           extraind = int(np.ceil(ptchs.shape[0] / parfact) * parfact) - ptchs.shape[0]
           ptchs = np.pad(ptchs, ((0, extraind), (0, 0)), mode='edge')
 
           for ix in range(int(np.ceil(ptchs.shape[0] / parfact))):
                if usemeth == 1:
-                    grds[parfact * ix:parfact * ix + parfact, :] = likelihood_grad(
-                         ptchs[parfact * ix:parfact * ix + parfact, :])
-               elif usemeth == 3:
-                    grds[parfact * ix:parfact * ix + parfact, :] = likelihood_grad_meth3(
+                    grds[parfact * ix:parfact * ix + parfact, :], grds_vars[parfact * ix:parfact * ix + parfact, :] = likelihood_grad(
                          ptchs[parfact * ix:parfact * ix + parfact, :])
                else:
                     assert (1 == 0)
 
           grds = grds[0:shape_orig[0], :]
 
-          return np.reshape(grds, shape_orig)
+          grds_vars = grds_vars[0:shape_orig[0], :]
+
+          return np.reshape(grds, shape_orig), np.reshape(grds_vars, shape_orig)
 
      def likelihood_patches(ptchs):
           # inp: [np, ps, ps]
@@ -236,12 +240,13 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
           ptchs = Ptchr.im2patches(np.reshape(image, [imsizer, imrizec]))
           ptchs = np.array(ptchs)
 
-          grd_lik = likelihood_grad_patches(ptchs)
+          grd_lik, grd_lik_var = likelihood_grad_patches(ptchs)
           grd_lik = (-1) * Ptchr.patches2im(grd_lik)
+          grd_lik_var = (-1) * Ptchr.patches2im(grd_lik_var)
 
           grd_dconst = dconst_grad(np.reshape(image, [imsizer, imrizec]))
 
-          return grd_lik + grd_dconst, grd_lik, grd_dconst
+          return grd_lik + grd_dconst, grd_lik, grd_dconst, grd_lik_var
 
      def full_funceval(image):
           # inp: [nx*nx, 1]
@@ -309,134 +314,34 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           return im - fdivg(us[:, :, :, it + 1])
 
-     def low_pass(im):
-          import scipy.ndimage as sndi
+     def g_tv_eval(x):
+          x_re = np.fft.fftshift(np.reshape(x, (imsizer,imrizec, 1)), axes=(0,1))
 
-          filtered = sndi.gaussian_filter(im, 15)
+          data = tf.placeholder(tf.float64, shape=x_re.shape)
 
-          return filtered
+          x_tv = tf.image.total_variation(data)
+          var_grad = tf.gradients(x_tv, [data])[0]
 
-     def tikh_proj(usph, niter=100, alpha=0.05):
+          var_grad_val = var_grad.eval(feed_dict={data: x_re})
 
-          ims = np.zeros((imsizer, imrizec, niter))
-          ims[:, :, 0] = usph.copy()
-          for ix in range(niter - 1):
-               ims[:, :, ix + 1] = ims[:, :, ix] + alpha * 2 * fdivg(fgrad(ims[:, :, ix]))
+          return np.fft.ifftshift(var_grad_val, axes=(0,1))
 
-          return ims[:, :, -1]
+     def tv_norm(x):
+          """Computes the total variation norm and its gradient. From jcjohnson/cnn-vis."""
+          x = np.fft.fftshift(np.reshape(x, (imsizer,imrizec, 1)), axes=(0,1))
 
-     def reg2_proj(usph, niter=100, alpha=0.05):
-          # from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
+          x_diff = x - np.roll(x, -1, axis=1)
+          y_diff = x - np.roll(x, -1, axis=0)
+          grad_norm2 = x_diff ** 2 + y_diff ** 2 + np.finfo(np.float32).eps
+          norm = np.sum(np.sqrt(grad_norm2))
+          dgrad_norm = 0.5 / np.sqrt(grad_norm2)
+          dx_diff = 2 * x_diff * dgrad_norm
+          dy_diff = 2 * y_diff * dgrad_norm
+          grad = dx_diff + dy_diff
+          grad[:, 1:, :] -= dx_diff[:, :-1, :]
+          grad[1:, :, :] -= dy_diff[:-1, :, :]
 
-          usph = usph + np.pi
-
-          ims = np.zeros((imsizer, imrizec, niter))
-          ims[:, :, 0] = usph.copy()
-          regval = reg2eval(ims[:, :, 0].flatten())
-          print(regval)
-          for ix in range(niter - 1):
-               ims[:, :, ix + 1] = ims[:, :, ix] + alpha * reg2grd(ims[:, :, ix].flatten()).reshape([imsizer, imrizec])  # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
-               regval = reg2eval(ims[:, :, ix + 1].flatten())
-          #              print(regval)
-
-          return ims[:, :, -1] - np.pi
-
-     def reg2_dcproj(usph, magim, bfestim, niter=100, alpha_reg=0.05, alpha_dc=0.05):
-          # from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
-
-          # usph=usph+np.pi
-
-          ims = np.zeros((imsizer, imrizec, niter))
-          grds_reg = np.zeros((imsizer, imrizec, niter))
-          grds_dc = np.zeros((imsizer, imrizec, niter))
-          ims[:, :, 0] = usph.copy()
-          regval = reg2eval(ims[:, :, 0].flatten())
-          print(regval)
-          for ix in range(niter - 1):
-               grd_reg = reg2grd(ims[:, :, ix].flatten()).reshape([imsizer, imrizec])  # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
-               grds_reg[:, :, ix] = grd_reg
-               grd_dc = reg2_dcgrd(ims[:, :, ix].flatten(), magim, bfestim).reshape([imsizer, imrizec])
-               grds_dc[:, :, ix] = grd_dc
-
-               ims[:, :, ix + 1] = ims[:, :, ix] + alpha_reg * grd_reg - alpha_dc * grd_dc
-               regval = reg2eval(ims[:, :, ix + 1].flatten())
-               f_dc = dconst(magim * np.exp(1j * ims[:, :, ix + 1]) * bfestim)
-
-               print("norm grad reg: " + str(np.linalg.norm(grd_reg)))
-               print("norm grad dc: " + str(np.linalg.norm(grd_dc)))
-
-               print("regval: " + str(regval))
-               print("fdc: (*1e9) {0:.6f}".format(f_dc / 1e9))
-
-          #          np.save('/home/ktezcan/unnecessary_stuff/phase', ims)
-          #          np.save('/home/ktezcan/unnecessary_stuff/grds_reg', grds_reg)
-          #          np.save('/home/ktezcan/unnecessary_stuff/grds_dc', grds_dc)
-          #          print("SAVED!!!!!!")
-          return ims[:, :, -1]  # -np.pi
-
-     def reg2eval(im):
-          # takes in 1d, returns scalar
-          im = im.reshape([imsizer, imrizec])
-          phs = np.exp(1j * im)
-          return np.linalg.norm(fgrad(phs).flatten())
-
-     def reg2grd(im):
-          # takes in 1d, returns 1d
-          im = im.reshape([imsizer, imrizec])
-          return -2 * np.real(1j * np.exp(-1j * im) * fdivg(fgrad(np.exp(1j * im)))).flatten()
-
-     def reg2_dcgrd(phim, magim, bfestim):
-          # takes in 1d, returns 1d
-          phim = phim.reshape([imsizer, imrizec])
-          magim = magim.reshape([imsizer, imrizec])
-
-          return -2 * np.real(1j * np.exp(-1j * phim.flatten()) * magim.flatten() * bfestim * tUFT(
-               (UFT(bfestim * np.exp(1j * phim) * magim, uspat) - data), uspat)).flatten()
-
-     def reg2_proj_ls(usph, niter=100):
-
-          # from  Separate Magnitude and Phase Regularization via Compressed Sensing,  Feng Zhao
-          # with line search
-
-          usph = usph + np.pi
-
-          ims = np.zeros((imsizer, imrizec, niter))
-          ims[:, :, 0] = usph.copy()
-          regval = reg2eval(ims[:, :, 0].flatten())
-          print(regval)
-          for ix in range(niter - 1):
-               currgrd = reg2grd(ims[:, :, ix].flatten())
-
-               res = sop.minimize_scalar(lambda alpha: reg2eval(ims[:, :, ix].flatten() + alpha * currgrd),
-                                         method='Golden')
-               alphaopt = res.x
-               print("optimal alpha: " + str(alphaopt))
-
-               ims[:, :, ix + 1] = ims[:, :, ix] + alphaopt * currgrd.reshape([imsizer, imrizec])  # *alpha*np.real(1j*np.exp(-1j*ims[:,:,ix])*    fdivg(fgrad(np.exp(  1j* ims[:,:,ix]    )))     )
-               regval = reg2eval(ims[:, :, ix + 1].flatten())
-               print("regval: " + str(regval))
-
-          return ims[:, :, -1] - np.pi
-
-     def N4corrf(im):
-
-          phasetmp = np.angle(im)
-          ddimcabs = np.abs(im)
-
-          inputImage = sitk.GetImageFromArray(ddimcabs, isVector=False)
-          corrector = sitk.N4BiasFieldCorrectionImageFilter();
-          inputImage = sitk.Cast(inputImage, sitk.sitkFloat32)
-          output = corrector.Execute(inputImage)
-          N4biasfree_output = sitk.GetArrayFromImage(output)
-
-          n4biasfield = ddimcabs / (N4biasfree_output + 1e-9)
-
-          if np.isreal(im).all():
-               return n4biasfield, N4biasfree_output
-          else:
-               return n4biasfield, N4biasfree_output * np.exp(1j * phasetmp)
-
-     rmses = np.zeros((1, 1, 4))
+          return norm, np.reshape(np.fft.ifftshift(grad, axes=(0,1)), [-1])
 
      # make the data
      # ===============================
@@ -448,13 +353,12 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
      trpat = np.zeros_like(uspat)
      trpat[:, 120:136] = 1
 
-
-     #     lrphase = np.angle( tUFT(data*trpat[:,:,np.newaxis],uspat) )
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lowresphase','rb'))
-     #     truephase = pickle.load(open('/home/ktezcan/unnecessary_stuff/truephase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/usphase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrusphase','rb'))
-     #     lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrmaskphase','rb'))
+     # lrphase = np.angle( tUFT(data*trpat[:,:,np.newaxis],uspat) )
+     # lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lowresphase','rb'))
+     # truephase = pickle.load(open('/home/ktezcan/unnecessary_stuff/truephase','rb'))
+     # lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/usphase','rb'))
+     # lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrusphase','rb'))
+     # lrphase = pickle.load(open('/home/ktezcan/unnecessary_stuff/lrmaskphase','rb'))
 
      # make the functions for POCS
      # =====================================
@@ -470,17 +374,17 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
           return full_funceval(im)
 
      def geval(im):
-          t1, t2, t3 = full_gradient(im)
-          return np.reshape(t1, [-1]), np.reshape(t2, [-1]), np.reshape(t3, [-1])
+          t1, t2, t3, t4 = full_gradient(im)
+          return np.reshape(t1, [-1]), np.reshape(t2, [-1]), np.reshape(t3, [-1]), np.reshape(t4, [-1])
 
      # initialize data
-     recs = np.zeros((imsizer * imrizec, numiter + 30), dtype=complex)
+     recs = np.zeros((imsizer * imrizec, numiter + 2), dtype=complex)
 
      #     recs[:,0] = np.abs(tUFT(data, uspat).flatten().copy()) #kct
 
      recs[:, 0] = tUFT(data, uspat).flatten().copy()
 
-     pickle.dump(recs[:, 0], open(logdir + '_rec_0', 'wb'))
+     #pickle.dump(recs[:, 0], open(logdir + '_rec_0', 'wb'))
      n4bf = 1
 
      #     recs[:,0] = np.abs(tUFT(data, uspat).flatten().copy() )*np.exp(1j*lrphase).flatten()
@@ -518,18 +422,29 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           ftot, f_lik, f_dc = 0,0,0#feval(recstmp)
 
-          gtot, g_lik, g_dc = geval(recstmp)
+          gtot, g_lik, g_dc, g_lik_var = geval(recstmp)
 
-          print("it no: " + str(it ) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + " f_dc (1e6)= " +
-                     str(f_dc / 1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(
-                         np.linalg.norm(g_dc)))
+          lambda_lik = 1
+          recstmp_1 = recstmp - alpha * lambda_lik * g_lik
 
-          recstmp = recstmp - alpha * g_lik
-          recs[:, it + 1] = recstmp.copy()
+          tvnorm, tvgrad = tv_norm(np.abs(recstmp_1))
 
-          if it == 1:
+          lambda_reg = 0
+          recstmp_2 = recstmp_1 - alpha * lambda_reg * tvgrad * g_lik_var
+          recs[:, it + 1] = recstmp_2.copy()
+
+          print("it no: " + str(it) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + ' TV norm= ' + str(
+               tvnorm) + " f_dc (1e6)= " +
+                str(f_dc / 1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(
+               np.linalg.norm(g_dc)) + ' |g_tv|= ' + str(np.linalg.norm(tvgrad)))
+
+          if it == 0:
+               pickle.dump(recstmp, open(logdir + '_rec_0', 'wb'))
                pickle.dump(g_lik, open(logdir + '_rec_likgrad', 'wb'))
                pickle.dump(g_dc, open(logdir + '_rec_dcgrad', 'wb'))
+               pickle.dump(tvgrad, open(logdir + '_rec_tvgrad', 'wb'))
+               pickle.dump(tvgrad * g_lik_var, open(logdir + '_rec_tvmulvar', 'wb'))
+               pickle.dump(g_lik_var, open(logdir + '_rec_var', 'wb'))
 
           # now do again a data consistency projection
           # ===============================================
@@ -551,8 +466,7 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           rss = np.sqrt(
                np.sum(np.square(np.abs(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]])
-                                       * np.conjugate(sensmaps))), axis=-1)) \
-                / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+                                       )), axis=-1))
 
           nmse = np.sqrt(((np.fft.fftshift(rss) - gt) ** 2).mean()) / np.sqrt(((gt) ** 2).mean())
           print('NMSE: ', nmse)

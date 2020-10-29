@@ -168,7 +168,7 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
                l2_loss_ = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits=y_out, labels=x_inp__), reduction_indices=1)
 
      # take the total mean loss of this batch
-     loss_tot = tf.reduce_mean(1/kld_div *  KLD + l2_loss_)
+     loss_tot = tf.reduce_mean(1/kld_div * KLD + l2_loss_)
 
      # get the optimizer
      if useMixtureScale:
@@ -312,11 +312,11 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      grd20 = grd2[0]
 
      samples = 10
-     grd_dir_list = []
-     for i in range(samples):
-          grd_dir_list.append(tf.multiply((y_out - x_rec), y_out_prec))
-
-     grd_dir_ = sum(grd_dir_list) / float(len(grd_dir_list))
+     # grd_dir_list = []
+     # for i in range(samples):
+     #      grd_dir_list.append(tf.multiply((y_out - x_rec), y_out_prec))
+     #
+     # grd_dir_ = sum(grd_dir_list) / float(len(grd_dir_list))
 
      grd_dir = tf.multiply((y_out - x_rec), y_out_prec)
 

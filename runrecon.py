@@ -21,7 +21,7 @@ from utils import tFT, FT
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
-parser.add_argument('--sli', type=int, default=2)
+parser.add_argument('--sli', type=int, default=5)
 parser.add_argument('--usfact', type=int, default=4)
 parser.add_argument('--contrun', type=int, default=0)
 parser.add_argument('--skiprecon', type=int, default=1)
@@ -124,7 +124,7 @@ usksp = uspat_allcoils * ksp
 tmp = np.fft.ifft2(np.fft.ifftshift(usksp, axes=(0, 1)), axes=(0, 1))
 rss = np.sqrt(np.sum(np.square(np.abs(tmp)), axis=2))
 
-pickle.dump(rss, open(logdir + '_zerofilled', 'wb'))
+#pickle.dump(rss, open(logdir + '_zerofilled', 'wb'))
 
 ###################
 ###### RECON ######
@@ -135,19 +135,21 @@ if not args.skiprecon:
 
      rec_vae[:,-1] = gt_pad.flatten()
 
-     lastiter = int((np.floor(rec_vae.shape[1]/2.)-2)*2)
+     recon_sli = np.reshape(rec_vae[:, num_iter-2], (img_sizex, img_sizey))
 
-     recon_sli = np.reshape(rec_vae[:, lastiter], (img_sizex, img_sizey))
-
-     rss = np.sqrt(np.sum(np.square(np.abs(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]])
-                                           * np.conjugate(sensmaps))), axis=-1)) \
-           / (np.abs(np.sqrt(np.sum(np.square(sensmaps * np.conjugate(sensmaps)), axis=-1))) + 0.00000001)
+     rss = np.sqrt(np.sum(np.square(np.abs(sensmaps * np.tile(recon_sli[:, :, np.newaxis], [1, 1, sensmaps.shape[2]]))), axis=-1))
 
      rec_vae[:, -2] = np.reshape(rss, [-1])
 
+     temp = np.fft.ifft2(np.fft.ifftshift(ksp, axes=(0, 1)), axes=(0, 1))
+
+     img_space = np.sum(temp, axis=2)
+
+     rec_vae[:, -3] = np.reshape(img_space, [-1])
+
      pickle.dump(rec_vae, open(
           basefolder + 'rec/rec' + str(args.contrun) + '_us' + str(R) + '_vol' + subj + '_sli' + str(
-               sli) + '_directapprox_' + str(direct_approx) + '_602',
+               sli) + '_directapprox_' + str(direct_approx) + '_VAEDC',
           'wb'))
 
      rec_gt = abs(np.reshape(rec_vae[:,-1], (img_sizex, img_sizey)))[img_sizey/2:-img_sizey/2, :]

@@ -1,0 +1,136 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing sensmap pattern file
+Read from existing u.s. pattern file
+xxxxxxxxxxxxxxxxxxx contRec is 
+xxxxxxxxxxxxxxxxxxx parfact is 25
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-29 17:07:06.764680: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:09:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-29 17:07:06.764723: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-29 17:07:07.118109: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-29 17:07:07.118162: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-29 17:07:07.118171: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-29 17:07:07.118363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:09:00.0, compute capability: 5.2)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+_____DIRECT APPROX_____
+KCT-INFO: there will be in total 1035 patches.
+contRec is 
+it no: 0 f_tot= 0 f_lik= 0 TV norm= 3398.434902925418 f_dc (1e6)= 0.0 |g_lik|= 16347.347322722515 |g_dc|= 14.165937826947184 |g_tv|= 374.84256914118123
+NMSE:  1.013411583453316
+it no: 2 f_tot= 0 f_lik= 0 TV norm= 22326.128718146516 f_dc (1e6)= 0.0 |g_lik|= 8907.544487712965 |g_dc|= 57.64010573302111 |g_tv|= 482.51992244924406
+NMSE:  2.38538243859669
+/scratch_net/bmicdl03/jonatank/conda_envs/tfv1/lib/python2.7/site-packages/numpy/core/_methods.py:107: RuntimeWarning: invalid value encountered in reduce
+  arrmean = umr_sum(arr, axis, dtype, keepdims=True)
+/scratch_net/bmicdl03/jonatank/conda_envs/tfv1/lib/python2.7/site-packages/numpy/core/_methods.py:117: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+/scratch_net/bmicdl03/jonatank/conda_envs/tfv1/lib/python2.7/site-packages/numpy/core/_methods.py:75: RuntimeWarning: invalid value encountered in reduce
+  ret = umr_sum(arr, axis, dtype, out, keepdims)
+/scratch_net/bmicdl03/jonatank/code/ddp/vaerecon.py:137: RuntimeWarning: invalid value encountered in multiply
+  grd0m = div * grd0m
+/scratch_net/bmicdl03/jonatank/code/ddp/Patcher.py:84: RuntimeWarning: invalid value encountered in divide
+  tmp = tmp / self.diviim
+it no: 4 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= 132.5877211726888 |g_tv|= nan
+NMSE:  nan
+it no: 6 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 8 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 10 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 12 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 14 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 16 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 18 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 20 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 22 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 24 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 26 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 28 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 30 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 32 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 34 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 36 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 38 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 40 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 42 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 44 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 46 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 48 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 50 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 52 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 54 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 56 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 58 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 60 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 62 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 64 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 66 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 68 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 70 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 72 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 74 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 76 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 78 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 80 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 82 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 84 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 86 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 88 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 90 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 92 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 94 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+it no: 96 f_tot= 0 f_lik= 0 TV norm= nan f_dc (1e6)= 0.0 |g_lik|= nan |g_dc|= nan |g_tv|= nan
+NMSE:  nan
+slurmstepd: error: *** JOB 131098 ON biwirender06 CANCELLED AT 2020-10-29T17:13:36 ***
