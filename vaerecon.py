@@ -123,19 +123,34 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           grd0eval = grd0.eval(feed_dict={x_rec: np.tile(usabs, (nsampl, 1)),
                                           z_std_multip: z_multip})  # ,x_inp: np.tile(usabs,(nsampl,1))
-
           # grd0eval: [500x784]
           grd0eval = np.array(np.split(grd0eval, nsampl, axis=0))  # [nsampl x parfact x 784]
 
-          grd0_var = np.std(grd0eval, axis=0)
+
+          sigmaeval = y_out_prec.eval(feed_dict={x_rec: np.tile(usabs, (nsampl, 1)),
+                                          z_std_multip: z_multip})  # ,x_inp: np.tile(usabs,(nsampl,1))
+          sigmaeval = np.array(np.split(sigmaeval, nsampl, axis=0))  # [nsampl x parfact x 784]
+
+          mueval = y_out.eval(feed_dict={x_rec: np.tile(usabs, (nsampl, 1)),
+                                          z_std_multip: z_multip})  # ,x_inp: np.tile(usabs,(nsampl,1))
+          mueval = np.array(np.split(mueval, nsampl, axis=0))  # [nsampl x parfact x 784]
+
+          #vareval = np.std(mueval, axis=0)  # V(MU(X))
+          #vareval = np.mean(1/sigmaeval, axis=0)  # M(SIGMA)
+          vareval = np.std(grd0eval, axis=0)  # V(SIGMA (X-MU(X)))
+
+          # grd0_var = np.std(grd0eval, axis=0)
           grd0m = np.mean(grd0eval, axis=0)  # [parfact,784]
 
           #grd0m = usc / np.abs(usc) * grd0m
           where_not_0 = np.where(usc > 0)
           div = usc
           div[where_not_0] = usc[where_not_0] / np.abs(usc)[where_not_0].astype('float')
+
           grd0m = div * grd0m
-          return grd0m, grd0_var  # .astype(np.float64)
+          var0m = vareval
+
+          return grd0m, var0m  # .astype(np.float64)
 
      def likelihood_grad_meth3(us):
           # inp: [parfact, ps*ps]
@@ -242,7 +257,7 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           grd_lik, grd_lik_var = likelihood_grad_patches(ptchs)
           grd_lik = (-1) * Ptchr.patches2im(grd_lik)
-          grd_lik_var = (-1) * Ptchr.patches2im(grd_lik_var)
+          grd_lik_var = Ptchr.patches2im(grd_lik_var)
 
           grd_dconst = dconst_grad(np.reshape(image, [imsizer, imrizec]))
 
@@ -424,28 +439,27 @@ def vaerecon(us_ksp_r2, sensmaps, dcprojiter, n=10, lat_dim=60, patchsize=28, co
 
           gtot, g_lik, g_dc, g_lik_var = geval(recstmp)
 
-          lambda_lik = 1
-          recstmp_1 = recstmp - alpha * lambda_lik * g_lik
+          tvnorm, tvgrad = tv_norm(np.abs(recstmp))
 
-          tvnorm, tvgrad = tv_norm(np.abs(recstmp_1))
+          lambda_lik = 0
+          lambda_reg = 1
+          recstmp_1 = recstmp - alpha * (lambda_lik * g_lik + lambda_reg * tvgrad)
 
-          lambda_reg = 0
-          recstmp_2 = recstmp_1 - alpha * lambda_reg * tvgrad * g_lik_var
-          recs[:, it + 1] = recstmp_2.copy()
+          recs[:, it + 1] = recstmp_1.copy()
 
           print("it no: " + str(it) + " f_tot= " + str(ftot) + " f_lik= " + str(f_lik) + ' TV norm= ' + str(
                tvnorm) + " f_dc (1e6)= " +
                 str(f_dc / 1e6) + " |g_lik|= " + str(np.linalg.norm(g_lik)) + " |g_dc|= " + str(
                np.linalg.norm(g_dc)) + ' |g_tv|= ' + str(np.linalg.norm(tvgrad)))
 
-          if it == 0:
-               pickle.dump(recstmp, open(logdir + '_rec_0', 'wb'))
-               pickle.dump(g_lik, open(logdir + '_rec_likgrad', 'wb'))
-               pickle.dump(g_dc, open(logdir + '_rec_dcgrad', 'wb'))
-               pickle.dump(tvgrad, open(logdir + '_rec_tvgrad', 'wb'))
-               pickle.dump(tvgrad * g_lik_var, open(logdir + '_rec_tvmulvar', 'wb'))
-               pickle.dump(g_lik_var, open(logdir + '_rec_var', 'wb'))
-
+          # if it == 0:
+          #      pickle.dump(recstmp, open(logdir + '_rec_0', 'wb'))
+          #      pickle.dump(g_lik, open(logdir + '_rec_likgrad', 'wb'))
+          #      pickle.dump(g_dc, open(logdir + '_rec_dcgrad', 'wb'))
+          #      pickle.dump(tvgrad, open(logdir + '_rec_tvgrad', 'wb'))
+          #      pickle.dump(tvgrad * g_lik_var, open(logdir + '_rec_tvmulvar', 'wb'))
+          #      pickle.dump(g_lik_var, open(logdir + '_rec_var', 'wb'))
+          #      exit()
           # now do again a data consistency projection
           # ===============================================
           # ===============================================

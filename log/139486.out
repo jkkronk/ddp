@@ -1,0 +1,28 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing sensmap pattern file
+Read from existing u.s. pattern file
+xxxxxxxxxxxxxxxxxxx contRec is 
+xxxxxxxxxxxxxxxxxxx parfact is 25
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-30 16:08:34.660251: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:04:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-30 16:08:34.660296: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-30 16:08:41.259623: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-30 16:08:41.259679: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-30 16:08:41.259689: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-30 16:08:41.259899: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:04:00.0, compute capability: 5.2)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+_____DIRECT APPROX_____
+KCT-INFO: there will be in total 1035 patches.
+contRec is 
+it no: 0 f_tot= 0 f_lik= 0 TV norm= 2845.6997463960306 f_dc (1e6)= 0.0 |g_lik|= 0.029625277755583334 |g_dc|= 13.189990624047814 |g_tv|= 361.86514735957894

@@ -1,0 +1,44 @@
+('Under sample factor: ', 4)
+FLAIR20201020-125121/jonatank_lat60_ns50_ps28_modalityFLAIR_step100000.ckpt
+Read from existing sensmap pattern file
+Read from existing u.s. pattern file
+xxxxxxxxxxxxxxxxxxx contRec is 
+xxxxxxxxxxxxxxxxxxx parfact is 25
+---- Defining VAE
+>>> lat_dim value: 60
+>>> mode is: MRIunproc
+2020-10-29 18:24:19.380802: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-10-29 18:24:19.619236: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:08:00.0
+totalMemory: 11.93GiB freeMemory: 11.82GiB
+2020-10-29 18:24:19.619326: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2020-10-29 18:24:27.950805: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-10-29 18:24:27.950918: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2020-10-29 18:24:27.950934: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2020-10-29 18:24:27.951306: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11435 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:08:00.0, compute capability: 5.2)
+Initialized parameters
+KCT-info: loaded the new model, trained fastmri
+KCT-INFO: the gradients: 
+Tensor("gradients_2/AddN_3:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_3/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+Tensor("gradients_4/Reshape_2_grad/Reshape:0", shape=(1250, 784), dtype=float32)
+KCT-INFO: there will be in total 1035 patches.
+contRec is 
+it no: 0 f_tot= 0 f_lik= 0 TV norm= 2862.650433046748 f_dc (1e6)= 0.0 |g_lik|= 27839.34110049507 |g_dc|= 13.189990624047814 |g_tv|= 356.63841903561746
+NMSE:  0.1566844129775336
+it no: 2 f_tot= 0 f_lik= 0 TV norm= 3254.8579640970615 f_dc (1e6)= 0.0 |g_lik|= 16087.424896754508 |g_dc|= 6.836062058253803 |g_tv|= 376.4113883880744
+NMSE:  0.15162014038268096
+it no: 4 f_tot= 0 f_lik= 0 TV norm= 3462.989021613137 f_dc (1e6)= 0.0 |g_lik|= 11970.374600032228 |g_dc|= 4.3012157051193 |g_tv|= 384.34169721445807
+NMSE:  0.149028274695643
+it no: 6 f_tot= 0 f_lik= 0 TV norm= 3578.0115723772183 f_dc (1e6)= 0.0 |g_lik|= 10567.07975452961 |g_dc|= 3.0629931258517575 |g_tv|= 388.5468067971877
+NMSE:  0.14740730434403923
+it no: 8 f_tot= 0 f_lik= 0 TV norm= 3650.72087293423 f_dc (1e6)= 0.0 |g_lik|= 10230.561465923125 |g_dc|= 2.3825835722642474 |g_tv|= 391.0570892407501
+NMSE:  0.14622915341454296
+it no: 10 f_tot= 0 f_lik= 0 TV norm= 3705.1041549847723 f_dc (1e6)= 0.0 |g_lik|= 9745.968449951411 |g_dc|= 1.9729819766864367 |g_tv|= 392.54778383810833
+NMSE:  0.14533004442078537
+it no: 12 f_tot= 0 f_lik= 0 TV norm= 3740.6433341307793 f_dc (1e6)= 0.0 |g_lik|= 9059.807453681648 |g_dc|= 1.7055769670765617 |g_tv|= 393.590622470064
+NMSE:  0.14460843687916608
+it no: 14 f_tot= 0 f_lik= 0 TV norm= 3770.8859656970394 f_dc (1e6)= 0.0 |g_lik|= 8696.689171652479 |g_dc|= 1.5156007292187286 |g_tv|= 394.1227280943374
+NMSE:  0.14400916371296668
+slurmstepd: error: *** JOB 131129 ON biwirender08 CANCELLED AT 2020-10-29T18:27:17 ***

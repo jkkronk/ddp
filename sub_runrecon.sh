@@ -6,4 +6,4 @@
 source /scratch_net/bmicdl03/jonatank/conda/etc/profile.d/conda.sh shell.bash hook
 conda activate tfv1
 
-python -u runrecon.py --skiprecon 0 --directapprox 0
+python -u runrecon.py --skiprecon 0 --directapprox 1

@@ -318,7 +318,7 @@ def definevae(lat_dim=60, patchsize=28, batchsize=50, mode=[], vae_model=''):
      #
      # grd_dir_ = sum(grd_dir_list) / float(len(grd_dir_list))
 
-     grd_dir = tf.multiply((y_out - x_rec), y_out_prec)
+     grd_dir = tf.multiply((y_out - x_rec), 1/y_out_prec)
 
      return x_rec, x_inp, funop, grd0, grd_dir, sess, grd_p_x_z0, grd_p_z0, grd_q_z_x0, grd20, y_out, y_out_prec, z_std_multip, op_q_z_x, mu, std, grd_q_zpl_x_az0, op_q_zpl_x, z_pl, z
 

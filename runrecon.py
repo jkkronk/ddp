@@ -21,7 +21,7 @@ from utils import tFT, FT
 
 parser = argparse.ArgumentParser(prog='PROG')
 parser.add_argument('--subj', type=str, default='file_brain_AXFLAIR_200_6002462.h5')
-parser.add_argument('--sli', type=int, default=5)
+parser.add_argument('--sli', type=int, default=1)
 parser.add_argument('--usfact', type=int, default=4)
 parser.add_argument('--contrun', type=int, default=0)
 parser.add_argument('--skiprecon', type=int, default=1)
@@ -141,15 +141,15 @@ if not args.skiprecon:
 
      rec_vae[:, -2] = np.reshape(rss, [-1])
 
-     temp = np.fft.ifft2(np.fft.ifftshift(ksp, axes=(0, 1)), axes=(0, 1))
+     #temp = np.fft.ifft2(np.fft.ifftshift(ksp, axes=(0, 1)), axes=(0, 1))
 
-     img_space = np.sum(temp, axis=2)
+     #img_space = np.sqrt(np.sum(np.square(temp), axis=2))
 
-     rec_vae[:, -3] = np.reshape(img_space, [-1])
+     rec_vae[:, -3] = np.reshape(usksp, [-1])
 
      pickle.dump(rec_vae, open(
           basefolder + 'rec/rec' + str(args.contrun) + '_us' + str(R) + '_vol' + subj + '_sli' + str(
-               sli) + '_directapprox_' + str(direct_approx) + '_VAEDC',
+               sli) + '_directapprox_' + str(direct_approx) + '_TVDC',
           'wb'))
 
      rec_gt = abs(np.reshape(rec_vae[:,-1], (img_sizex, img_sizey)))[img_sizey/2:-img_sizey/2, :]

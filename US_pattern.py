@@ -1,7 +1,46 @@
 import numpy as np
 
-
 class US_pattern:
+    def choose_acceleration(self, seed, R):
+        self.rng.seed(seed)
+        if R == 4:
+            num_low_freqs = 0.08
+        if R == 8:
+            num_low_freqs = 0.04
+        acceleration = R
+        return num_low_freqs, acceleration
+
+    # ====================================================================
+    def generate_US_pattern_pytorch(self, shape, R=4 ,seed=1):
+        """
+                Args:
+                    shape (iterable[int]): The shape of the mask to be created. The shape should have
+                        at least 3 dimensions. Samples are drawn along the second last dimension.
+                    seed (int, optional): Seed for the random number generator. Setting the seed
+                        ensures the same mask is generated each time for the same shape.
+                Returns:
+                    torch.Tensor: A mask of the specified shape.
+        """
+
+        if len(shape) < 3:
+            raise ValueError('Shape should have 3 or more dimensions')
+
+        self.rng = np.random.RandomState()
+        self.rng.seed(seed)
+        num_cols = shape[1]
+        center_fraction, acceleration = self.choose_acceleration(seed, R)
+        # Create the mask
+        num_low_freqs = int(round(num_cols * center_fraction))
+        prob = (num_cols / acceleration - num_low_freqs) / (num_cols - num_low_freqs)
+        mask = self.rng.uniform(size=num_cols) < prob
+
+        pad = (num_cols - num_low_freqs + 1) // 2
+        mask[pad:pad + num_low_freqs] = True
+
+        # Reshape the mask
+        mask = np.repeat(mask[np.newaxis,:], shape[:1], axis=0)
+
+        return mask
 
     # ====================================================================
     def generate_US_pattern_1D(self, size_2D, R, no_of_training_profs=15):
